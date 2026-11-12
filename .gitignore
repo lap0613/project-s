@@ -187,3 +187,8 @@ $RECYCLE.BIN/
 CrashReports/
 InitTestScene*.unity*
 .gradle/
+
+# === Local asset tests (large third-party packs) ===
+/Assets/_Sandbox/
+/Assets/_Sandbox.meta
+.vscode/
