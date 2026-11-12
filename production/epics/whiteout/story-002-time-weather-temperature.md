@@ -12,7 +12,7 @@
 ## Context
 
 **GDD**: `design/game-brief.md`
-**Requirement**: `Brief MVP feature 4` (낮/밤 주기(시야)와 날씨(3일 예보)·시작 지점 거리 기반 환경 온도)
+**Requirement**: `Brief MVP feature 4` (낮/밤 주기(시야)와 날씨(3일 예보)·맵 중심 거리 기반 환경 온도)
 **근거 문서**: `design/quick-specs/core-rules.md` §1·3 · `docs/architecture/code-structure.md` §4(이벤트, `IAmbientTemperatureSource`, `IRandom`)·§7
 
 **ADR Governing Implementation**: N/A (minimal — no ADRs)
@@ -34,7 +34,7 @@
 - [ ] 날씨는 아침마다 1회 결정되고 하루 동안 유지된다. 확률은 맑음 40 / 눈 30 / 눈보라 20 / 한파 10(%), 날짜와 무관하다. `IRandom`을 쓰며 같은 시드면 같은 결과다 (core-rules §3)
 - [ ] 3일치(오늘·내일·모레)를 미리 뽑아 두고, 예보가 실제 날씨와 항상 일치한다. 아침마다 예보를 하루 밀고 `WeatherForecastUpdated`를 발행한다
 - [ ] 환경 온도 = -10 + 날씨(0 / -5 / -15 / -25) + 거리 링 + 모닥불 온기 + 증강 보정 (core-rules §3)
-- [ ] 거리 링(시작 지점 기준): 0~60m +5 / 60~130m -5 / 130~200m -15. 경계값(60m, 130m)이 한쪽으로 일관되게 처리된다
+- [ ] 거리 링(맵 중심 기준): 0~60m +5 / 60~130m -5 / 130~200m -15. 경계값(60m, 130m)이 한쪽으로 일관되게 처리된다
 - [ ] 모닥불 온기는 `IAmbientTemperatureSource` 같은 Core 인터페이스로 받는다(켜진 불 중 가장 따뜻한 1개). 불을 만드는 쪽은 004가 연결한다. 증강 보정은 스탯 수정자 슬롯으로 둔다
 - [ ] 시야: 밤에는 플레이어 주변 12m와 모닥불 빛만 보이고, 눈보라는 안개로 약 15m 너머가 흐려진다. 둘이 겹치면 더 좁은 쪽 (core-rules §3)
 - [ ] 장소 구역(숲·설원)은 만들지 않는다. 장소에 따른 온도는 거리 링뿐이다 (core-rules §3)

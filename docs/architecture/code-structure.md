@@ -30,12 +30,12 @@ Assets/Scripts/
       Logic/             Whiteout.Survival        (엔진 참조 없음)
       Unity/             Whiteout.Survival.Unity  (Data/ 와 View/ 폴더로 분리)
     Environment/         날씨(3일 예보), 거리 링, 환경 온도
-    Camp/                모닥불·은신처 설치, 연료, 점화(부싯돌·부싯깃), 재점화, 온기·휴식 범위
+    Camp/                모닥불·은신처·구조 신호기 설치, 연료, 점화(부싯돌·부싯깃), 재점화, 온기·휴식 범위, 신호기 부품 장착
     Resources/           아이템 정의(재료·소모품·도구·장비·부품), 가방, 채집, 배치, 제작, 요리
     Augments/            증강 정의, 풀, 선택, 수정자 적용
     Augments.Effects/    Whiteout.Augments.Effects (규칙형 증강 모음, Unity 어셈블리 1개)
     Threats/             적 정의, 등장 규칙, 행동, 전투
-    RunFlow/             낮/밤, 날짜, 부품 등장, 무전기, 구조, 승패
+    RunFlow/             낮/밤, 날짜, 부품 등장, 구조 요청 타이머, 승패
     Player/              이동, 공격
   Input/                 Whiteout.Input           (Input System → Core 인터페이스)
   UI/                    Whiteout.UI              (HUD, 증강 선택 화면)
@@ -83,7 +83,9 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `PlayerDamaged` | Threats | Survival |
 | `PlayerDied` | Survival | RunFlow |
 | `AugmentChosen` | Augments | UI |
-| `RadioRepaired` / `RescueArrived` | RunFlow | UI |
+| `SignalBeaconCompleted` | Camp | UI |
+| `RescueRequested` | Camp | RunFlow(타이머 시작), UI |
+| `RescueArrived` | RunFlow | UI |
 | `StructurePlaced` | Camp | UI, View |
 | `WeatherForecastUpdated` | Environment | UI |
 
@@ -97,7 +99,10 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 
 - `StatId`: Core의 문자열 기반 값 타입. enum이 아니므로 새 스탯 추가 시 기존 코드 수정 없음.
   에디터에서는 `StatIdAsset`(Core.Unity)으로 고른다.
-- 최종값 = (기본값 + Σ더하기) × (1 + Σ곱하기)
+- 최종값 = (기본값 + Σ더하기) × max(1 + Σ곱하기, 0.1)
+  - **% 효과는 합연산:** 같은 스탯에 붙은 %는 모두 더한 뒤 한 번만 곱한다. 예: +15%와 -10% → ×1.05.
+  - **하한:** 곱하는 값은 최소 ×0.1 (임시값). 음수 %가 쌓여 0 이하가 되는 것을 막는다.
+  - **확률 효과는 예외:** '알뜰한 채집 20%' 같은 확률은 배율 공식에 넣지 않는다. 같은 확률끼리 더하고 100%를 상한으로 둔다.
 - 수정자마다 출처(어느 증강인지)를 기록해 값이 바뀐 이유를 추적한다.
 
 ## 6. 기존 코드 수정 없이 추가하기
@@ -118,6 +123,7 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - Logic은 `UnityEngine`을 쓸 수 없다. `Mathf`·`Vector3`·`Debug` 대신 `System.Math`와 자체 타입.
   불 반경·구역 같은 위치 판정은 View가 하고 결과만 Logic에 넘긴다.
 - 시간은 `Tick(dt)`로만 진행 → 테스트에서 시간을 직접 조작할 수 있다.
+- 시야 가림(레이캐스트)도 위치 판정과 같이 View가 하고, Logic은 '보임/가림' 값만 받는다 (tech-decisions 16).
 - 어셈블리 약 20개: 컴파일은 빨라지지만 참조 설정을 관리해야 한다.
 - VContainer `1.19.0` (git URL + 태그 고정, `tech-decisions.md` 9번): Unity 6.3 호환을 공식 문서로 확인하지 못함.
   설치 직후 컴파일·간단한 주입 테스트로 확인한다.
@@ -127,3 +133,6 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-12: 테스트 어셈블리를 선택사항으로 표시, VContainer 버전 1.19.0 명시.
 - 2026-11-12: Camp에 모닥불·은신처 설치 추가, Environment에 날씨 예보·거리 링 추가, 이벤트 2종 추가.
 - 2026-11-12: Resources에 아이템 체계·제작·요리 추가 (design/quick-specs/items.md). 장비 효과는 스탯 수정자로 처리.
+- 2026-11-12: 무전기 → 구조 신호기. 설치·부품 장착은 Camp, 구조 타이머·승패는 RunFlow. 이벤트 `RadioRepaired` → `SignalBeaconCompleted`·`RescueRequested`.
+- 2026-11-12: §5에 % 효과 합연산(같은 스탯의 %는 더한 뒤 한 번 곱함), 하한 ×0.1(임시값), 확률 효과 예외(합산, 100% 상한) 명시.
+- 2026-11-12: §7에 시야 가림 판정은 View, Logic은 결과만 받는다고 명시.

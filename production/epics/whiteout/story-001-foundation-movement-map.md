@@ -36,7 +36,7 @@
 - [ ] Bootstrap 씬이 Game 씬을 추가로 불러오고, Game 씬 재로드로 재시작된다 (tech-decisions 12)
 - [ ] WASD로 이동한다: Input System + CharacterController, 이동속도 초당 4m, 물리에 밀리지 않는다 (core-rules §5, tech-decisions 5·10)
 - [ ] 카메라는 Cinemachine, 60도 고정 탑다운, 플레이어 추적 (tech-decisions 11)
-- [ ] 설원 맵 1개: 시작 지점에서 반경 약 200m, 거리 링 경계(60m, 130m)를 알 수 있다(디버그 표시 가능), 장애물에 막힌다 (core-rules §3·5)
+- [ ] 설원 맵 1개: 맵 중심에서 반경 약 200m, 거리 링 경계(60m, 130m)를 알 수 있다(디버그 표시 가능), 장애물에 막힌다. 플레이어는 맵 중심 0~60m 링 안의 무작위 지점에서 시작한다 (core-rules §3·5)
 - [ ] 플레이어 프리팹은 루트 = 로직, 자식 = 기본 도형 모델이다 (tech-decisions 4)
 - [ ] 플레이 모드로 실행해 화면 스크린샷을 `production/qa/evidence/`에 남긴다
 
