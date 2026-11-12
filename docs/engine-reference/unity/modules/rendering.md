@@ -233,6 +233,28 @@ var colorTarget = cameraData.renderer.cameraColorTargetHandle;
 
 ---
 
+## Runtime Materials and `Shader.Find` in Builds
+
+**Verified 2026-11-12** (forum/issue-tracker sources, not the manual)
+
+- In the Editor `Shader.Find` finds any shader in the project. **In a player build it only finds shaders that were
+  included** (referenced by an included material/asset, or on Graphics > Always Included Shaders). Otherwise it
+  returns `null`, and `new Material(null)` throws.
+- **Prefer a serialized reference** (a material or shader field assigned in the Inspector) over `Shader.Find`.
+- Always Included Shaders keeps the shader but has been reported not to keep every variant; test in a development build.
+- A material created with `new Material(...)` at runtime is not freed automatically: create it once and `Destroy` it
+  in `OnDestroy`.
+- **Not confirmed:** whether the built-in `Sprites/Default` shader (often used for `LineRenderer`) survives URP
+  build stripping in this project. Use a URP Unlit material asset for lines instead.
+
+---
+
 ## Sources
 - https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@17.0/manual/index.html
 - https://docs.unity3d.com/6000.0/Documentation/Manual/render-pipelines.html
+- https://discussions.unity.com/t/solved-bug-urp-10-0-0-shader-is-null/816820
+- https://discussions.unity.com/t/shader-find-returns-null-for-asset-bundles-repro-included/719313
+- https://issuetracker.unity.com/issues/22158/renderspritetotexture2d-required-shaders-get-stripped-when-building-player-with-no-way-to-include-them
+
+## 변경 이력
+- 2026-11-12: 빌드에서의 `Shader.Find`와 런타임 머티리얼 절 추가.

@@ -40,6 +40,7 @@ Assets/Scripts/
   Input/                 Whiteout.Input           (Input System → Core 인터페이스)
   UI/                    Whiteout.UI              (HUD, 증강 선택 화면)
   Game/                  Whiteout.Game            (조합 루트)
+  Editor/                Whiteout.Editor          (에디터 전용 개발 도구, 빌드에 포함되지 않음, 게임 어셈블리를 참조하지 않음)
 Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트, 지금은 선택사항, 나중에 추가)
 ```
 
@@ -94,6 +95,7 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `IAmbientTemperatureSource` | Environment | Survival |
 | `IStatRegistry` | Core | 스탯을 쓰는 모든 시스템, Augments |
 | `IRandom` | Core (시드 지정 가능) | Resources(배치), Environment(날씨), Augments(뽑기) |
+| `IMapLayout` (맵 중심, 링 반지름 60/130/200m, 거리가 어느 링인지) | Core (값은 Core.Unity의 ScriptableObject) | Player(시작 위치), Environment(온도), Resources(배치), Threats(늑대 중심지) |
 
 ## 5. 스탯과 수정자
 
@@ -120,9 +122,18 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 
 ## 7. 주의할 점
 
+- **미정 (story-006 착수 전에 결정):** Game 씬(결과 화면 UI 등)에서 Bootstrap 씬의 재시작 기능(`GameRestarter`)을
+  호출하는 경로가 아직 없다. Game 씬은 Bootstrap 씬을 참조할 수 없으므로 연결 방식(예: Bootstrap 스코프에 등록해 주입,
+  또는 Core의 재시작 요청 이벤트)을 정해야 한다.
+
 - Logic은 `UnityEngine`을 쓸 수 없다. `Mathf`·`Vector3`·`Debug` 대신 `System.Math`와 자체 타입.
   불 반경·구역 같은 위치 판정은 View가 하고 결과만 Logic에 넘긴다.
 - 시간은 `Tick(dt)`로만 진행 → 테스트에서 시간을 직접 조작할 수 있다.
+- **씬 View 주입:** 씬 전체를 타입으로 검색(`FindObjectsByType` 등)해서 주입하지 않는다.
+  꼭 있어야 하는 View는 `RegisterComponentInHierarchy<T>()`, 없어도 되는 View(디버그 표시 등)는
+  LifetimeScope의 `autoInjectGameObjects` 목록(씬 데이터)으로 주입한다. (`FindObjectsByType`의 정렬 인자는 6.5에서 폐기, engine-reference `deprecated-apis.md`)
+- **런타임 머티리얼:** `Shader.Find`로 머티리얼을 만들지 않고, 직렬화된 머티리얼 에셋을 참조한다.
+  빌드에서 셰이더가 빠지면 `Shader.Find`가 null을 돌려주기 때문이다 (engine-reference `modules/rendering.md`).
 - 시야 가림(레이캐스트)도 위치 판정과 같이 View가 하고, Logic은 '보임/가림' 값만 받는다 (tech-decisions 16).
 - 어셈블리 약 20개: 컴파일은 빨라지지만 참조 설정을 관리해야 한다.
 - VContainer `1.19.0` (git URL + 태그 고정, `tech-decisions.md` 9번): Unity 6.3 호환을 공식 문서로 확인하지 못함.
@@ -136,3 +147,7 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-12: 무전기 → 구조 신호기. 설치·부품 장착은 Camp, 구조 타이머·승패는 RunFlow. 이벤트 `RadioRepaired` → `SignalBeaconCompleted`·`RescueRequested`.
 - 2026-11-12: §5에 % 효과 합연산(같은 스탯의 %는 더한 뒤 한 번 곱함), 하한 ×0.1(임시값), 확률 효과 예외(합산, 100% 상한) 명시.
 - 2026-11-12: §7에 시야 가림 판정은 View, Logic은 결과만 받는다고 명시.
+- 2026-11-12: §4 조회 인터페이스에 `IMapLayout` 추가 (맵 중심·링 정보를 시스템끼리 참조하지 않고 Core 인터페이스로 공유). story-001 구현 전 확정.
+- 2026-11-12: §7에 Game 씬→재시작 호출 경로 미정 메모 추가 (story-006 전에 결정).
+- 2026-11-12: §7에 씬 View 주입 규칙(전체 검색 금지, RegisterComponentInHierarchy / autoInjectGameObjects)과 런타임 머티리얼 규칙(Shader.Find 금지, 에셋 참조) 추가. 엔진 점검 결과 반영.
+- 2026-11-12: §2에 에디터 전용 어셈블리 `Whiteout.Editor` 추가 (포커스 없는 플레이 확인, tech-decisions 18).

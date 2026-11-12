@@ -64,6 +64,20 @@ public partial struct PlayerStats : IComponentData {
 
 ---
 
+### Assembly Definition Files (`.asmdef`)
+
+**Verified 2026-11-12** against the Unity 6.3 LTS manual (Assembly Definition file format).
+
+- `noEngineReferences` (optional, default `false`): `true` compiles the assembly without engine references, so
+  `UnityEngine` cannot be used. This project sets it on Core and every system Logic assembly.
+- `references` (optional string array): each entry is either the referenced assembly's **name** or its asmdef
+  **GUID** written `GUID:<32 hex>`. All entries in one file must use the same form. The Inspector's Use GUIDs
+  checkbox is not stored in the JSON; the form is inferred from the entries.
+- `autoReferenced`: no longer shown in the Inspector since 2019.3; the field is still read. Its default differs
+  between manual versions (2021.1 says `true`), so set it explicitly when it matters.
+
+---
+
 ## DOTS/ECS (Production-Ready in Unity 6.3 LTS)
 
 ### Use ISystem (Not ComponentSystem)
@@ -373,3 +387,9 @@ Debug.Log($"Player {playerName} scored {score} points");
 - https://docs.unity3d.com/6000.0/Documentation/Manual/BestPracticeGuides.html
 - https://docs.unity3d.com/Packages/com.unity.entities@1.3/manual/index.html
 - https://docs.unity3d.com/Packages/com.unity.inputsystem@1.11/manual/index.html
+- https://docs.unity3d.com/Manual/AssemblyDefinitionFileFormat.html (Unity 6.3 LTS)
+- https://docs.unity.com/en-us/engine/6000.3/manual/programming-environment/script-compilation/assembly-definition-files/file-format
+- https://docs.unity3d.com/ru/2021.1/Manual/AssemblyDefinitionFileFormat.html
+
+## 변경 이력
+- 2026-11-12: Scripting에 Assembly Definition Files 절 추가 (`noEngineReferences`, 이름/GUID 참조, `autoReferenced`).

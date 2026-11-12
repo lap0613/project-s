@@ -1,0 +1,19 @@
+{
+    "name": "Whiteout.Player.Unity",
+    "rootNamespace": "Whiteout.Player.Unity",
+    "references": [
+        "Whiteout.Core",
+        "Whiteout.Core.Unity",
+        "Whiteout.Player",
+        "VContainer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

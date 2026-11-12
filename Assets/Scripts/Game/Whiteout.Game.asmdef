@@ -1,0 +1,22 @@
+{
+    "name": "Whiteout.Game",
+    "rootNamespace": "Whiteout.Game",
+    "references": [
+        "Whiteout.Core",
+        "Whiteout.Core.Unity",
+        "Whiteout.Player",
+        "Whiteout.Player.Unity",
+        "Whiteout.Input",
+        "VContainer",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

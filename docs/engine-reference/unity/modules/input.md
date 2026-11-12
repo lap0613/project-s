@@ -351,6 +351,28 @@ public class Player : MonoBehaviour {
 
 ---
 
+## Project-Wide Actions (Input System 1.8+)
+
+**Verified 2026-11-12** (manual 1.8/1.14; the project runs 1.20.1, not separately checked)
+
+- An Input Action Asset can be assigned as the **project-wide actions** (Project Settings > Input System Package).
+  Its actions and action maps are **enabled by default** when the project assigns one.
+- `InputSystem.actions` can only be assigned in **edit mode**; assigning it in Play Mode throws.
+- **Shared state:** the project-wide asset is one shared object. If code also injects that same asset and calls
+  `Enable()` / `Disable()` on its actions, it changes the state every other user of the asset sees.
+- **This project (observed 2026-11-12, not from the manual):** `Assets/InputSystem_Actions.inputactions` is registered
+  as project-wide actions (in `ProjectSettings/EditorBuildSettings.asset`), and `Whiteout.Input.InputSystemPlayerInput`
+  enables/disables its `Player/Move` action. On a Game-scene restart the old scope disables before the new one enables.
+- **Not confirmed:** whether 1.20.1 changes the default-enable behaviour above.
+
+---
+
 ## Sources
 - https://docs.unity3d.com/Packages/com.unity.inputsystem@1.11/manual/index.html
 - https://docs.unity3d.com/Packages/com.unity.inputsystem@1.11/manual/QuickStartGuide.html
+- https://docs.unity3d.com/Packages/com.unity.inputsystem@1.8/manual/ProjectWideActions.html
+- https://docs.unity3d.com/Packages/com.unity.inputsystem@1.8/api/UnityEngine.InputSystem.InputSystem.html
+- https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/manual/ProjectWideActions.html
+
+## 변경 이력
+- 2026-11-12: Project-Wide Actions 절 추가 (기본 활성화, 편집 모드에서만 지정, 공유 상태, 이 프로젝트의 등록 현황).

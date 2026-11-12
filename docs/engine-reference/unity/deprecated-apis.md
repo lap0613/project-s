@@ -98,6 +98,7 @@ Format: **Don't use X** → **Use Y instead**
 |------------|-------------|-------|
 | `WWW` class | `UnityWebRequest` | Modern async networking |
 | `Application.LoadLevel()` | `SceneManager.LoadScene()` | Scene management |
+| `Object.FindObjectsByType<T>(FindObjectsSortMode)` and the `FindObjectsSortMode` enum | `FindObjectsByType<T>()` or `FindObjectsByType<T>(FindObjectsInactive)` | **Still valid on the pinned 6.3.** Obsolete from Unity 6.5 (InstanceID → EntityId migration). Unsorted results: sort explicitly if order matters. 6.4/6.5 betas logged CS0618 warnings; one 6.5 doc mirror says compile errors. Check on upgrade. Verified 2026-11-12 |
 
 ---
 
@@ -154,3 +155,6 @@ rootVisualElement.Q<Label>("score-label").text = "Score: 100";
 **Sources:**
 - https://docs.unity3d.com/6000.0/Documentation/Manual/deprecated-features.html
 - https://docs.unity3d.com/Packages/com.unity.inputsystem@1.11/manual/Migration.html
+
+## 변경 이력
+- 2026-11-12: Scripting 표에 `FindObjectsByType` 정렬 인자 폐기(6.5) 추가. 출처: https://docs.unity3d.com/Manual/instanceid-to-entityid-migration.html (6.5), https://docs.unity.cn/Manual/instanceid-to-entityid-migration.html, https://issuetracker.unity.com/issues/6806/warnings-due-to-obsolete-objectfindobjectsbytypet-usage-and-serializereference-are-logged-when-opening-the-netcode-for-entities-setup-scene, 설치된 `com.coplaydev.unity-mcp`의 `Runtime/Helpers/UnityFindObjectsCompat.cs` (`#if UNITY_6000_5_OR_NEWER` 분기).
