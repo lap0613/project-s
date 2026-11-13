@@ -42,3 +42,8 @@
 | 009 | 최소 타이틀·로딩 페이드·일시정지 (`design/ux/ui-plan.md` D1·D7) | UI | Draft | N/A (minimal) |
 | 010 | HUD 상단 배치와 예보 타임라인 막대 (`design/ux/ui-plan.md` §7, T1~T7) | UI | Ready | N/A (minimal) |
 | 011 | 마우스 클릭 상호작용과 커서 위치 설치 (`design/ux/ui-plan.md` §8.1·§9) | Integration | Ready | N/A (minimal) |
+| 012 | 목표 안내와 안도 연출 (`design/ux/ui-plan.md` §7.6) | UI | Ready | N/A (minimal) |
+
+## 작업 순서 메모 (지영 결정 2026-11-13)
+- 011(마우스 클릭 상호작용·커서 설치) → 모닥불 1.5배(해당 스토리·문서 미확인) → 012(목표 안내와 안도 연출).
+- 005(증강)는 증강 방향 안(`design/proposals/augment-direction.md`, 제안)이 확정된 뒤로 미룬다. 확정되면 005의 AC를 고친 뒤 시작한다.

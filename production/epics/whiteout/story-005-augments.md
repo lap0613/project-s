@@ -88,3 +88,7 @@
 
 - Depends on: `production/epics/whiteout/story-003-hurdles-death.md`, `production/epics/whiteout/story-004-items-bag-structures-cooking.md`
 - Unlocks: None
+
+## 순서 메모 (지영 결정 2026-11-13)
+- 이 스토리는 증강 방향 안(`design/proposals/augment-direction.md`, 제안)이 확정된 뒤에 시작한다.
+  확정되면 `design/quick-specs/core-rules.md` §7과 이 스토리의 Acceptance Criteria(증강 개수·목록)를 먼저 고친다.
