@@ -43,7 +43,7 @@
 
 ## Implementation Notes
 
-- 제작·도구·장비 정의는 Resources 시스템의 ScriptableObject 데이터다. 새 도구·장비·레시피는 에셋 추가만으로 가능해야 한다 (code-structure §6).
+- 제작·도구·장비 정의는 Gathering 시스템(이전 이름 Resources)의 ScriptableObject 데이터다. 새 도구·장비·레시피는 에셋 추가만으로 가능해야 한다 (code-structure §6).
 - 장비·도구의 효과는 다른 시스템 코드를 고치지 않고 스탯 ID로 수정자를 붙인다.
 - 횃불의 "늑대가 4m 안으로 오지 않음"은 Threats가 읽는 Core 인터페이스(빛 영역)를 통해 알린다.
 - 문서에 없는 규칙이 필요하면 만들지 말고 보고한다.
@@ -60,7 +60,7 @@
 
 ## Files
 
-- `Assets/Scripts/Systems/Resources/**` (제작, 도구, 장비)
+- `Assets/Scripts/Systems/Gathering/**` (이전 이름 `Resources`, 폴더 이동은 S개발) (제작, 도구, 장비)
 - `Assets/Scripts/Systems/Camp/**` (은신처 제작 상호작용)
 - `Assets/Scripts/UI/**` (제작·장비 UI)
 - `Assets/Data/**` (재료·도구·장비·레시피 에셋)

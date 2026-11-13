@@ -65,7 +65,7 @@
 
 - `Assets/Scripts/Systems/Camp/**` (신호기 틀, 부품 장착)
 - `Assets/Scripts/Systems/RunFlow/**` (구조 타이머, 승패)
-- `Assets/Scripts/Systems/Resources/**` (부품·금속 조각 정의와 배치)
+- `Assets/Scripts/Systems/Gathering/**` (이전 이름 `Resources`, 폴더 이동은 S개발) (부품·금속 조각 정의와 배치)
 - `Assets/Scripts/UI/**` (남은 시간 HUD, 결과 화면)
 - `Assets/Data/**` (신호기 구조물 정의, 부품 정의)
 

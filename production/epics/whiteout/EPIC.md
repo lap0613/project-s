@@ -41,3 +41,4 @@
 | 008 | 도구·장비·한 단계 제작 | Integration | Ready | N/A (minimal) |
 | 009 | 최소 타이틀·로딩 페이드·일시정지 (`design/ux/ui-plan.md` D1·D7) | UI | Draft | N/A (minimal) |
 | 010 | HUD 상단 배치와 예보 타임라인 막대 (`design/ux/ui-plan.md` §7, T1~T7) | UI | Ready | N/A (minimal) |
+| 011 | 마우스 클릭 상호작용과 커서 위치 설치 (`design/ux/ui-plan.md` §8.1·§9) | Integration | Ready | N/A (minimal) |
