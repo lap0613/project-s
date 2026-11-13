@@ -1,0 +1,16 @@
+{
+    "name": "Whiteout.Survival",
+    "rootNamespace": "Whiteout.Survival",
+    "references": [
+        "Whiteout.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

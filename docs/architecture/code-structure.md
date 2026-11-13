@@ -74,6 +74,8 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
   여러 시스템이 쓰는 이벤트 타입은 `Core/Contracts/Events/`, 시스템 내부용은 그 시스템 안에 둔다.
 - **조회 인터페이스 (매 프레임 읽는 값):** `Core/Contracts/`에 정의, 구현은 해당 시스템, 연결은 Game.
 - 이벤트는 알림에만 쓰고, 명령은 인터페이스 호출로 한다 (흐름 추적을 위해).
+- **시스템 사이 연결(브리지):** 두 시스템을 잇는 코드는 Game에 둔다. 예: `SurvivalPlayerBridge`는 Survival의 체온 30 미만 상태를
+  Player의 이동속도 스탯 수정자로 붙이고, `PlayerDied`에 `PlayerController`를 끈다. Survival과 Player는 서로를 모른다.
 
 | 이벤트 | 발행 | 구독 |
 |---|---|---|
@@ -83,7 +85,7 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `FireStateChanged` | Camp | UI, View |
 | `ResourceGathered` | Resources | UI |
 | `PlayerDamaged` | Threats | Survival |
-| `PlayerDied` | Survival | RunFlow |
+| `PlayerDied` | Survival | RunFlow, Game(`SurvivalPlayerBridge`: 플레이어 이동 정지) |
 | `AugmentChosen` | Augments | UI |
 | `SignalBeaconCompleted` | Camp | UI |
 | `RescueRequested` | Camp | RunFlow(타이머 시작), UI |
@@ -155,3 +157,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-12: §2에 에디터 전용 어셈블리 `Whiteout.Editor` 추가 (포커스 없는 플레이 확인, tech-decisions 18).
 - 2026-11-13: §2 Whiteout.Editor 설명에 Play 시 Bootstrap에서 시작(tech-decisions 21) 추가.
 - 2026-11-13: §4에 `IWarmthSource` 추가 (Environment가 Camp를 참조하지 않고 모닥불 온기를 받는 통로, story-002). 낮/밤 길이는 RunFlow의 `RunFlowConfig`, 날씨·온도·시야 값은 Environment의 `EnvironmentConfig`에 둔다.
+- 2026-11-13: §4에 Game 브리지(`SurvivalPlayerBridge`)와 `PlayerDied` 구독자(Game) 추가 (story-003: 시스템끼리 참조 금지를 지키면서 이동속도 불이익·사망 정지를 연결).

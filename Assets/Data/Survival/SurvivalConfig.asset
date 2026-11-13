@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993c9f20437ab9e4db71a8e9797f3318, type: 3}
+  m_Name: SurvivalConfig
+  m_EditorClassIdentifier: Whiteout.Survival.Unity::Whiteout.Survival.Unity.SurvivalConfig
+  maxValue: 100
+  startValue: 100
+  temperaturePerDegree: 0.1
+  coldHungerMultiplier: 1.5
+  hungerDrainPerSecond: 0.4
+  regenThreshold: 60
+  healthRegenPerSecond: 0.5
+  freezingDamagePerSecond: 2
+  starvationDamagePerSecond: 1
+  lowThreshold: 30
+  moveSpeedPenalty: 0.25
+  gatherSpeedPenalty: 0.3

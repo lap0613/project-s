@@ -11,6 +11,8 @@
         "Whiteout.RunFlow.Unity",
         "Whiteout.Environment",
         "Whiteout.Environment.Unity",
+        "Whiteout.Survival",
+        "Whiteout.Survival.Unity",
         "Whiteout.UI",
         "VContainer",
         "Unity.InputSystem"

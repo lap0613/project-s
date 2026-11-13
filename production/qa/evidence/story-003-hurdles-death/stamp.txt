@@ -1,0 +1,15 @@
+Reviewed-Content-Hash: Assets/Scenes/Game.unity 708ffee0803a3703961cbab01a58afcebabfbe97
+Reviewed-Content-Hash: Assets/Scripts/Game/GameLifetimeScope.cs 27a858a72a6d49929be0119b9916ef6577279b48
+Reviewed-Content-Hash: Assets/Scripts/Game/Whiteout.Game.asmdef 42d6efc6b4599195c87ddb2b548e3ff8f69dd481
+Reviewed-Content-Hash: Assets/Data/Survival/SurvivalConfig.asset 884f97df46d7f0594b55299bb02a8f6621a05b54
+Reviewed-Content-Hash: Assets/Scripts/Core/Contracts/DeathCause.cs 0ec8682b5c09231eb676a2ad135d75994a2f0df9
+Reviewed-Content-Hash: Assets/Scripts/Core/Contracts/Events/PlayerDied.cs 4d84127181c747402fbbe4a5dad7fdcf895669d0
+Reviewed-Content-Hash: Assets/Scripts/Game/SurvivalPlayerBridge.cs 36bf85256615e910bd28e183614e33ab27d2ff41
+Reviewed-Content-Hash: Assets/Scripts/Systems/Survival/Logic/SurvivalSettings.cs 1cbd3abcd77469f9785b83a20cb0e80ac8c9e893
+Reviewed-Content-Hash: Assets/Scripts/Systems/Survival/Logic/SurvivalStats.cs 49b3f37767dbe0181b850145bf9a92a37a6b1fd2
+Reviewed-Content-Hash: Assets/Scripts/Systems/Survival/Logic/SurvivalSystem.cs 42b212fb521d58671b285140869734ff69e5c67b
+Reviewed-Content-Hash: Assets/Scripts/Systems/Survival/Logic/Whiteout.Survival.asmdef eaf03d2d9436c10040ed00345e350a4f837bc637
+Reviewed-Content-Hash: Assets/Scripts/Systems/Survival/Unity/Data/SurvivalConfig.cs faa21d81b8d11b6a291696cc4ad2177de89a43e9
+Reviewed-Content-Hash: Assets/Scripts/Systems/Survival/Unity/View/SurvivalHud.cs 34ea82a933164a1b7ee2bfda287ae6f4b761ba83
+Reviewed-Content-Hash: Assets/Scripts/Systems/Survival/Unity/View/SurvivalRunner.cs 1972bda730fa89934e9db3712fa8385ce07c2a8f
+Reviewed-Content-Hash: Assets/Scripts/Systems/Survival/Unity/Whiteout.Survival.Unity.asmdef 92a5bbdc9caa00f73ece970f1a84da6f76a32e9e

@@ -10,6 +10,8 @@ using Whiteout.Input;
 using Whiteout.Player.Unity;
 using Whiteout.RunFlow;
 using Whiteout.RunFlow.Unity;
+using Whiteout.Survival;
+using Whiteout.Survival.Unity;
 using Whiteout.UI;
 
 namespace Whiteout.Game
@@ -31,13 +33,14 @@ namespace Whiteout.Game
         [SerializeField] private InputActionAsset inputActions;
         [SerializeField] private RunFlowConfig runFlowConfig;
         [SerializeField] private EnvironmentConfig environmentConfig;
+        [SerializeField] private SurvivalConfig survivalConfig;
 
         /// <inheritdoc />
         protected override void Configure(IContainerBuilder builder)
         {
-            if (runFlowConfig == null || environmentConfig == null)
+            if (runFlowConfig == null || environmentConfig == null || survivalConfig == null)
             {
-                throw new InvalidOperationException("GameLifetimeScope: RunFlow Config and Environment Config must be assigned.");
+                throw new InvalidOperationException("GameLifetimeScope: RunFlow, Environment and Survival Config must be assigned.");
             }
 
             builder.RegisterInstance(playerConfig);
@@ -55,6 +58,12 @@ namespace Whiteout.Game
             builder.Register<EnvironmentSystem>(Lifetime.Singleton).AsSelf().As<IAmbientTemperatureSource>();
             builder.RegisterComponentInHierarchy<EnvironmentView>();
             builder.RegisterComponentInHierarchy<WeatherHud>();
+
+            builder.RegisterInstance(survivalConfig.ToSettings());
+            builder.Register<SurvivalSystem>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<SurvivalRunner>();
+            builder.RegisterEntryPoint<SurvivalPlayerBridge>();
+            builder.RegisterComponentInHierarchy<SurvivalHud>();
         }
     }
 }
