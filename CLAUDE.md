@@ -82,6 +82,8 @@ See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
 6. **구현 전에 충돌부터 보고한다.** 지영이 아이디어나 수정을 지시하면, 구현하기 전에 기존 정책·기획
    문서와 어긋나거나 충돌하는 지점을 먼저 찾아 보고한다. 충돌이 있으면 선택지를 제시하고,
    지영이 정한 뒤 문서를 고치고 그다음 구현한다.
+   문서와 충돌하지 않아도 더 나은 대안이나 위험(재미·범위·성능·기존 시스템 영향)이 보이면
+   구현 전에 한 번 짧게 말한다. 근거 없는 반대는 하지 않고, 지영이 정하면 그대로 진행한다.
 7. **정책·기획 규칙은 임의로 정하지 않는다.** 문서에 없는 규칙이 필요하면 추천값과 선택지를 제시하고
    지영에게 확인받는다.
 8. **각 문서에 변경 이력을 남긴다.** 문서 끝의 `변경 이력`(브리프는 `Change log`)에
@@ -94,6 +96,7 @@ See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
 | `design/quick-specs/items.md` | 아이템 목록, 가방, 제작, 요리, 시작 소지품 |
 | `docs/architecture/tech-decisions.md` | 기술 결정 요약 |
 | `docs/architecture/code-structure.md` | 폴더, 어셈블리, 의존 방향, 시스템 간 통신, 확장 방식 |
+| `design/ux/ui-plan.md` | 화면 목록·흐름, HUD 배치, 화면별 입력·정보 우선순위·피드백, UI 결정(D1~D12) |
 
 새 설계 문서를 추가하면 이 표에도 추가한다.
 
@@ -116,3 +119,20 @@ elsewhere in the repo, so they are restated here rather than lost:
 - **Helpers in `.claude/scripts/` emit observations, never verdicts.** A script
   that scores or judges will eventually contradict a mode or override it cannot
   see. (Cited by `artifact-check.sh` and `adr-dep-graph.sh`.)
+
+## 배운 점 (반복 금지)
+
+운영 규칙:
+- 같은 실수가 2번 나오면 한 줄 추가한다.
+- 코드 교훈은 `docs/architecture/code-structure.md` §7에 적고 여기엔 적지 않는다.
+- 10줄을 넘으면 합치거나 해당 문서로 옮긴다.
+- '하지 말 것/할 것' 방법 형태로 적는다.
+
+항목:
+- Play는 항상 Bootstrap 씬에서 시작한다. Game 씬만 열고 Play하면 주입이 실패한다 (`docs/architecture/tech-decisions.md` 21번).
+- 시각 확인은 탑다운뿐 아니라 비스듬한 카메라로도 본다. 눈보라 안개가 위에서는 보이지 않았다.
+
+## 변경 이력
+
+- 2026-11-13: Document-First 6번 확장(문서와 충돌하지 않아도 대안·위험을 구현 전에 한 번 말하기), `배운 점 (반복 금지)` 섹션 신설(항목 2개). 지영 승인, 출처 MGD 쇼츠 'AI로 게임 만들 때 작업 규칙 4가지' 검토.
+- 2026-11-13: Document-First 문서 표에 `design/ux/ui-plan.md` 등록 (UI 기획 확정본, 지영 결정 D1~D12).
