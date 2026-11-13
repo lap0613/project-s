@@ -11,8 +11,8 @@ using Whiteout.Environment;
 using Whiteout.Environment.Unity;
 using Whiteout.Input;
 using Whiteout.Player.Unity;
-using Whiteout.Resources;
-using Whiteout.Resources.Unity;
+using Whiteout.Gathering;
+using Whiteout.Gathering.Unity;
 using Whiteout.RunFlow;
 using Whiteout.RunFlow.Unity;
 using Whiteout.Survival;
@@ -45,15 +45,16 @@ namespace Whiteout.Game
         [SerializeField] private CampConfig campConfig;
         [SerializeField] private UiTextTable uiTexts;
         [SerializeField] private HudConfig hudConfig;
+        [SerializeField] private PointerConfig pointerConfig;
 
         /// <inheritdoc />
         protected override void Configure(IContainerBuilder builder)
         {
             if (playerConfig == null || inputActions == null || runFlowConfig == null || environmentConfig == null || survivalConfig == null
-                || resourcesConfig == null || campConfig == null || uiTexts == null || hudConfig == null)
+                || resourcesConfig == null || campConfig == null || uiTexts == null || hudConfig == null || pointerConfig == null)
             {
                 throw new InvalidOperationException(
-                    "GameLifetimeScope: Player Config, Input Actions, RunFlow, Environment, Survival, Resources, Camp and HUD Config and the UI Text Table must be assigned.");
+                    "GameLifetimeScope: Player Config, Input Actions, RunFlow, Environment, Survival, Resources, Camp, HUD and Pointer Config and the UI Text Table must be assigned.");
             }
 
             builder.RegisterInstance(playerConfig);
@@ -63,7 +64,10 @@ namespace Whiteout.Game
             builder.Register<InputSystemInteractionInput>(Lifetime.Singleton).As<IInteractionInput>();
             builder.RegisterComponentInHierarchy<PlayerController>();
             builder.RegisterEntryPoint<PlayerPositionSource>();
-            builder.RegisterEntryPoint<InteractionDirector>();
+            builder.RegisterInstance(pointerConfig);
+            builder.Register<PointerWorld>(Lifetime.Singleton).As<IPointerWorld>();
+            builder.RegisterEntryPoint<InteractionDirector>().AsSelf();
+            builder.RegisterEntryPoint<TargetHighlighter>();
 
             builder.RegisterInstance(uiTexts);
             builder.RegisterInstance(hudConfig);

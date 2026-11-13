@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdbe521161807cc40b1c1601a6e78174, type: 3}
   m_Name: Resource_raw_meat
-  m_EditorClassIdentifier: Whiteout.Resources.Unity::Whiteout.Resources.Unity.ResourceDefinition
+  m_EditorClassIdentifier: Whiteout.Gathering.Unity::Whiteout.Gathering.Unity.ResourceDefinition
   item: {fileID: 11400000, guid: 3677d040a7da2004c9017aad14babcbd, type: 2}
   displayName: "\uB0A0\uACE0\uAE30"
   stackLimit: 3

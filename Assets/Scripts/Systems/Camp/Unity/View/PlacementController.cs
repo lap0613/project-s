@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using VContainer;
 using VContainer.Unity;
 using Whiteout.Core.Contracts;
@@ -12,8 +11,9 @@ namespace Whiteout.Camp.Unity
 {
     /// <summary>
     /// The placement mode (ui-plan section 9, core-rules section 4). B opens the structure list built from the
-    /// <see cref="StructureCatalog"/>; number keys or the wheel select; a preview stands in front of the player,
-    /// blue when it can be placed and red when it overlaps an obstacle; confirm places; cancel or B closes.
+    /// <see cref="StructureCatalog"/>; number keys select; the preview follows the mouse cursor (at most the max distance
+    /// from the player), the wheel turns it, blue when it can be placed and red when it overlaps an obstacle; left click places;
+    /// right click, Esc or B closes.
     /// Time keeps running and the player can move. A new structure definition just makes the list longer.
     /// Registered as a VContainer entry point; also the <see cref="IPlacementMenu"/> the HUD reads.
     /// </summary>
@@ -29,6 +29,7 @@ namespace Whiteout.Camp.Unity
         private readonly CampSystem _camp;
         private readonly IInteractionInput _input;
         private readonly IPlayerPosition _player;
+        private readonly IPointerWorld _pointer;
         private readonly IBag _bag;
         private readonly IItemNames _names;
         private readonly UiTextTable _texts;
@@ -40,6 +41,9 @@ namespace Whiteout.Camp.Unity
         private GameObject _preview;
         private int _previewIndex = -1;
         private bool _previewBlocked;
+        private float _yaw;
+        private bool _hasCursorPosition;
+        private Vector3 _cursorPosition;
         private bool _playerDead;
 
         /// <summary>Creates the controller.</summary>
@@ -47,7 +51,8 @@ namespace Whiteout.Camp.Unity
         /// <param name="config">Catalog and placement values.</param>
         /// <param name="camp">Pays for the structure.</param>
         /// <param name="input">Button input.</param>
-        /// <param name="player">Player position and facing.</param>
+        /// <param name="player">Player position.</param>
+        /// <param name="pointer">Where the mouse cursor points on the ground.</param>
         /// <param name="bag">The bag (for have/need amounts in notices).</param>
         /// <param name="names">Item names.</param>
         /// <param name="texts">UI text table (cost formatting).</param>
@@ -58,6 +63,7 @@ namespace Whiteout.Camp.Unity
             CampSystem camp,
             IInteractionInput input,
             IPlayerPosition player,
+            IPointerWorld pointer,
             IBag bag,
             IItemNames names,
             UiTextTable texts,
@@ -68,6 +74,7 @@ namespace Whiteout.Camp.Unity
             _camp = camp ?? throw new ArgumentNullException(nameof(camp));
             _input = input ?? throw new ArgumentNullException(nameof(input));
             _player = player ?? throw new ArgumentNullException(nameof(player));
+            _pointer = pointer ?? throw new ArgumentNullException(nameof(pointer));
             _bag = bag ?? throw new ArgumentNullException(nameof(bag));
             _names = names ?? throw new ArgumentNullException(nameof(names));
             _texts = texts != null ? texts : throw new ArgumentNullException(nameof(texts));
@@ -100,6 +107,9 @@ namespace Whiteout.Camp.Unity
 
         /// <inheritdoc />
         public int SelectedIndex { get; private set; }
+
+        /// <inheritdoc />
+        public int ClickConsumedFrame { get; private set; } = -1;
 
         /// <inheritdoc />
         public string GetEntryName(int index) => _specs[index].DisplayName;
@@ -136,13 +146,10 @@ namespace Whiteout.Camp.Unity
                 SelectedIndex = number;
             }
 
-            SelectedIndex = (SelectedIndex + _input.SelectionScroll + _specs.Length) % _specs.Length;
+            _yaw = Mathf.Repeat(_yaw + _input.WheelScroll * _config.RotationStepDegrees, 360f);
 
             var definition = _definitions[SelectedIndex];
-            var position = new Vector3(
-                _player.X + _player.ForwardX * _config.PreviewDistance,
-                _player.Y,
-                _player.Z + _player.ForwardZ * _config.PreviewDistance);
+            var position = CursorPosition();
             var blocked = Physics.CheckSphere(
                 position + Vector3.up * definition.FootprintRadius,
                 definition.FootprintRadius,
@@ -151,9 +158,9 @@ namespace Whiteout.Camp.Unity
             UpdatePreview(definition, position, blocked);
 
             // A click on the HUD (a bag slot, a menu entry) is not a placement click.
-            var overUi = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
-            if (_input.ConfirmPressed && !overUi)
+            if (_input.ConfirmPressed && !_pointer.IsOverUi)
             {
+                ClickConsumedFrame = Time.frameCount;
                 Place(definition, _specs[SelectedIndex], position, blocked);
             }
         }
@@ -163,6 +170,31 @@ namespace Whiteout.Camp.Unity
         {
             _diedSubscription.Dispose();
             Close();
+        }
+
+        private Vector3 CursorPosition()
+        {
+            if (_pointer.TryGetPointOnPlane(_player.Y, out var cursorX, out var cursorZ))
+            {
+                var dx = cursorX - _player.X;
+                var dz = cursorZ - _player.Z;
+                var distance = Mathf.Sqrt(dx * dx + dz * dz);
+                if (distance > _config.MaxPlaceDistance)
+                {
+                    var scale = _config.MaxPlaceDistance / distance;
+                    cursorX = _player.X + dx * scale;
+                    cursorZ = _player.Z + dz * scale;
+                }
+
+                _cursorPosition = new Vector3(cursorX, _player.Y, cursorZ);
+                _hasCursorPosition = true;
+            }
+            else if (!_hasCursorPosition)
+            {
+                _cursorPosition = new Vector3(_player.X, _player.Y, _player.Z);
+            }
+
+            return _cursorPosition;
         }
 
         private void Place(StructureDefinition definition, StructureSpec spec, Vector3 position, bool blocked)
@@ -193,7 +225,7 @@ namespace Whiteout.Camp.Unity
                     return;
             }
 
-            var instance = _resolver.Instantiate(definition.Prefab, position, Quaternion.identity);
+            var instance = _resolver.Instantiate(definition.Prefab, position, Quaternion.Euler(0f, _yaw, 0f));
             if (instance.TryGetComponent<StructureView>(out var view))
             {
                 view.Initialize(definition);
@@ -210,7 +242,7 @@ namespace Whiteout.Camp.Unity
                 _previewIndex = SelectedIndex;
                 if (definition.PreviewPrefab != null)
                 {
-                    _preview = UnityEngine.Object.Instantiate(definition.PreviewPrefab, position, Quaternion.identity);
+                    _preview = UnityEngine.Object.Instantiate(definition.PreviewPrefab, position, Quaternion.Euler(0f, _yaw, 0f));
                     _previewRenderers = _preview.GetComponentsInChildren<Renderer>();
                     ApplyPreviewMaterial(blocked);
                 }
@@ -221,7 +253,7 @@ namespace Whiteout.Camp.Unity
                 return;
             }
 
-            _preview.transform.position = position;
+            _preview.transform.SetPositionAndRotation(position, Quaternion.Euler(0f, _yaw, 0f));
             if (blocked != _previewBlocked)
             {
                 ApplyPreviewMaterial(blocked);
@@ -246,6 +278,8 @@ namespace Whiteout.Camp.Unity
         private void Close()
         {
             IsOpen = false;
+            _yaw = 0f;
+            _hasCursorPosition = false;
             DestroyPreview();
         }
 

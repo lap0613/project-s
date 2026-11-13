@@ -23,5 +23,8 @@ namespace Whiteout.Camp
 
         /// <summary>The relight cost is not in the bag.</summary>
         MissingRelightItems,
+
+        /// <summary>A new fire cannot be lit: the ignite items are missing.</summary>
+        MissingIgniteItems,
     }
 }

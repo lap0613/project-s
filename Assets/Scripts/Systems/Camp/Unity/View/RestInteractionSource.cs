@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using Whiteout.Core.Contracts;
 
 namespace Whiteout.Camp.Unity
@@ -63,6 +64,43 @@ namespace Whiteout.Camp.Unity
 
             _target = null;
             return false;
+        }
+
+        /// <inheritdoc />
+        public bool TryOfferPointed(in PointerQuery query, out float holdSeconds)
+        {
+            holdSeconds = 0f;
+            var shelters = _registry.Shelters;
+            for (var i = 0; i < shelters.Count; i++)
+            {
+                var shelter = shelters[i];
+                var position = shelter.transform.position;
+                var px = position.x - _player.X;
+                var pz = position.z - _player.Z;
+                if (px * px + pz * pz > query.MaxPlayerDistance * query.MaxPlayerDistance
+                    || !query.Pointer.TryGetPointOnPlane(position.y, out var cursorX, out var cursorZ))
+                {
+                    continue;
+                }
+
+                var dx = position.x - cursorX;
+                var dz = position.z - cursorZ;
+                var radius = Mathf.Max(query.HoverRadius, shelter.PointerRadius);
+                if (dx * dx + dz * dz <= radius * radius)
+                {
+                    _target = shelter;
+                    Prompt = new InteractionPrompt(CampTextKeys.RestPrompt, string.Empty, true, position.x, position.y, position.z);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <inheritdoc />
+        public bool IsTargetInReach()
+        {
+            return _target != null && _target.Contains(_player);
         }
 
         /// <inheritdoc />

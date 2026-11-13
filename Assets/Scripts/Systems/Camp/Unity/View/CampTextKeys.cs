@@ -12,6 +12,9 @@ namespace Whiteout.Camp.Unity
         public const string FuelPrompt = "prompt.fuel";
 
         /// <summary>Prompt on a burned-out campfire; {0} = relight cost.</summary>
+        /// <summary>Prompt for lighting a new fire.</summary>
+        public const string IgnitePrompt = "prompt.ignite";
+
         public const string RelightPrompt = "prompt.relight";
 
         /// <summary>Prompt inside a shelter.</summary>

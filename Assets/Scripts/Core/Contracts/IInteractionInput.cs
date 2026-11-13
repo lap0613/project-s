@@ -30,7 +30,16 @@ namespace Whiteout.Core.Contracts
         /// <summary>Zero-based index of the number key (1 = 0 ... 9 = 8) that went down this frame, or -1 when none.</summary>
         int NumberPressed { get; }
 
-        /// <summary>Selection scroll this frame: +1 next, -1 previous, 0 none (mouse wheel).</summary>
-        int SelectionScroll { get; }
+        /// <summary>Mouse wheel this frame: +1 wheel up, -1 wheel down, 0 none. The placement mode turns the preview with it.</summary>
+        int WheelScroll { get; }
+
+        /// <summary>True when a pointing device (mouse) is present, so <see cref="PointerX"/> and <see cref="PointerY"/> mean something.</summary>
+        bool HasPointer { get; }
+
+        /// <summary>Cursor X in screen pixels (0 = left).</summary>
+        float PointerX { get; }
+
+        /// <summary>Cursor Y in screen pixels (0 = bottom).</summary>
+        float PointerY { get; }
     }
 }

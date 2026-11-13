@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using Whiteout.Core.Contracts;
 using Whiteout.Core.Events;
 using Whiteout.Core.Unity;
@@ -6,8 +7,8 @@ using Whiteout.Core.Unity;
 namespace Whiteout.Camp.Unity
 {
     /// <summary>
-    /// E-action on the nearest campfire in reach: put in one wood (the first one lights a new fire), or relight a
-    /// burned-out fire with tinder 1 + wood 2 while holding flint (core-rules section 4). When something is missing
+    /// E-action on the nearest campfire in reach: put in one wood, light a new fire with wood 2, or relight a
+    /// burned-out fire with tinder 1 + wood 2, both while holding flint (core-rules section 4). When something is missing
     /// the prompt is greyed with have/need amounts and pressing E posts a notice (ui-plan section 8).
     /// </summary>
     /// <example>
@@ -87,20 +88,49 @@ namespace Whiteout.Camp.Unity
                 return false;
             }
 
-            var fire = _target.Fire;
-            if (_target != _promptTarget || fire.State != _promptState || _bag.Version != _promptBagVersion)
+            RefreshPrompt();
+            return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryOfferPointed(in PointerQuery query, out float holdSeconds)
+        {
+            holdSeconds = _config.FuelHoldSeconds;
+            _target = null;
+            var best = float.MaxValue;
+            var campfires = _registry.Campfires;
+            for (var i = 0; i < campfires.Count; i++)
             {
-                _promptTarget = _target;
-                _promptState = fire.State;
-                _promptBagVersion = _bag.Version;
-                var key = fire.State == FireState.BurnedOut ? CampTextKeys.RelightPrompt : CampTextKeys.FuelPrompt;
-                var argument = fire.State == FireState.BurnedOut
-                    ? _texts.FormatItems(fire.Spec.RelightCost, _names, _bag)
-                    : _names.GetDisplayName(fire.Spec.FuelItem);
-                Prompt = new InteractionPrompt(key, argument, _camp.CanFuel(fire), fire.X, fire.Y, fire.Z);
+                var fire = campfires[i];
+                if (fire.DistanceTo(_player) > query.MaxPlayerDistance
+                    || !query.Pointer.TryGetPointOnPlane(fire.transform.position.y, out var cursorX, out var cursorZ))
+                {
+                    continue;
+                }
+
+                var dx = fire.transform.position.x - cursorX;
+                var dz = fire.transform.position.z - cursorZ;
+                var distance = Mathf.Sqrt(dx * dx + dz * dz);
+                if (distance <= Mathf.Max(query.HoverRadius, fire.Definition.FootprintRadius) && distance < best)
+                {
+                    best = distance;
+                    _target = fire;
+                }
             }
 
+            if (_target == null)
+            {
+                return false;
+            }
+
+            RefreshPrompt();
             return true;
+        }
+
+        /// <inheritdoc />
+        public bool IsTargetInReach()
+        {
+            return _target != null && _target.DistanceTo(_player) <= _target.Definition.InteractRange;
         }
 
         /// <inheritdoc />
@@ -115,6 +145,10 @@ namespace Whiteout.Camp.Unity
                 case FireActionResult.MissingRelightItems:
                     _bus.Publish(new NoticePosted(
                         CampTextKeys.MissingMaterialsNotice, _texts.FormatItems(fire.Spec.RelightCost, _names, _bag)));
+                    return false;
+                case FireActionResult.MissingIgniteItems:
+                    _bus.Publish(new NoticePosted(
+                        CampTextKeys.MissingMaterialsNotice, _texts.FormatItems(fire.Spec.IgniteCost, _names, _bag)));
                     return false;
                 case FireActionResult.NoFuelItem:
                     _bus.Publish(new NoticePosted(
@@ -148,6 +182,38 @@ namespace Whiteout.Camp.Unity
         /// <inheritdoc />
         public void Cancel()
         {
+        }
+
+        private void RefreshPrompt()
+        {
+            var fire = _target.Fire;
+            if (_target == _promptTarget && fire.State == _promptState && _bag.Version == _promptBagVersion)
+            {
+                return;
+            }
+
+            _promptTarget = _target;
+            _promptState = fire.State;
+            _promptBagVersion = _bag.Version;
+            string key;
+            string argument;
+            switch (fire.State)
+            {
+                case FireState.BurnedOut:
+                    key = CampTextKeys.RelightPrompt;
+                    argument = _texts.FormatItems(fire.Spec.RelightCost, _names, _bag);
+                    break;
+                case FireState.Unlit:
+                    key = CampTextKeys.IgnitePrompt;
+                    argument = _texts.FormatItems(fire.Spec.IgniteCost, _names, _bag);
+                    break;
+                default:
+                    key = CampTextKeys.FuelPrompt;
+                    argument = _names.GetDisplayName(fire.Spec.FuelItem);
+                    break;
+            }
+
+            Prompt = new InteractionPrompt(key, argument, _camp.CanFuel(fire), fire.X, fire.Y, fire.Z);
         }
 
         private void PostMissingRequired(CampfireSpec spec)

@@ -1,7 +1,7 @@
 using System;
 using VContainer.Unity;
 using Whiteout.Core.Stats;
-using Whiteout.Resources;
+using Whiteout.Gathering;
 using Whiteout.Survival;
 
 namespace Whiteout.Game

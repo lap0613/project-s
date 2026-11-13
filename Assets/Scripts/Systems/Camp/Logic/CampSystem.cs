@@ -166,22 +166,25 @@ namespace Whiteout.Camp
             }
 
             var spec = fire.Spec;
-            if (fire.State == FireState.BurnedOut)
+            if (fire.State != FireState.Lit)
             {
                 if (!HasAll(spec.IgniterItems))
                 {
                     return FireActionResult.MissingIgniter;
                 }
 
-                for (var i = 0; i < spec.RelightCost.Count; i++)
+                var cost = fire.State == FireState.BurnedOut ? spec.RelightCost : spec.IgniteCost;
+                for (var i = 0; i < cost.Count; i++)
                 {
-                    if (_bag.Count(spec.RelightCost[i].Item) < spec.RelightCost[i].Amount)
+                    if (_bag.Count(cost[i].Item) < cost[i].Amount)
                     {
-                        return FireActionResult.MissingRelightItems;
+                        return fire.State == FireState.BurnedOut
+                            ? FireActionResult.MissingRelightItems
+                            : FireActionResult.MissingIgniteItems;
                     }
                 }
 
-                return FireActionResult.Relit;
+                return fire.State == FireState.BurnedOut ? FireActionResult.Relit : FireActionResult.Ignited;
             }
 
             if (fire.FuelSeconds + spec.BurnSecondsPerFuel > fire.FuelCapacitySeconds)
@@ -194,7 +197,7 @@ namespace Whiteout.Camp
                 return FireActionResult.NoFuelItem;
             }
 
-            return fire.State == FireState.Unlit ? FireActionResult.Ignited : FireActionResult.FuelAdded;
+            return FireActionResult.FuelAdded;
         }
 
         /// <summary>True when the E action on this fire would do something.</summary>
@@ -218,24 +221,27 @@ namespace Whiteout.Camp
             switch (result)
             {
                 case FireActionResult.Relit:
-                    if (!_bag.TryRemoveAll(spec.RelightCost))
+                case FireActionResult.Ignited:
+                    var cost = result == FireActionResult.Relit ? spec.RelightCost : spec.IgniteCost;
+                    if (!_bag.TryRemoveAll(cost))
                     {
-                        return FireActionResult.MissingRelightItems;
+                        return result == FireActionResult.Relit
+                            ? FireActionResult.MissingRelightItems
+                            : FireActionResult.MissingIgniteItems;
                     }
 
                     var fuelItems = 0;
-                    for (var i = 0; i < spec.RelightCost.Count; i++)
+                    for (var i = 0; i < cost.Count; i++)
                     {
-                        if (spec.RelightCost[i].Item == spec.FuelItem)
+                        if (cost[i].Item == spec.FuelItem)
                         {
-                            fuelItems += spec.RelightCost[i].Amount;
+                            fuelItems += cost[i].Amount;
                         }
                     }
 
                     fire.FuelSeconds = Math.Min(fuelItems * spec.BurnSecondsPerFuel, fire.FuelCapacitySeconds);
                     break;
                 case FireActionResult.FuelAdded:
-                case FireActionResult.Ignited:
                     if (!_bag.TryRemove(spec.FuelItem, 1))
                     {
                         return FireActionResult.NoFuelItem;

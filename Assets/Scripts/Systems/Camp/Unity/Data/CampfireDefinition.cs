@@ -5,7 +5,7 @@ namespace Whiteout.Camp.Unity
 {
     /// <summary>
     /// Campfire data (core-rules sections 3 and 4): cost wood 3 + tinder 1 with flint in the bag, 1 wood = 60 s,
-    /// at most 5 wood, +35 degrees within 4 m, relight with tinder 1 + wood 2. The structure's required items (flint)
+    /// at most 5 wood, +35 degrees within 4 m, light a new fire with wood 2, relight with tinder 1 + wood 2. The structure's required items (flint)
     /// are also what relighting needs. Must not reference View code.
     /// </summary>
     /// <example>
@@ -25,6 +25,9 @@ namespace Whiteout.Camp.Unity
 
         [Tooltip("Most fuel items the fire holds.")]
         [SerializeField] private int maxFuel = 5;
+
+        [Tooltip("Items consumed to light a new, never-lit fire (wood 2, ui-plan section 8, M6). The fuel items among them become its fuel.")]
+        [SerializeField] private ItemCost[] igniteCost;
 
         [Tooltip("Items consumed to relight a burned-out fire. The fuel items among them become its fuel.")]
         [SerializeField] private ItemCost[] relightCost;
@@ -56,7 +59,8 @@ namespace Whiteout.Camp.Unity
         public CampfireSpec ToCampfireSpec()
         {
             return new CampfireSpec(
-                fuelItem.Id, burnSecondsPerFuel, maxFuel, warmth, ItemCost.ToAmounts(relightCost), ToRequiredItems());
+                fuelItem.Id, burnSecondsPerFuel, maxFuel, warmth, ItemCost.ToAmounts(igniteCost), ItemCost.ToAmounts(relightCost),
+                ToRequiredItems());
         }
     }
 }

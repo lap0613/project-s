@@ -1,0 +1,6 @@
+Reviewed-Content-Hash: Assets/Scripts/Game/InteractionDirector.cs eee2618380b6610a31f8d3e102f808fbc2bc4e1b
+Reviewed-Content-Hash: Assets/Scripts/Game/TargetHighlighter.cs f1f1d62145414cf8550d07d8a9ab9d718ebc215a
+Reviewed-Content-Hash: Assets/Scripts/Game/PointerWorld.cs 91700cd6c36c724a65fb78f00b1f9aeb44dcb1e6
+Reviewed-Content-Hash: Assets/Scripts/Game/PlayerActionLock.cs 51619f018ba143b253aae1f839ea8f927697564e
+Reviewed-Content-Hash: Assets/Scripts/Systems/Camp/Unity/View/PlacementController.cs 1598fa2dd377a499e068f599752269010e5dcbcb
+Reviewed-Content-Hash: Assets/Scripts/Systems/Camp/Unity/View/FuelInteractionSource.cs 9e6f3e8f268b1952813e2a31e7e97cdba9384954

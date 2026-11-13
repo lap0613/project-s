@@ -11,6 +11,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5ba2dfb8d804294e8f98c8dd13b86ae, type: 3}
   m_Name: Effect_Berry
-  m_EditorClassIdentifier: Whiteout.Resources.Unity::Whiteout.Resources.Unity.RestoreVitalEffectDefinition
+  m_EditorClassIdentifier: Whiteout.Gathering.Unity::Whiteout.Gathering.Unity.RestoreVitalEffectDefinition
   vital: 0
   amount: 15

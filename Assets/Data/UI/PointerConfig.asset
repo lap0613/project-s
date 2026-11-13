@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e85f213710f81334e8af65284719f424, type: 3}
+  m_Name: PointerConfig
+  m_EditorClassIdentifier: Whiteout.Core.Unity::Whiteout.Core.Unity.PointerConfig
+  clickRange: 6
+  hoverRadius: 0.7
+  stuckCancelSeconds: 1
+  stuckSpeed: 0.3
+  highlightAvailableColor: {r: 1, g: 0.92, b: 0.35, a: 1}
+  highlightUnavailableColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+  outlineScale: 1.08
+  outlineMaterial: {fileID: 2100000, guid: e0f43341aca027243b43521e6f7d2ce5, type: 2}

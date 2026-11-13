@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdbe521161807cc40b1c1601a6e78174, type: 3}
   m_Name: Resource_wood
-  m_EditorClassIdentifier: Whiteout.Resources.Unity::Whiteout.Resources.Unity.ResourceDefinition
+  m_EditorClassIdentifier: Whiteout.Gathering.Unity::Whiteout.Gathering.Unity.ResourceDefinition
   item: {fileID: 11400000, guid: 60483a3c9a9199e42b9a765129c486f2, type: 2}
   displayName: "\uB098\uBB34"
   stackLimit: 5

@@ -28,6 +28,8 @@ MonoBehaviour:
     text: "[E] \uAD7D\uAE30 \u2014 {0}"
   - key: prompt.fuel
     text: "[E] {0} \uB123\uAE30"
+  - key: prompt.ignite
+    text: "[E] \uBD88 \uBD99\uC774\uAE30 ({0})"
   - key: prompt.relight
     text: "[E] \uB2E4\uC2DC \uD53C\uC6B0\uAE30 ({0})"
   - key: prompt.rest
@@ -60,7 +62,7 @@ MonoBehaviour:
   - key: placement.entry_selected
     text: "\u25B6 {0} {1}   {2}"
   - key: placement.hint
-    text: "[\uC88C\uD074\uB9AD] \uC124\uCE58   [\uC6B0\uD074\uB9AD/B/Esc] \uCDE8\uC18C"
+    text: "[\uC88C\uD074\uB9AD] \uC124\uCE58   [\uD720] \uD68C\uC804   [\uC6B0\uD074\uB9AD/B/Esc] \uCDE8\uC18C"
   - key: world.fuel_seconds
     text: "{0}\uCD08"
   - key: format.item_amount

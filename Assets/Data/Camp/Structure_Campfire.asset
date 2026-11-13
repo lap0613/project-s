@@ -27,6 +27,9 @@ MonoBehaviour:
   fuelItem: {fileID: 11400000, guid: 60483a3c9a9199e42b9a765129c486f2, type: 2}
   burnSecondsPerFuel: 60
   maxFuel: 5
+  igniteCost:
+  - item: {fileID: 11400000, guid: 60483a3c9a9199e42b9a765129c486f2, type: 2}
+    amount: 2
   relightCost:
   - item: {fileID: 11400000, guid: e88f7d0a0018885458e2f0fb6ce4d0cc, type: 2}
     amount: 1

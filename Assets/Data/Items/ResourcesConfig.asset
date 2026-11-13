@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca16e0c8c5859da4db0c5fa62eb0d867, type: 3}
   m_Name: ResourcesConfig
-  m_EditorClassIdentifier: Whiteout.Resources.Unity::Whiteout.Resources.Unity.ResourcesConfig
+  m_EditorClassIdentifier: Whiteout.Gathering.Unity::Whiteout.Gathering.Unity.ResourcesConfig
   catalog: {fileID: 11400000, guid: b83e3544d57bddb42806cd93dd03e3c7, type: 2}
   baseBagSlots: 6
   startingItems:

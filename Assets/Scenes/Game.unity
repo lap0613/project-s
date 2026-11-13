@@ -7750,6 +7750,7 @@ MonoBehaviour:
   campConfig: {fileID: 11400000, guid: e2ca38679bed69947be5c179f91fcad6, type: 2}
   uiTexts: {fileID: 11400000, guid: 15a63785dbe749f4bab658c89da1fc78, type: 2}
   hudConfig: {fileID: 11400000, guid: 259496cd25b5ee2458495c2e9492359c, type: 2}
+  pointerConfig: {fileID: 11400000, guid: 942b7f70b54f8e94098783f6b93f4c1c, type: 2}
 --- !u!4 &977636597
 Transform:
   m_ObjectHideFlags: 0

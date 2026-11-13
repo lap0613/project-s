@@ -1,0 +1,19 @@
+{
+    "name": "Whiteout.Gathering.Unity",
+    "rootNamespace": "Whiteout.Gathering.Unity",
+    "references": [
+        "Whiteout.Core",
+        "Whiteout.Core.Unity",
+        "Whiteout.Gathering",
+        "VContainer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

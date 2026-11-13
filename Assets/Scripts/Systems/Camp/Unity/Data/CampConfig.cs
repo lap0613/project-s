@@ -18,8 +18,11 @@ namespace Whiteout.Camp.Unity
         [SerializeField] private StructureCatalog catalog;
 
         [Header("Placement mode (ui-plan section 9)")]
-        [Tooltip("Provisional. The preview stands this far in front of the player, in meters.")]
-        [SerializeField] private float previewDistance = 2f;
+        [Tooltip("Provisional (ui-plan P3). The preview follows the mouse cursor but stops this far from the player, in meters.")]
+        [SerializeField] private float maxPlaceDistance = 6f;
+
+        [Tooltip("Provisional (ui-plan P2). One mouse wheel notch turns the preview by this many degrees.")]
+        [SerializeField] private float rotationStepDegrees = 15f;
 
         [Tooltip("Layers that block placement (trees, rocks, placed structures). Do not include the ground or the player.")]
         [SerializeField] private LayerMask obstacleMask;
@@ -43,8 +46,11 @@ namespace Whiteout.Camp.Unity
         /// <summary>The structures the placement list offers.</summary>
         public StructureCatalog Catalog => catalog;
 
-        /// <summary>Preview distance in front of the player, in meters.</summary>
-        public float PreviewDistance => previewDistance;
+        /// <summary>Farthest the preview (and the placed structure) can be from the player, in meters.</summary>
+        public float MaxPlaceDistance => maxPlaceDistance;
+
+        /// <summary>Degrees one wheel notch turns the preview.</summary>
+        public float RotationStepDegrees => rotationStepDegrees;
 
         /// <summary>Layers that block placement.</summary>
         public LayerMask ObstacleMask => obstacleMask;

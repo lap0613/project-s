@@ -22,6 +22,12 @@ namespace Whiteout.Core.Contracts
         /// <summary>Index of the selected structure.</summary>
         int SelectedIndex { get; }
 
+        /// <summary>
+        /// Frame number (<c>Time.frameCount</c>) in which the placement mode used the left click, or -1. The interaction
+        /// director skips a click made in that frame so one click never does two things (ui-plan section 8.1, M1).
+        /// </summary>
+        int ClickConsumedFrame { get; }
+
         /// <summary>Player-facing name of a structure.</summary>
         /// <param name="index">Index in [0, <see cref="EntryCount"/>).</param>
         string GetEntryName(int index);

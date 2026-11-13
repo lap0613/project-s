@@ -20,6 +20,9 @@ namespace Whiteout.Camp.Unity
         private CampRegistry _registry;
         private ShelterDefinition _definition;
 
+        /// <summary>Radius around the shelter's center that counts as pointing at it with the cursor, in meters.</summary>
+        public float PointerRadius => _definition.FootprintRadius;
+
         /// <summary>Receives dependencies from the container.</summary>
         /// <param name="registry">Tracks placed structures.</param>
         [Inject]

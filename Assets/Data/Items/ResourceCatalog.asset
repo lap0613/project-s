@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63bcfbebfd660b64d8843dff50367c72, type: 3}
   m_Name: ResourceCatalog
-  m_EditorClassIdentifier: Whiteout.Resources.Unity::Whiteout.Resources.Unity.ResourceCatalog
+  m_EditorClassIdentifier: Whiteout.Gathering.Unity::Whiteout.Gathering.Unity.ResourceCatalog
   resources:
   - {fileID: 11400000, guid: e963fdf74f050b4468d020d00b10d7eb, type: 2}
   - {fileID: 11400000, guid: 0f6e0d51d053dfc47a9c7ac14b100ce2, type: 2}

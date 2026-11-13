@@ -23,6 +23,20 @@ namespace Whiteout.Core.Contracts
         /// <returns>True when there is a target.</returns>
         bool TryOffer(out float holdSeconds);
 
+        /// <summary>
+        /// Looks for a target under the mouse cursor and remembers it, like <see cref="TryOffer"/> but chosen by the cursor
+        /// instead of by the player's distance (ui-plan section 8.1). Only targets within <see cref="PointerQuery.MaxPlayerDistance"/>
+        /// of the player count. It may overwrite the target <see cref="TryOffer"/> remembered, so the director calls it
+        /// again right before <see cref="Begin"/> on a click.
+        /// </summary>
+        /// <param name="query">Cursor and ranges.</param>
+        /// <param name="holdSeconds">Time the action takes; 0 or less means "until the player moves" (resting).</param>
+        /// <returns>True when the cursor is on a target of this source.</returns>
+        bool TryOfferPointed(in PointerQuery query, out float holdSeconds);
+
+        /// <summary>True when the player is already close enough to the remembered target to start the action (the E range).</summary>
+        bool IsTargetInReach();
+
         /// <summary>Starts the action on the remembered target.</summary>
         /// <returns>False when refused (e.g. bag full); the source posts the reason as a notice.</returns>
         bool Begin();

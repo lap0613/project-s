@@ -53,9 +53,8 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 `Unity/Data/`는 `Unity/View/`를 참조하지 않는다 (폴더 규칙, 리뷰로 지킨다).
 
 **폴더 이름 변경 (지영 결정 2026-11-13):** `Systems/Resources/` → `Systems/Gathering/`. `Resources`는 Unity 특수 폴더 이름이라
-그 안의 에셋이 모두 빌드에 들어간다. 이 문서의 시스템 이름도 Gathering으로 바꿨다. **코드 반영은 S개발**: 실제 폴더와 어셈블리
-(`Whiteout.Resources`, `Whiteout.Resources.Unity`)는 아직 이전 이름이다. 어셈블리·네임스페이스 이름도 `Whiteout.Gathering`으로 바꿀지는
-코드 반영 때 정하고 여기에 기록한다. `ResourceDefinition`·`ResourcesConfig`·`ResourceGathered` 같은 타입·에셋 이름은 이번 결정 대상이 아니다.
+그 안의 에셋이 모두 빌드에 들어간다. 이 문서의 시스템 이름도 Gathering으로 바꿨다. **코드 반영함 (story-011):** 폴더 `Systems/Gathering/`,
+어셈블리·네임스페이스 `Whiteout.Gathering`, `Whiteout.Gathering.Unity` (이름은 임시, 지영 확인 필요. tech-decisions 31번). `ResourceDefinition`·`ResourcesConfig`·`ResourceGathered` 같은 타입·에셋 이름은 이번 결정 대상이 아니다.
 
 ## 3. 의존 그래프 (화살표 = 참조 방향)
 
@@ -88,11 +87,16 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
   story-004의 브리지: `InteractionDirector`(E 행동을 우선순위대로 하나만 시작하고, 누르는 시간·취소·이동 잠금을 맡는다. 줍기·요리는 Gathering,
   나무 넣기·휴식은 Camp가 `IInteractionSource`로 내놓는다), `PlayerActionLock`(E 행동 중 이동 입력을 막는다),
   `SurvivalGatherBridge`(허기 30 미만이면 채집 속도 스탯에 -30% 수정자를 붙인다), `PlayerPositionSource`.
+  story-011: `InteractionDirector`가 좌클릭도 처리한다. 순서는 HUD > 설치 모드(`PlacementController`가 그 프레임의 클릭을 썼다고 `IPlacementMenu.ClickConsumedFrame`으로 알림) >
+  커서 밑 대상(각 `IInteractionSource.TryOfferPointed`) > 공격(`IAttackInput.AttackClicked`, story-007이 읽음). 멀면 `PlayerActionLock`의 자동 이동으로 직선으로 걸어간다.
+  커서가 가리키는 바닥·대상 판정은 Game의 `PointerWorld`(`IPointerWorld`: 카메라 광선과 수평면의 교점, 대상에 콜라이더가 없어도 된다)가 하고,
+  외곽선은 Game의 `TargetHighlighter`가 그린다. 값은 `PointerConfig`(Core.Unity) 에셋.
 
 | 이벤트 | 발행 | 구독 |
 |---|---|---|
 | `DayStarted` / `NightStarted` | RunFlow | Threats, View(조명·시야) |
 | `DayEnded` | RunFlow | Augments(선택 열기), UI |
+| `PlayerDamaged` (공격에 맞음, 클릭 자동 이동 취소) | 아직 없음(story-007) | Game(`InteractionDirector`) |
 | `WeatherChanged` | Environment | UI, View |
 | `FireStateChanged` | Camp | UI, View |
 | `ResourceGathered` | Gathering | UI |
@@ -120,8 +124,10 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `IFireStatus` (근처 모닥불의 켜짐·연료) | Camp | Gathering(요리), UI(연료 표시) |
 | `IPlacementMenu` (설치 목록: 열림, 항목, 고른 항목) | Camp | UI, Game, Gathering(목록이 열린 동안 숫자키는 가방 칸을 고르지 않음) |
 | `IPlayerPosition` (플레이어 위치(발 높이)와 바라보는 방향) | Game (`PlayerPositionSource`) | Gathering, Camp |
-| `IInteractionInput` (E, B, 확인·취소, 숫자키, 휠) | Input | Game, Gathering, Camp, UI |
-| `IInteractionSource` (E로 하는 행동 1개: 줍기·요리·나무 넣기·휴식) | Gathering, Camp | Game(`InteractionDirector`) |
+| `IInteractionInput` (E, B, 확인(좌클릭)·취소, 숫자키, 휠(`WheelScroll`: 설치 모드에서 회전), 커서 화면 위치) | Input | Game, Camp, UI |
+| `IInteractionSource` (행동 1개: 줍기·요리·나무 넣기·휴식. E로 가까운 대상, `TryOfferPointed`로 커서 밑 대상, `IsTargetInReach`로 닿았는지) | Gathering, Camp | Game(`InteractionDirector`) |
+| `IPointerWorld` (커서가 HUD 위인지, 커서 광선이 수평면과 만나는 점) | Game (`PointerWorld`) | Gathering, Camp, Game |
+| `IAttackInput` (다른 곳에 쓰이지 않은 좌클릭) | Game (`InteractionDirector`) | story-007 전투 |
 | `IInteractionStatus` (지금 보여 줄 프롬프트와 진행률) | Game (`InteractionDirector`) | UI |
 | `IMapLayout` (맵 중심, 링 반지름 60/130/200m, 거리가 어느 링인지) | Core (값은 Core.Unity의 ScriptableObject) | Player(시작 위치), Environment(온도), Gathering(배치), Threats(늑대 중심지) |
 
@@ -186,3 +192,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-13: 시스템 폴더 이름 Resources → Gathering (지영 결정, Unity 특수 폴더 이름 회피). §2·§3·§4의 시스템 이름을 바꾸고 §2에 메모 추가. 코드 반영은 S개발.
 - 2026-11-13: §4에 조회 인터페이스 `IDayTimeSource` 추가, `RescueRequested`에 값(도착까지 남은 초) 표기, `IAmbientTemperatureSource` 사용처에 UI 추가 (story-010 HUD 타임라인: UI가 RunFlow를 참조하지 않고 게임 시간을 읽는 통로).
 - 2026-11-13: §2에 코드 밖 에셋 폴더(Art·Prefabs)와 프리팹 구성 규칙 추가, `asset-rules.md` 연결 (모닥불 에셋 통합, tech-decisions 30번).
+- 2026-11-13: story-011 반영: §2 Gathering 폴더·어셈블리 이름 코드 반영(임시), §4 마우스 클릭 상호작용 연결(`InteractionDirector`·`PointerWorld`·`TargetHighlighter`)과 인터페이스 `IPointerWorld`·`IAttackInput`·`PlayerDamaged`, `IInteractionInput`·`IInteractionSource` 변경(휠 = `WheelScroll`, 커서 위치, `TryOfferPointed`).
