@@ -1,0 +1,19 @@
+{
+    "name": "Whiteout.RunFlow.Unity",
+    "rootNamespace": "Whiteout.RunFlow.Unity",
+    "references": [
+        "Whiteout.Core",
+        "Whiteout.Core.Unity",
+        "Whiteout.RunFlow",
+        "VContainer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

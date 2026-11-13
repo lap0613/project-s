@@ -1,10 +1,16 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer;
 using VContainer.Unity;
 using Whiteout.Core.Contracts;
+using Whiteout.Environment;
+using Whiteout.Environment.Unity;
 using Whiteout.Input;
 using Whiteout.Player.Unity;
+using Whiteout.RunFlow;
+using Whiteout.RunFlow.Unity;
+using Whiteout.UI;
 
 namespace Whiteout.Game
 {
@@ -23,14 +29,32 @@ namespace Whiteout.Game
     {
         [SerializeField] private PlayerConfig playerConfig;
         [SerializeField] private InputActionAsset inputActions;
+        [SerializeField] private RunFlowConfig runFlowConfig;
+        [SerializeField] private EnvironmentConfig environmentConfig;
 
         /// <inheritdoc />
         protected override void Configure(IContainerBuilder builder)
         {
+            if (runFlowConfig == null || environmentConfig == null)
+            {
+                throw new InvalidOperationException("GameLifetimeScope: RunFlow Config and Environment Config must be assigned.");
+            }
+
             builder.RegisterInstance(playerConfig);
             builder.RegisterInstance(inputActions);
             builder.Register<InputSystemPlayerInput>(Lifetime.Singleton).As<IPlayerInput>();
             builder.RegisterComponentInHierarchy<PlayerController>();
+
+            builder.RegisterInstance(runFlowConfig.ToSettings());
+            builder.Register<DayClock>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<DayClockRunner>();
+
+            builder.RegisterInstance(environmentConfig);
+            builder.RegisterInstance(environmentConfig.ToSettings());
+            builder.Register<NoWarmthSource>(Lifetime.Singleton).As<IWarmthSource>();
+            builder.Register<EnvironmentSystem>(Lifetime.Singleton).AsSelf().As<IAmbientTemperatureSource>();
+            builder.RegisterComponentInHierarchy<EnvironmentView>();
+            builder.RegisterComponentInHierarchy<WeatherHud>();
         }
     }
 }

@@ -1,0 +1,16 @@
+{
+    "name": "Whiteout.RunFlow",
+    "rootNamespace": "Whiteout.RunFlow",
+    "references": [
+        "Whiteout.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

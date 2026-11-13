@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfbf68366677e2f4fbecb412bc2538bd, type: 3}
+  m_Name: EnvironmentConfig
+  m_EditorClassIdentifier: Whiteout.Environment.Unity::Whiteout.Environment.Unity.EnvironmentConfig
+  baseTemperature: -10
+  innerRingOffset: 5
+  middleRingOffset: -5
+  outerRingOffset: -15
+  weathers:
+  - {fileID: 11400000, guid: a7fe11997f003034d8d8aa3ab4d3ee69, type: 2}
+  - {fileID: 11400000, guid: 76034bfccb07a3e4d80231eab1e59869, type: 2}
+  - {fileID: 11400000, guid: 1d67bca117898744e8dc95260b9d367a, type: 2}
+  - {fileID: 11400000, guid: 85cccb8b72d291f48b0c4bdb668a2eff, type: 2}
+  nightVisionRadius: 12
+  blizzardFogDistance: 15
+  blizzardFogFalloff: 15
+  blizzardFogColor: {r: 0.82, g: 0.87, b: 0.92, a: 1}
+  nightSunIntensityScale: 0.05
+  nightAmbientIntensityScale: 0.1
+  visionFadeSeconds: 1

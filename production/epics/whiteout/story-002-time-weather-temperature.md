@@ -1,13 +1,13 @@
 # Story 002: 낮/밤·날씨(3일 예보)·환경 온도
 
 > **Epic**: whiteout
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Core
 > **Type**: Integration
 > **Estimate**: M
 > **Build step**: core
 > **Manifest Version**: N/A (minimal — no control manifest)
-> **Last Updated**: [set by /dev-story when implementation begins]
+> **Last Updated**: 2026-11-13
 
 ## Context
 
@@ -62,12 +62,45 @@
 
 ## Files
 
-- `Assets/Scripts/Systems/Environment/**`
-- `Assets/Scripts/Systems/RunFlow/**`
-- `Assets/Scripts/Core/Contracts/**` (`IAmbientTemperatureSource`, 이벤트)
-- `Assets/Scripts/UI/**` (날씨·기온 HUD)
-
----
+- `Assets/Scenes/Game.unity`
+- `Assets/Scripts/Game/GameLifetimeScope.cs`
+- `Assets/Scripts/Game/Whiteout.Game.asmdef`
+- `Assets/Data/Environment/EnvironmentConfig.asset`
+- `Assets/Data/Environment/Weather_blizzard.asset`
+- `Assets/Data/Environment/Weather_clear.asset`
+- `Assets/Data/Environment/Weather_cold_snap.asset`
+- `Assets/Data/Environment/Weather_snow.asset`
+- `Assets/Data/RunFlow/RunFlowConfig.asset`
+- `Assets/Scripts/Core/Contracts/Events/DayEnded.cs`
+- `Assets/Scripts/Core/Contracts/Events/DayStarted.cs`
+- `Assets/Scripts/Core/Contracts/Events/NightStarted.cs`
+- `Assets/Scripts/Core/Contracts/Events/WeatherChanged.cs`
+- `Assets/Scripts/Core/Contracts/Events/WeatherForecastUpdated.cs`
+- `Assets/Scripts/Core/Contracts/IAmbientTemperatureSource.cs`
+- `Assets/Scripts/Core/Contracts/IWarmthSource.cs`
+- `Assets/Scripts/Core/Contracts/WeatherInfo.cs`
+- `Assets/Scripts/Game/NoWarmthSource.cs`
+- `Assets/Scripts/Systems/Environment/Logic/EnvironmentSettings.cs`
+- `Assets/Scripts/Systems/Environment/Logic/EnvironmentStats.cs`
+- `Assets/Scripts/Systems/Environment/Logic/EnvironmentSystem.cs`
+- `Assets/Scripts/Systems/Environment/Logic/WeatherSpec.cs`
+- `Assets/Scripts/Systems/Environment/Logic/Whiteout.Environment.asmdef`
+- `Assets/Scripts/Systems/Environment/Unity/Data/EnvironmentConfig.cs`
+- `Assets/Scripts/Systems/Environment/Unity/Data/WeatherDefinition.cs`
+- `Assets/Scripts/Systems/Environment/Unity/View/EnvironmentView.cs`
+- `Assets/Scripts/Systems/Environment/Unity/Whiteout.Environment.Unity.asmdef`
+- `Assets/Scripts/Systems/RunFlow/Logic/DayClock.cs`
+- `Assets/Scripts/Systems/RunFlow/Logic/DayClockSettings.cs`
+- `Assets/Scripts/Systems/RunFlow/Logic/DayPhase.cs`
+- `Assets/Scripts/Systems/RunFlow/Logic/Whiteout.RunFlow.asmdef`
+- `Assets/Scripts/Systems/RunFlow/Unity/Data/RunFlowConfig.cs`
+- `Assets/Scripts/Systems/RunFlow/Unity/View/DayClockRunner.cs`
+- `Assets/Scripts/Systems/RunFlow/Unity/Whiteout.RunFlow.Unity.asmdef`
+- `Assets/Scripts/UI/WeatherHud.cs`
+- `Assets/Scripts/UI/Whiteout.UI.asmdef`
+- `docs/architecture/tech-decisions.md` (22번)
+- `docs/architecture/code-structure.md` (§4 IWarmthSource)
+- `design/quick-specs/core-rules.md` (§3 임시값 표시)
 
 ## QA Test Cases
 
@@ -81,7 +114,7 @@
 **Test**: waived at qa.level minimal
 **Required evidence**: HUD가 보이는 플레이 스크린샷을 `production/qa/evidence/`에 남긴다
 
-**Status**: [ ] Not yet created
+**Status**: [x] Retained — `production/qa/evidence/story-002-time-weather-temperature/` (screenshots 5, stamp.txt)
 
 ---
 
@@ -89,3 +122,22 @@
 
 - Depends on: `production/epics/whiteout/story-001-foundation-movement-map.md`
 - Unlocks: `production/epics/whiteout/story-003-hurdles-death.md`, `production/epics/whiteout/story-004-items-bag-structures-cooking.md`
+
+## Completion Notes
+**Completed**: 2026-11-13
+**Criteria**: 9/9 passing (AC-2 같은 시드 재현·확률 분포는 에디터 실행으로 확인, 테스트 파일 없음; AC-7 눈보라 안개는 비스듬한 촬영에서만 보임)
+**Deviations**: ADVISORY — HUD 문구 기본값이 코드에 한국어로 있음(`Assets/Scripts/UI/WeatherHud.cs:26`, 현지화 없음); 눈보라 안개가 현재 탑다운 카메라 화면에 거의 안 보임(지영 결정: 지금처럼 두고 플레이 후 판단, `docs/architecture/tech-decisions.md` 22번); `EnvironmentSystem` 생성이 `EnvironmentView` 의존에 기대고 있음(`RegisterBuildCallback` 권장); 릴리스 빌드 Graphics > Fog Modes에 Linear 미설정; HUD가 레거시 uGUI `Text`(TMP 권장)
+**Test Evidence**: waived at qa.level minimal; run evidence `production/qa/evidence/story-002-time-weather-temperature/` (이미지 5장 + stamp.txt)
+**Reviewed by**: self, no independent review
+
+## Calls beyond the design
+- 낮/밤 길이(120/60초)는 `RunFlowConfig` 에셋에 따로 둠 (`Assets/Scripts/Systems/RunFlow/Unity/Data/RunFlowConfig.cs`) · kept 2026-11-13
+- 맵 밖(OutOfMap)은 바깥 링 보정 -15 (`EnvironmentSystem.cs` RingOffset) · kept 2026-11-13
+- 날짜는 1일차부터, `DayEnded(N)` → `DayStarted(N+1)` 같은 프레임 발행 (`DayClock.cs`) · kept 2026-11-13
+- View 첫 갱신 전 플레이어 링은 Inner (`EnvironmentSystem.cs`) · kept 2026-11-13
+- 증강 온도 스탯 id `environment.augment_temperature`, Add 수정자만 적용 (`EnvironmentStats.cs`) · kept 2026-11-13
+- 모닥불 온기는 `IWarmthSource`, story-004 전까지 `NoWarmthSource`가 0 (`Assets/Scripts/Game/NoWarmthSource.cs`) · kept 2026-11-13
+- 밤·눈보라 시각 표현 임시값: 해 ×0.05, 환경광 ×0.1, 플레이어 점광원 12m·밝기 3·따뜻한 색, 안개 색 (0.82, 0.87, 0.92)·falloff 15m, 전환 1초 (`Assets/Data/Environment/EnvironmentConfig.asset`, tech-decisions 22번) · kept 2026-11-13
+- HUD 모양 임시값: 흰 글씨 + 검은 외곽선, 크기 40, 왼쪽 위, uGUI 레거시 Text (`Assets/Scenes/Game.unity` HUD) · kept 2026-11-13
+- HUD 문구 기본값 `"오늘: {0}\n내일: {1}\n모레: {2}\n기온: {3:0.#}°C"` (`Assets/Scripts/UI/WeatherHud.cs:26`) · kept 2026-11-13
+- 눈보라 안개 가시성은 지금처럼 두고 플레이 후 판단 (지영 결정, tech-decisions 22번) · kept 2026-11-13

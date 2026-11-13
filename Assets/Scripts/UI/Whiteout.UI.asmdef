@@ -1,0 +1,19 @@
+{
+    "name": "Whiteout.UI",
+    "rootNamespace": "Whiteout.UI",
+    "references": [
+        "Whiteout.Core",
+        "Whiteout.Core.Unity",
+        "VContainer",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

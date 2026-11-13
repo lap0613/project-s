@@ -7,6 +7,11 @@
         "Whiteout.Player",
         "Whiteout.Player.Unity",
         "Whiteout.Input",
+        "Whiteout.RunFlow",
+        "Whiteout.RunFlow.Unity",
+        "Whiteout.Environment",
+        "Whiteout.Environment.Unity",
+        "Whiteout.UI",
         "VContainer",
         "Unity.InputSystem"
     ],

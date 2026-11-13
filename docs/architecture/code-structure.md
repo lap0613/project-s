@@ -94,6 +94,7 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | 조회 인터페이스 | 구현 | 사용 |
 |---|---|---|
 | `IAmbientTemperatureSource` | Environment | Survival |
+| `IWarmthSource` (플레이어 위치의 켜진 모닥불 중 가장 따뜻한 1개의 온기, 없으면 0) | Camp (story-004 전까지는 Game의 `NoWarmthSource`가 0을 돌려줌) | Environment |
 | `IStatRegistry` | Core | 스탯을 쓰는 모든 시스템, Augments |
 | `IRandom` | Core (시드 지정 가능) | Resources(배치), Environment(날씨), Augments(뽑기) |
 | `IMapLayout` (맵 중심, 링 반지름 60/130/200m, 거리가 어느 링인지) | Core (값은 Core.Unity의 ScriptableObject) | Player(시작 위치), Environment(온도), Resources(배치), Threats(늑대 중심지) |
@@ -153,3 +154,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-12: §7에 씬 View 주입 규칙(전체 검색 금지, RegisterComponentInHierarchy / autoInjectGameObjects)과 런타임 머티리얼 규칙(Shader.Find 금지, 에셋 참조) 추가. 엔진 점검 결과 반영.
 - 2026-11-12: §2에 에디터 전용 어셈블리 `Whiteout.Editor` 추가 (포커스 없는 플레이 확인, tech-decisions 18).
 - 2026-11-13: §2 Whiteout.Editor 설명에 Play 시 Bootstrap에서 시작(tech-decisions 21) 추가.
+- 2026-11-13: §4에 `IWarmthSource` 추가 (Environment가 Camp를 참조하지 않고 모닥불 온기를 받는 통로, story-002). 낮/밤 길이는 RunFlow의 `RunFlowConfig`, 날씨·온도·시야 값은 Environment의 `EnvironmentConfig`에 둔다.
