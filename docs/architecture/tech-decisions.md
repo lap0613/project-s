@@ -13,6 +13,7 @@
    테스트는 지금은 선택사항(`qa.level: minimal`)이다. 핵심 기능을 빨리 구현하고 눈으로 확인하는 것을 우선한다.
    테스트할 수 있는 구조는 유지해서 나중에 `Assets/Tests/EditMode/`에 추가한다.
 4. **외형 분리:** 프리팹 루트 = 로직, 자식 = 모델. 리소스는 미정이며 처음에는 기본 도형으로 만든다.
+   → 에셋 규칙(단위·크기·예산·팔레트 머티리얼·경로·이름)은 `docs/architecture/asset-rules.md`. 첫 실제 모델은 모닥불(30번). 나머지는 아직 기본 도형이다.
 5. **플랫폼:** Steam PC, 키보드+마우스, Input System. 게임패드는 나중에 입력 매핑만 추가.
 6. **렌더링:** URP, 3D 로우폴리, 고정 60도 탑다운 카메라.
 7. **코드 위치:** `Assets/Scripts/Systems/<시스템>/` (Survival, Environment, Camp, Gathering, Augments, Threats, RunFlow, Player).
@@ -159,7 +160,7 @@
     - **장애물 레이어:** 나무·바위를 `Obstacle` 레이어(6번)로 옮겼다. 설치 가림 판정에만 쓴다. 16번의 '시야 차단' 레이어는 story-007에서 정한다.
     - **키 입력:** E, B, 좌클릭, 우클릭/Esc, 1~9, 휠은 코드에서 만든 InputAction이다(`InputSystem_Actions.inputactions`에 없음). 게임패드 매핑을 넣을 때 에셋으로 옮긴다.
     - **플레이어 위치:** `IPlayerPosition.Y`는 발 높이다(캡슐 중심 아님). 설치물과 버린 아이템이 바닥에 놓인다.
-    - **임시 모양:** 줍기·모닥불·은신처는 기본 도형이다(4번). 은신처 범위는 바닥의 반투명 원으로 보인다. 진행 표시는 원이 아니라 막대, 가방 칸은 아이콘 없이 이름 + 개수, 설치 목록은 글자 줄이다.
+    - **임시 모양:** 줍기·은신처는 기본 도형이다(4번). 모닥불은 30번에서 실제 모델로 바꿨다. 은신처 범위는 바닥의 반투명 원으로 보인다. 진행 표시는 원이 아니라 막대, 가방 칸은 아이콘 없이 이름 + 개수, 설치 목록은 글자 줄이다.
     - **HUD 배치:** 이번 스토리의 상단 배치(기온 왼쪽 위, 예보 위쪽 가운데)는 중간 상태다. 최종 배치(기온 가운데 + 예보 타임라인)는 story-010이 한다(24번). → story-010에서 최종 배치로 바꿨다(29번).
     - **만들지 않은 것:** 날짜·낮/밤 표시(지영 결정: story-004에서 제외), `입기`·C 제작(008), R 증강 발동(005), 신호기 틀(006), 프롬프트의 6m 표시 제한과 칸 툴팁.
     - **검증 (25번 방식):** 에디터 Play Mode + 입력 이벤트로 설치·점화·재점화·요리·사용·버리기·은신처 휴식·가방 가득 참을 실행해 확인했다.
@@ -179,6 +180,28 @@
     - **문구 키:** `hud.timeline.day_current`·`day`·`unknown`·`tooltip`, `weather.<id>` 4개를 `UiTextTable`에 추가, `hud.temperature`는 `{0:0}°C`로 바꾸고 `hud.forecast`는 삭제(27번 형식 그대로).
     - **만들지 않은 것 (ui-plan [B] 피드백의 [가정]):** 밤 15초 전 깜빡임, 위험 날씨 맥박, 새 모레 1초 강조, 알림 `모레: 한파`. [C] 구조 타이머는 story-006.
     - **검증 (25번 방식):** 에디터 Play Mode에서 `DayClock`을 시험용으로 멈추고 앞으로 돌려 5장면을 찍었다. 툴팁은 포인터 진입 이벤트를 보내 확인했고(아이콘 위치의 레이캐스트 첫 대상이 아이콘인 것도 확인), 실제 마우스로는 올려 보지 않았다.
+
+30. **모닥불 에셋 통합 (PM 지시·지영 결정 순서 2026-11-13, `docs/architecture/asset-rules.md` §1·§4·§5·§7):** 모닥불의 기본 도형을 모델봇이 만든 모델로 바꿨다. 스토리 파일 없이 진행했다.
+    - **파일:** `Assets/Art/Models/Props/SM_Campfire.fbx`, `Assets/Art/Textures/T_Palette.png`(256×256), 공용 머티리얼 `Assets/Art/Materials/M_Palette.mat`(URP Lit, BaseMap = `T_Palette`).
+      원본 `.blend`와 내보낸 대기본은 저장소 밖 `C:\Users\studio2\ProjectS_Art\`에 있다(asset-rules §5).
+    - **임포트 설정:** `T_Palette`는 Filter Point, Compression None, sRGB 켬, Mip Map 끔(asset-rules §4의 '미확인'을 이 값으로 확정). FBX 안의 머티리얼 `M_Palette`는 공용 `M_Palette.mat`로 리맵했다(텍스처 embed 없음).
+      FBX의 애니메이션·카메라·라이트 임포트는 껐다. 스케일·축 설정은 기본값 그대로다(Scale Factor 1, Bake Axis Conversion 끔).
+    - **임포트 확인 (실측):** 루트 회전 (0, 0, 0), 스케일 (1, 1, 1), 크기 0.965 × 0.239 × 0.960 m(Unity X × Y × Z, Y가 위), 바닥 Y = 0.000, `FirePoint` (0, 0.259, 0),
+      자식 `Logs`(120 tri)·`Stones`(458 tri) 모두 위치 0·회전 0·스케일 1. asset-rules §5의 '임포트 후 확인할 것'을 이 값으로 확인했다.
+    - **프리팹:** `Assets/Prefabs/Props/Campfire.prefab`. 루트 = `CampfireView` + `CapsuleCollider`(4번: 루트 = 로직), 자식 `SM_Campfire`(FBX), 불 표현은 `SM_Campfire/FirePoint/LitVisual`(켜졌을 때만 보임) 아래 `Flame`(파티클) + `FireLight`(점광원).
+      기존 `Assets/Prefabs/Structures/Campfire.prefab`·`CampfirePreview.prefab`을 `Assets/Prefabs/Props/`로 옮겨 내용을 바꿨다(GUID 유지, `Structure_Campfire.asset` 참조 그대로). 미리보기도 같은 모델을 쓴다(콜라이더 없음).
+      `Shelter.prefab`·`ShelterPreview.prefab`은 `Assets/Prefabs/Structures/`에 그대로 있다(은신처 모델이 올 때 옮길지 정한다, 지영 확인 필요).
+      쓰지 않게 된 `Assets/Art/Placeholder/Structure_Campfire.mat`·`Structure_Flame.mat`은 지웠다.
+    - **콜라이더 (임시, 지영 확인 필요):** Capsule 반경 0.45 m, 높이 1.0 m, 중심 Y 0.5 m, 레이어 Default. 메시 콜라이더는 쓰지 않는다(asset-rules §3).
+      **동작 변화:** 이전 모닥불에는 콜라이더가 없어 플레이어가 지나갈 수 있었다. 이제 플레이어(CharacterController)가 모닥불을 통과하지 못한다. `Obstacle` 레이어가 아니므로 다른 설치물의 설치 가림 판정(28번)은 바뀌지 않는다.
+    - **불 표현 (임시, 지영 확인 필요):** 캡슐 도형 불꽃을 파티클로 바꿨다(asset-rules §4: 빛나는 부분은 Unity 이펙트). 머티리얼 `Assets/Art/Materials/M_FireParticle.mat`(URP Particles/Unlit, 불투명, 텍스처 없는 사각 조각).
+      초당 28개, 수명 0.5~0.9초, 속도 0.5~0.9 m/s, 크기 0.14~0.24 m, 원뿔 각 8°·반경 0.12 m, 색 노랑 → 주황 → 빨강, 최대 60개.
+      점광원은 이전 값 그대로다(색 (1, 0.6, 0.3), 밝기 6, 범위 8 m, 그림자 없음). 높이도 이전과 같게 바닥에서 1.2 m(`FirePoint` 기준 +0.941 m)에 두었다.
+    - **머티리얼 값 (임시, 지영 확인 필요):** `M_Palette`의 Smoothness 0, Metallic 0(평면 셰이딩, asset-rules §4). `T_Palette`의 Wrap Mode는 임포트 기본값(Repeat) 그대로다.
+    - **검증 (25번 방식):** 에디터 Play Mode(Bootstrap 시작) + 입력 이벤트로 설치 목록·미리보기(새 모델, 파란 미리보기 머티리얼) → 좌클릭 설치(나무 3 + 부싯깃 1 소모, 꺼진 상태) → E 점화(불 파티클·빛 켜짐, 연료 칸 1) → E 나무 넣기(22.6초 → 81.0초, 나무 11 → 10) → 온기(기온 -5°C → 30°C)를 확인했다. Play 중 콘솔 오류·경고 0.
+      증거: `production/qa/evidence/campfire-asset-integration/01`~`05`. 확인하지 않은 것: 연료가 다 타서 꺼지는 모습과 재점화, 플레이어가 콜라이더에 막히는 모습, 밤의 모습.
+    - **알게 된 것:** Play를 멈출 때 `EnvironmentView.OnDestroy`가 이미 파괴된 해(Light)에 값을 써서 `MissingReferenceException`이 1건 난다(story-002 코드, 이번 작업과 무관, 고치지 않았다. 지영 확인 필요).
+      18번 입력 절차 보충: 포커스를 잃은 적이 있으면 장치가 `enabled = true`로 보여도 내부적으로 꺼져 있어 입력 이벤트가 버려진다. 꺼짐 여부를 보지 말고 모든 장치에 `InputSystem.EnableDevice`를 부른다.
 
 ## 변경 이력
 - 2026-11-12: 최초 작성 (1~7번).
@@ -210,3 +233,4 @@
 - 2026-11-13: 27번 UI 문구 데이터 형식(`UiTextTable`, `NoticePosted`, `HudConfig`), 28번 아이템·가방·설치 임시값과 검증 방법 추가 (story-004, 지영 확인 필요. PM 운영 규칙: 임시값으로 진행하고 문서에 기록).
 - 2026-11-13: 지영 결정 반영(15:28): 7번 시스템 폴더 Resources → Gathering(코드 반영은 S개발), 28번 모닥불 첫 점화·재점화 모두 나무 2개(지영 확정, 코드 반영은 S개발, 부싯깃 조건은 ui-plan M6 확인 필요), 28번 설치에 커서 위치 설치·휠 회전 변경 예정 메모(story-011).
 - 2026-11-13: 29번 HUD 상단 배치·예보 타임라인 임시값과 검증 방법 추가 (story-010, 지영 확인 필요. PM 운영 규칙: 임시값으로 진행하고 문서에 기록).
+- 2026-11-13: 30번 모닥불 에셋 통합 추가(SM_Campfire·T_Palette·M_Palette, 임포트 실측값, Props/Campfire 프리팹, 콜라이더·불 파티클 임시값). 4번에 asset-rules 연결, 28번 임시 모양에서 모닥불 제외. PM 지시(지영 결정 순서), 근거 `docs/architecture/asset-rules.md`.

@@ -45,6 +45,10 @@ Assets/Scripts/
 Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트, 지금은 선택사항, 나중에 추가)
 ```
 
+**코드 밖 에셋 폴더:** 모델·텍스처·머티리얼은 `Assets/Art/Models/<분류>/`·`Assets/Art/Textures/`·`Assets/Art/Materials/`, 프리팹은 `Assets/Prefabs/<분류>/`에 둔다.
+규칙은 `docs/architecture/asset-rules.md` §7. 프리팹 루트에 View 컴포넌트(로직)와 콜라이더를 두고 모델 FBX는 자식으로 붙인다(tech-decisions 4·30번).
+모델을 바꿔도 View 코드는 바뀌지 않는다: `CampfireView`는 `litVisual` 오브젝트 참조만 알고 모델 구조는 모른다.
+
 각 시스템 폴더는 `Logic/`(Whiteout.<System>)과 `Unity/`(Whiteout.<System>.Unity, 하위에 `Data/`·`View/`)로 같은 모양이다.
 `Unity/Data/`는 `Unity/View/`를 참조하지 않는다 (폴더 규칙, 리뷰로 지킨다).
 
@@ -181,3 +185,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-13: §4에 story-004 계약 추가: 이벤트 `NoticePosted`, 조회 인터페이스 10종(가방·이름·칸 메뉴·회복·휴식·모닥불 상태·설치 목록·플레이어 위치·E 입력·E 행동), Game 브리지 4종. `IWarmthSource` 구현을 Camp로 바꾸고 `NoWarmthSource` 삭제 (story-004, UI 결정 D3~D5 반영으로 계약이 늘었다).
 - 2026-11-13: 시스템 폴더 이름 Resources → Gathering (지영 결정, Unity 특수 폴더 이름 회피). §2·§3·§4의 시스템 이름을 바꾸고 §2에 메모 추가. 코드 반영은 S개발.
 - 2026-11-13: §4에 조회 인터페이스 `IDayTimeSource` 추가, `RescueRequested`에 값(도착까지 남은 초) 표기, `IAmbientTemperatureSource` 사용처에 UI 추가 (story-010 HUD 타임라인: UI가 RunFlow를 참조하지 않고 게임 시간을 읽는 통로).
+- 2026-11-13: §2에 코드 밖 에셋 폴더(Art·Prefabs)와 프리팹 구성 규칙 추가, `asset-rules.md` 연결 (모닥불 에셋 통합, tech-decisions 30번).
