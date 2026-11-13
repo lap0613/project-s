@@ -96,7 +96,7 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `PlayerDied` | Survival | RunFlow, Game(`SurvivalPlayerBridge`: 플레이어 이동 정지) |
 | `AugmentChosen` | Augments | UI |
 | `SignalBeaconCompleted` | Camp | UI |
-| `RescueRequested` | Camp | RunFlow(타이머 시작), UI |
+| `RescueRequested` (도착까지 남은 게임 초) | Camp | RunFlow(타이머 시작), UI(타임라인 깃발) |
 | `RescueArrived` | RunFlow | UI |
 | `StructurePlaced` | Camp | UI, View |
 | `WeatherForecastUpdated` | Environment | UI |
@@ -104,7 +104,8 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 
 | 조회 인터페이스 | 구현 | 사용 |
 |---|---|---|
-| `IAmbientTemperatureSource` | Environment | Survival |
+| `IAmbientTemperatureSource` | Environment | Survival, UI(기온 표시) |
+| `IDayTimeSource` (날짜, 그날 지난 초, 낮·밤 길이) | RunFlow (`DayClock`) | UI(예보 타임라인) |
 | `IWarmthSource` (플레이어 위치의 켜진 모닥불 중 가장 따뜻한 1개의 온기, 없으면 0) | Camp (`CampSystem`) | Environment |
 | `IStatRegistry` | Core | 스탯을 쓰는 모든 시스템, Augments |
 | `IRandom` | Core (시드 지정 가능) | Gathering(배치), Environment(날씨), Augments(뽑기) |
@@ -179,3 +180,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-13: §4에 Game 브리지(`SurvivalPlayerBridge`)와 `PlayerDied` 구독자(Game) 추가 (story-003: 시스템끼리 참조 금지를 지키면서 이동속도 불이익·사망 정지를 연결).
 - 2026-11-13: §4에 story-004 계약 추가: 이벤트 `NoticePosted`, 조회 인터페이스 10종(가방·이름·칸 메뉴·회복·휴식·모닥불 상태·설치 목록·플레이어 위치·E 입력·E 행동), Game 브리지 4종. `IWarmthSource` 구현을 Camp로 바꾸고 `NoWarmthSource` 삭제 (story-004, UI 결정 D3~D5 반영으로 계약이 늘었다).
 - 2026-11-13: 시스템 폴더 이름 Resources → Gathering (지영 결정, Unity 특수 폴더 이름 회피). §2·§3·§4의 시스템 이름을 바꾸고 §2에 메모 추가. 코드 반영은 S개발.
+- 2026-11-13: §4에 조회 인터페이스 `IDayTimeSource` 추가, `RescueRequested`에 값(도착까지 남은 초) 표기, `IAmbientTemperatureSource` 사용처에 UI 추가 (story-010 HUD 타임라인: UI가 RunFlow를 참조하지 않고 게임 시간을 읽는 통로).

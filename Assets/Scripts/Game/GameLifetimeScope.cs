@@ -69,7 +69,7 @@ namespace Whiteout.Game
             builder.RegisterInstance(hudConfig);
 
             builder.RegisterInstance(runFlowConfig.ToSettings());
-            builder.Register<DayClock>(Lifetime.Singleton);
+            builder.Register<DayClock>(Lifetime.Singleton).AsSelf().As<IDayTimeSource>();
             builder.RegisterEntryPoint<DayClockRunner>();
 
             builder.RegisterInstance(environmentConfig);

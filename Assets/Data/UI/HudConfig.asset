@@ -22,3 +22,60 @@ MonoBehaviour:
   fuelDisplayHeight: 3
   fuelPipFilledColor: {r: 0.95, g: 0.45, b: 0.2, a: 1}
   fuelPipEmptyColor: {r: 0, g: 0, b: 0, a: 0.6}
+  temperaturePanelSize: {x: 225, y: 96}
+  temperaturePanelColor: {r: 0, g: 0, b: 0, a: 0.45}
+  temperatureFontSize: 60
+  temperatureWarmColor: {r: 1, g: 0.6, b: 0.2, a: 1}
+  temperatureColdColor: {r: 1, g: 1, b: 1, a: 1}
+  temperatureFrozenColor: {r: 0.55, g: 0.85, b: 1, a: 1}
+  temperatureWarmThreshold: 0
+  temperatureFrozenThreshold: -20
+  hudTopMargin: 18
+  timelineGap: 18
+  timelineSize: {x: 630, y: 60}
+  timelineRangeSeconds: 540
+  timelineFontSize: 20
+  dayHeaderPadding: 6
+  dayLabelWidth: 60
+  weatherIconSize: 30
+  iconBorderThickness: 3
+  timelineDayColor: {r: 0.78, g: 0.84, b: 0.92, a: 0.95}
+  timelineNightColor: {r: 0.08, g: 0.12, b: 0.3, a: 0.95}
+  timelineUnknownColor: {r: 0.35, g: 0.35, b: 0.38, a: 0.55}
+  timelineDayTextColor: {r: 0.08, g: 0.1, b: 0.2, a: 1}
+  timelineNightTextColor: {r: 0.9, g: 0.92, b: 1, a: 1}
+  timelineUnknownTextColor: {r: 0.85, g: 0.85, b: 0.88, a: 0.9}
+  timelineTickColor: {r: 0.05, g: 0.07, b: 0.15, a: 0.9}
+  bigTickWidth: 3
+  smallTickWidth: 2
+  smallTickHeightRatio: 0.5
+  nowMarkerColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+  nowMarkerWidth: 4
+  nowMarkerDiamondSize: 14
+  iconBackColor: {r: 0.1, g: 0.14, b: 0.25, a: 0.9}
+  dangerBorderColor: {r: 0.95, g: 0.25, b: 0.2, a: 1}
+  rescueFlagColor: {r: 0.4, g: 0.95, b: 0.45, a: 1}
+  rescueFlagPoleWidth: 3
+  rescueFlagSize: {x: 20, y: 14}
+  rescueFlagRise: 16
+  tooltipPanelColor: {r: 0, g: 0, b: 0, a: 0.85}
+  tooltipFontSize: 22
+  tooltipPadding: {x: 12, y: 6}
+  tooltipOffset: 8
+  weatherStyles:
+  - weatherId: clear
+    shape: 0
+    color: {r: 1, g: 0.85, b: 0.3, a: 1}
+    isDanger: 0
+  - weatherId: snow
+    shape: 1
+    color: {r: 0.85, g: 0.93, b: 1, a: 1}
+    isDanger: 0
+  - weatherId: blizzard
+    shape: 2
+    color: {r: 0.9, g: 0.95, b: 1, a: 1}
+    isDanger: 1
+  - weatherId: cold_snap
+    shape: 3
+    color: {r: 0.5, g: 0.85, b: 1, a: 1}
+    isDanger: 1

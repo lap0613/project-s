@@ -15,9 +15,7 @@ MonoBehaviour:
   font: {fileID: 11400000, guid: 3f8b67f9be45e524c945b460c6158b03, type: 2}
   entries:
   - key: hud.temperature
-    text: "\uAE30\uC628 {0:0.#}\xB0C"
-  - key: hud.forecast
-    text: "\uC624\uB298 {0}   \uB0B4\uC77C {1}   \uBAA8\uB808 {2}"
+    text: "{0:0}\xB0C"
   - key: hud.gauge.temperature
     text: "\uCCB4\uC628"
   - key: hud.gauge.hunger
@@ -71,3 +69,19 @@ MonoBehaviour:
     text: '{0} {1}/{2}'
   - key: format.item_separator
     text: ' + '
+  - key: hud.timeline.day_current
+    text: "{0}\uC77C\uCC28"
+  - key: hud.timeline.day
+    text: '{0}'
+  - key: hud.timeline.unknown
+    text: '?'
+  - key: hud.timeline.tooltip
+    text: "{0} {1:+0;-0;0}\xB0C"
+  - key: weather.clear
+    text: "\uB9D1\uC74C"
+  - key: weather.snow
+    text: "\uB208"
+  - key: weather.blizzard
+    text: "\uB208\uBCF4\uB77C"
+  - key: weather.cold_snap
+    text: "\uD55C\uD30C"

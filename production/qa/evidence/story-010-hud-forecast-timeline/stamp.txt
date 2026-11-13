@@ -1,0 +1,13 @@
+Reviewed-Content-Hash: Assets/Scripts/UI/WeatherHud.cs d53bc2f3aa1c431efebc07eb31cad92ce6bdc333
+Reviewed-Content-Hash: Assets/Scripts/UI/ForecastTimelineView.cs b75cdf7c010facbbbe713e7a4578a34130a64475
+Reviewed-Content-Hash: Assets/Scripts/UI/WeatherIconSprites.cs fe9897dce52960096acc27df059366468dc75963
+Reviewed-Content-Hash: Assets/Scripts/UI/WeatherIconHover.cs 183b64a080d13efab1ed12f8f190ed469b8cfb1d
+Reviewed-Content-Hash: Assets/Scripts/UI/WeatherStyle.cs 3215836db41eddf4a2b11035644372a94a7b7d5e
+Reviewed-Content-Hash: Assets/Scripts/UI/HudConfig.cs 3620538cd6448950ad295849a7fdc5d595f55497
+Reviewed-Content-Hash: Assets/Scripts/Core/Contracts/IDayTimeSource.cs 28e8ded8d56312dfe2f598705c0f11e393d08caf
+Reviewed-Content-Hash: Assets/Scripts/Core/Contracts/Events/RescueRequested.cs b715081f0e416cb35c569bcd500eff96bcd60d6c
+Reviewed-Content-Hash: Assets/Scripts/Systems/RunFlow/Logic/DayClock.cs 5bf39dd79319e3f0fe3fba0f6f40d9bc290f2951
+Reviewed-Content-Hash: Assets/Scripts/Game/GameLifetimeScope.cs f9f2dee938f759f57e610747f51a2e910a833cf1
+Reviewed-Content-Hash: Assets/Data/UI/HudConfig.asset 6c221b2ef977739ffee3ee5fe9e52cd9b1718b10
+Reviewed-Content-Hash: Assets/Data/UI/UiTextTable.asset cc2da992d8c2fb6540e500b65bb961e60913e7d3
+Reviewed-Content-Hash: Assets/Scenes/Game.unity d5d6bb837ac8b37d9d9c3d5bcdc703d44e833245

@@ -18,7 +18,7 @@ namespace Whiteout.RunFlow
     /// clock.IsPaused = true; // Tick now does nothing
     /// </code>
     /// </example>
-    public sealed class DayClock
+    public sealed class DayClock : IDayTimeSource
     {
         private readonly DayClockSettings _settings;
         private readonly IEventBus _bus;
@@ -40,6 +40,15 @@ namespace Whiteout.RunFlow
 
         /// <summary>Seconds spent in the current phase.</summary>
         public float PhaseElapsed { get; private set; }
+
+        /// <inheritdoc />
+        public float SecondsIntoDay => Phase == DayPhase.Day ? PhaseElapsed : _settings.DayLength + PhaseElapsed;
+
+        /// <inheritdoc />
+        public float DayLength => _settings.DayLength;
+
+        /// <inheritdoc />
+        public float NightLength => _settings.NightLength;
 
         /// <summary>When true, <see cref="Tick"/> does nothing. Setting it from an event handler stops the current Tick at once.</summary>
         public bool IsPaused { get; set; }
