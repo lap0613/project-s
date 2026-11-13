@@ -157,3 +157,12 @@
 
 **미확인**: 꺼진 불 재점화의 클릭 실행, `PlayerDamaged`로 걷기 취소(발행처 없음), HUD 위 클릭이 새지 않는지 실제 HUD 위 클릭, 은신처에 막히는 경우(은신처에는 콜라이더가 없음),
 실제 마우스 조작, 한 프레임에 휠 여러 칸.
+
+**Completed**: 2026-11-13
+**Criteria**: 15/15 passing (손맛·자동 이동 체감·의도치 않은 클릭 여부는 지영 플레이 확인, DEFERRED)
+**Deviations**: ADVISORY — 점화 나무 2개 코드 반영(스토리 Out of Scope)을 PM 지시로 포함. 점화 조건은 M6 추천값 유지(임시, 지영 확인 필요): 개발봇 지시이며 지영이 확인한 것이 아니다. 첫 점화 나무 2만 소모, 재점화 나무 2 + 부싯깃 1, 부싯돌은 가방에 있기만 하면 되고 소모하지 않음.
+**Test Evidence**: waived at qa.level minimal; 스크린샷 `production/qa/evidence/story-011-mouse-interaction-cursor-placement/` (stamp: 변경 없음)
+**Reviewed by**: self, no independent review
+
+## Calls beyond the design
+- 커서 대상 반경 0.7m(수평면 교점 방식), 외곽선 1.08배 노랑/회색, 막힘 0.3m/s·1초, 회색 대상 클릭은 알림만, 걷는 중 클릭은 취소(공격 아님), 설치 모드를 닫으면 회전 초기화, `PlayerDamaged` 이벤트 신설, Gathering 어셈블리 이름 · kept 2026-11-13 (개발봇 지시: 추천안 진행, 임시, 지영 확인 필요; 값·위치는 tech-decisions 31번)
