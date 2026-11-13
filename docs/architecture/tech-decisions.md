@@ -59,6 +59,12 @@
 20. **개발용 디버그 표시:** 링 선 같은 디버그 표시는 `Debug.isDebugBuild`가 참일 때만 켠다(에디터, Development Build).
     실제(릴리스) 빌드에서는 그리지 않는다. Scene 뷰 Gizmos는 원래 에디터 전용이다.
 
+21. **Play는 항상 Bootstrap에서 시작 (에디터 전용):** 에디터에서 어떤 씬을 연 채 Play해도 Bootstrap 씬부터 시작한다
+    (`EditorSceneManager.playModeStartScene`). Game 씬만 열고 Play하면 Bootstrap 스코프가 없어 주입이 실패하기 때문이다.
+    시작 씬은 Build Settings의 0번 씬(Bootstrap, 12번)을 쓴다. Unity 메뉴 `Whiteout > Play From Bootstrap`으로 끄고 켤 수 있고
+    (기본 켜짐), 이 값은 이 PC의 에디터 설정(EditorPrefs)에만 저장된다. 샌드박스 씬을 단독으로 시험할 때만 잠깐 끈다.
+    `Whiteout.Editor` 어셈블리에 있어 빌드에는 영향이 없다. Play를 멈추면 에디터는 원래 열려 있던 씬으로 돌아간다.
+
 ## 변경 이력
 - 2026-11-12: 최초 작성 (1~7번).
 - 2026-11-12: 8번 코드 구조 추가, 7번 경로를 시스템 폴더 구조에 맞춤.
@@ -74,3 +80,5 @@
 - 2026-11-12: 9번 VContainer 덮어쓰기는 '새 스코프 파일은 만든 뒤 내용 재확인' 규칙만 유지하고 우회 스크립트는 두지 않기로 확정 (지영 결정).
 - 2026-11-12: 18번 포커스 없는 플레이 확인 추가. 검증: Unity 창 포커스 없음(focused=False) 상태에서 Bootstrap 플레이가 수동 조작 없이 진행(시작 후 4초에 739프레임, runInBackground=True), 기록한 입력 절차로 A 입력 5.55초에 22.21m 이동(4.0 m/s), 콘솔 오류 0.
 - 2026-11-12: 19번 시작 위치 장애물 회피, 20번 개발용 디버그 표시(에디터·개발 빌드만) 추가 (지영 결정, story-001 Own calls 2·12번 변경).
+- 2026-11-13: 21번 Play 시 항상 Bootstrap에서 시작(에디터 전용, 메뉴로 끄기, EditorPrefs) 추가 (지영 결정).
+- 2026-11-13: 21번 검증: Game 씬만 연 채 Play하면 Bootstrap+Game 2개가 로드되고 Game 스코프의 부모가 Bootstrap, 주입 오류 0, 플레이어는 안쪽 링(33.3m)에서 시작. Play를 멈추면 Game 씬으로 돌아옴. 메뉴로 끄면 Game 씬만 로드됨(부모 없음, 예상대로 주입 오류). 검증 후 다시 켬.

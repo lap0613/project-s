@@ -40,7 +40,8 @@ Assets/Scripts/
   Input/                 Whiteout.Input           (Input System → Core 인터페이스)
   UI/                    Whiteout.UI              (HUD, 증강 선택 화면)
   Game/                  Whiteout.Game            (조합 루트)
-  Editor/                Whiteout.Editor          (에디터 전용 개발 도구, 빌드에 포함되지 않음, 게임 어셈블리를 참조하지 않음)
+  Editor/                Whiteout.Editor          (에디터 전용 개발 도구, 빌드에 포함되지 않음, 게임 어셈블리를 참조하지 않음:
+                                                   포커스 없는 플레이 확인(tech 18), Play 시 Bootstrap에서 시작(tech 21))
 Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트, 지금은 선택사항, 나중에 추가)
 ```
 
@@ -151,3 +152,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-12: §7에 Game 씬→재시작 호출 경로 미정 메모 추가 (story-006 전에 결정).
 - 2026-11-12: §7에 씬 View 주입 규칙(전체 검색 금지, RegisterComponentInHierarchy / autoInjectGameObjects)과 런타임 머티리얼 규칙(Shader.Find 금지, 에셋 참조) 추가. 엔진 점검 결과 반영.
 - 2026-11-12: §2에 에디터 전용 어셈블리 `Whiteout.Editor` 추가 (포커스 없는 플레이 확인, tech-decisions 18).
+- 2026-11-13: §2 Whiteout.Editor 설명에 Play 시 Bootstrap에서 시작(tech-decisions 21) 추가.
