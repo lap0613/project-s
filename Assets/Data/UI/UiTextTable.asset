@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67bd4d2f09e11dd46ae0927a675d643f, type: 3}
+  m_Name: UiTextTable
+  m_EditorClassIdentifier: Whiteout.Core.Unity::Whiteout.Core.Unity.UiTextTable
+  font: {fileID: 11400000, guid: 3f8b67f9be45e524c945b460c6158b03, type: 2}
+  entries:
+  - key: hud.temperature
+    text: "\uAE30\uC628 {0:0.#}\xB0C"
+  - key: hud.forecast
+    text: "\uC624\uB298 {0}   \uB0B4\uC77C {1}   \uBAA8\uB808 {2}"
+  - key: hud.gauge.temperature
+    text: "\uCCB4\uC628"
+  - key: hud.gauge.hunger
+    text: "\uD5C8\uAE30"
+  - key: hud.gauge.health
+    text: "\uCCB4\uB825"
+  - key: prompt.gather
+    text: "[E] \uC90D\uAE30 \u2014 {0}"
+  - key: prompt.cook
+    text: "[E] \uAD7D\uAE30 \u2014 {0}"
+  - key: prompt.fuel
+    text: "[E] {0} \uB123\uAE30"
+  - key: prompt.relight
+    text: "[E] \uB2E4\uC2DC \uD53C\uC6B0\uAE30 ({0})"
+  - key: prompt.rest
+    text: "[E] \uD734\uC2DD"
+  - key: notice.bag_full
+    text: "\uAC00\uBC29\uC774 \uAC00\uB4DD \uCC3C\uC2B5\uB2C8\uB2E4 ({0})"
+  - key: notice.missing_required
+    text: "{0}\uC774(\uAC00) \uC5C6\uC2B5\uB2C8\uB2E4"
+  - key: notice.missing_materials
+    text: "\uC7AC\uB8CC\uAC00 \uBD80\uC871\uD569\uB2C8\uB2E4: {0}"
+  - key: notice.fire_full
+    text: "\uBAA8\uB2E5\uBD88\uC5D0 \uB098\uBB34\uB97C \uB354 \uB123\uC744 \uC218
+      \uC5C6\uC2B5\uB2C8\uB2E4"
+  - key: notice.placement_blocked
+    text: "\uC5EC\uAE30\uC5D0\uB294 \uC124\uCE58\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4"
+  - key: notice.fire_out
+    text: "\uBAA8\uB2E5\uBD88\uC774 \uAEBC\uC84C\uC2B5\uB2C8\uB2E4"
+  - key: bag.action.use
+    text: "\uC0AC\uC6A9"
+  - key: bag.action.drop
+    text: "\uBC84\uB9AC\uAE30"
+  - key: bag.slot_filled
+    text: '{0}
+
+      {1} x{2}'
+  - key: bag.slot_empty
+    text: '{0}'
+  - key: placement.entry
+    text: '{0} {1}   {2}'
+  - key: placement.entry_selected
+    text: "\u25B6 {0} {1}   {2}"
+  - key: placement.hint
+    text: "[\uC88C\uD074\uB9AD] \uC124\uCE58   [\uC6B0\uD074\uB9AD/B/Esc] \uCDE8\uC18C"
+  - key: world.fuel_seconds
+    text: "{0}\uCD08"
+  - key: format.item_amount
+    text: '{0} {1}'
+  - key: format.item_shortage
+    text: '{0} {1}/{2}'
+  - key: format.item_separator
+    text: ' + '

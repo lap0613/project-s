@@ -6,7 +6,7 @@ namespace Whiteout.Survival
     /// </summary>
     /// <example>
     /// <code>
-    /// var settings = new SurvivalSettings(100f, 100f, 0.1f, 1.5f, 0.4f, 30f, 60f, 0.5f, 2f, 1f, 0.25f, 0.3f);
+    /// var settings = new SurvivalSettings(100f, 100f, 0.1f, 1.5f, 0.4f, 30f, 60f, 0.5f, 2f, 1f, 0.25f, 0.3f, 30f, 3f);
     /// </code>
     /// </example>
     public sealed class SurvivalSettings
@@ -24,6 +24,8 @@ namespace Whiteout.Survival
         /// <param name="starvationDamagePerSecond">Health lost per second while hunger is 0.</param>
         /// <param name="moveSpeedPenalty">Move speed reduction while body temperature is low (0.25 = -25%).</param>
         /// <param name="gatherSpeedPenalty">Gather speed reduction while hunger is low (0.3 = -30%); applied by story 004.</param>
+        /// <param name="restRegenThreshold">While resting in a shelter, body temperature and hunger need only be at least this to regenerate.</param>
+        /// <param name="restRegenMultiplier">While resting, health regeneration is multiplied by this (3 = +1.5 per second).</param>
         public SurvivalSettings(
             float maxValue,
             float startValue,
@@ -36,7 +38,9 @@ namespace Whiteout.Survival
             float freezingDamagePerSecond,
             float starvationDamagePerSecond,
             float moveSpeedPenalty,
-            float gatherSpeedPenalty)
+            float gatherSpeedPenalty,
+            float restRegenThreshold,
+            float restRegenMultiplier)
         {
             MaxValue = maxValue;
             StartValue = startValue;
@@ -50,6 +54,8 @@ namespace Whiteout.Survival
             StarvationDamagePerSecond = starvationDamagePerSecond;
             MoveSpeedPenalty = moveSpeedPenalty;
             GatherSpeedPenalty = gatherSpeedPenalty;
+            RestRegenThreshold = restRegenThreshold;
+            RestRegenMultiplier = restRegenMultiplier;
         }
 
         /// <summary>Upper bound of every gauge.</summary>
@@ -87,5 +93,11 @@ namespace Whiteout.Survival
 
         /// <summary>Gather speed reduction while hunger is low (0.3 = -30%).</summary>
         public float GatherSpeedPenalty { get; }
+
+        /// <summary>Regeneration threshold while resting in a shelter.</summary>
+        public float RestRegenThreshold { get; }
+
+        /// <summary>Multiplier on health regeneration while resting in a shelter.</summary>
+        public float RestRegenMultiplier { get; }
     }
 }

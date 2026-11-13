@@ -13,8 +13,13 @@
         "Whiteout.Environment.Unity",
         "Whiteout.Survival",
         "Whiteout.Survival.Unity",
+        "Whiteout.Resources",
+        "Whiteout.Resources.Unity",
+        "Whiteout.Camp",
+        "Whiteout.Camp.Unity",
         "Whiteout.UI",
         "VContainer",
+        "Unity.TextMeshPro",
         "Unity.InputSystem"
     ],
     "includePlatforms": [],

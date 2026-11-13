@@ -13,6 +13,8 @@ namespace Whiteout.Survival
     /// (kept between 0 and the maximum) and modifiers can be attached by other systems.
     /// If both body temperature and hunger are 0 on the killing tick, the cause is the one that drained more
     /// health that tick (freezing on a tie), a provisional rule from tech-decisions.md item 23.
+    /// While resting in a shelter (<see cref="SetResting"/>) health regenerates from a lower threshold and faster.
+    /// Items restore gauges through <see cref="Restore"/>.
     /// </summary>
     /// <example>
     /// <code>
@@ -21,7 +23,7 @@ namespace Whiteout.Survival
     /// bool slow = survival.IsTemperatureLow;
     /// </code>
     /// </example>
-    public sealed class SurvivalSystem
+    public sealed class SurvivalSystem : IRestTarget, IVitalsReceiver
     {
         private readonly SurvivalSettings _settings;
         private readonly IAmbientTemperatureSource _ambient;
@@ -60,6 +62,26 @@ namespace Whiteout.Survival
         /// <summary>True after health reached 0. Ticking does nothing from then on.</summary>
         public bool IsDead { get; private set; }
 
+        /// <summary>True while the player rests in a shelter (set by Camp through <see cref="IRestTarget"/>).</summary>
+        public bool IsResting { get; private set; }
+
+        /// <inheritdoc />
+        public void SetResting(bool resting)
+        {
+            IsResting = resting;
+        }
+
+        /// <inheritdoc />
+        public void Restore(VitalKind kind, float amount)
+        {
+            if (IsDead)
+            {
+                return;
+            }
+
+            Change(kind == VitalKind.Hunger ? Hunger : Health, amount);
+        }
+
         /// <summary>Advances the hurdles by <paramref name="dt"/> seconds.</summary>
         /// <param name="dt">Elapsed seconds; zero or negative is ignored.</param>
         public void Tick(float dt)
@@ -89,9 +111,14 @@ namespace Whiteout.Survival
                     Die(freezing >= starvation ? DeathCause.Freezing : DeathCause.Starvation);
                 }
             }
-            else if (Temperature.Value >= _settings.RegenThreshold && Hunger.Value >= _settings.RegenThreshold)
+            else
             {
-                Change(Health, _settings.HealthRegenPerSecond * dt);
+                var threshold = IsResting ? _settings.RestRegenThreshold : _settings.RegenThreshold;
+                if (Temperature.Value >= threshold && Hunger.Value >= threshold)
+                {
+                    var regen = _settings.HealthRegenPerSecond * (IsResting ? _settings.RestRegenMultiplier : 1f);
+                    Change(Health, regen * dt);
+                }
             }
         }
 

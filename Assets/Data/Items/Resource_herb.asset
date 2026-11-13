@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdbe521161807cc40b1c1601a6e78174, type: 3}
+  m_Name: Resource_herb
+  m_EditorClassIdentifier: Whiteout.Resources.Unity::Whiteout.Resources.Unity.ResourceDefinition
+  item: {fileID: 11400000, guid: facf4aea753ca2b449cdbe8c1120bf99, type: 2}
+  displayName: "\uC57D\uCD08"
+  stackLimit: 5
+  useEffects:
+  - {fileID: 11400000, guid: e892c981814cb534aad5ba5be1fd815b, type: 2}
+  cooksInto: {fileID: 0}
+  pickupPrefab: {fileID: 4481990332042815401, guid: 4f9d1e05508f3cb42ab2fca27ca56f2e, type: 3}

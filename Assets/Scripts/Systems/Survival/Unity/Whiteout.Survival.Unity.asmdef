@@ -3,7 +3,9 @@
     "rootNamespace": "Whiteout.Survival.Unity",
     "references": [
         "Whiteout.Core",
+        "Whiteout.Core.Unity",
         "Whiteout.Survival",
+        "Unity.TextMeshPro",
         "VContainer"
     ],
     "includePlatforms": [],

@@ -5,7 +5,8 @@
         "Whiteout.Core",
         "Whiteout.Core.Unity",
         "VContainer",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

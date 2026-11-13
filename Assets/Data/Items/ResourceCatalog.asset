@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63bcfbebfd660b64d8843dff50367c72, type: 3}
+  m_Name: ResourceCatalog
+  m_EditorClassIdentifier: Whiteout.Resources.Unity::Whiteout.Resources.Unity.ResourceCatalog
+  resources:
+  - {fileID: 11400000, guid: e963fdf74f050b4468d020d00b10d7eb, type: 2}
+  - {fileID: 11400000, guid: 0f6e0d51d053dfc47a9c7ac14b100ce2, type: 2}
+  - {fileID: 11400000, guid: b18581e8f1e2fe04aadf28dde01f07aa, type: 2}
+  - {fileID: 11400000, guid: 9cf482aaf42b7384d8cf48065e205490, type: 2}
+  - {fileID: 11400000, guid: c148408ba8b32864c8ee10697726b3d7, type: 2}
+  - {fileID: 11400000, guid: c4727a5110580bc4ead060f8bdfe201a, type: 2}
+  - {fileID: 11400000, guid: 8360c9f855ef3c14cb709f80d923ce51, type: 2}

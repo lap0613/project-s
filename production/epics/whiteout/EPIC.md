@@ -34,7 +34,7 @@
 | 001 | 기반 + 이동 + 설원 맵 | Integration | Complete | N/A (minimal) |
 | 002 | 낮/밤·날씨(3일 예보)·환경 온도 | Integration | Complete | N/A (minimal) |
 | 003 | 허들 3종과 사망 | Logic | Complete | N/A (minimal) |
-| 004 | 아이템 채집·가방·모닥불/은신처 설치·요리 | Integration | Ready | N/A (minimal) |
+| 004 | 아이템 채집·가방·모닥불/은신처 설치·요리 | Integration | Complete | N/A (minimal) |
 | 005 | 증강 3택 1 (16개) | Integration | Ready | N/A (minimal) |
 | 006 | 구조 신호기·부품·구조·결과 화면 | Integration | Ready | N/A (minimal) |
 | 007 | 늑대 무리와 단순 공격 | Integration | Ready | N/A (minimal) |

@@ -2,7 +2,8 @@
     "name": "Whiteout.Core.Unity",
     "rootNamespace": "Whiteout.Core.Unity",
     "references": [
-        "Whiteout.Core"
+        "Whiteout.Core",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

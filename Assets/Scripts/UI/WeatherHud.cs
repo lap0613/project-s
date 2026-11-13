@@ -1,62 +1,77 @@
 using System;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using VContainer;
 using Whiteout.Core.Contracts;
 using Whiteout.Core.Events;
+using Whiteout.Core.Unity;
 
 namespace Whiteout.UI
 {
     /// <summary>
-    /// Minimal HUD text: today / tomorrow / day-after weather (from <see cref="WeatherForecastUpdated"/>)
-    /// and the current temperature (read from <see cref="IAmbientTemperatureSource"/>).
-    /// Uses one uGUI <see cref="Text"/>. Unsubscribes when destroyed.
+    /// Two HUD texts (ui-plan section 7.1, D2): the current temperature, top-left above the gauges, and the
+    /// today / tomorrow / day-after forecast, top-centre. TextMeshPro labels; texts and font come from the
+    /// <see cref="UiTextTable"/> (tech-decisions item 24). Unsubscribes when destroyed.
     /// </summary>
     /// <example>
     /// <code>
-    /// // Put on a Canvas object with a Text child assigned to Label.
+    /// // Put on a Canvas object; assign Temperature Label (top-left) and Forecast Label (top-centre).
     /// // GameLifetimeScope registers it with RegisterComponentInHierarchy&lt;WeatherHud&gt;().
     /// </code>
     /// </example>
     public sealed class WeatherHud : MonoBehaviour
     {
-        [SerializeField] private Text label;
+        private const string TemperatureKey = "hud.temperature";
+        private const string ForecastKey = "hud.forecast";
 
-        [Tooltip("Text layout. {0} today, {1} tomorrow, {2} day after, {3} temperature in degrees C.")]
-        [SerializeField, TextArea(2, 5)] private string format = "오늘: {0}\n내일: {1}\n모레: {2}\n기온: {3:0.#}°C";
+        [SerializeField] private TMP_Text temperatureLabel;
+        [SerializeField] private TMP_Text forecastLabel;
 
         private IAmbientTemperatureSource _temperature;
+        private UiTextTable _texts;
         private IDisposable _forecastSubscription;
         private WeatherForecastUpdated _forecast;
         private float _shownTemperature = float.NaN;
-        private bool _dirty = true;
+        private bool _forecastDirty = true;
 
         /// <summary>Receives dependencies from the container.</summary>
         /// <param name="bus">Event channel.</param>
         /// <param name="temperature">Ambient temperature at the player.</param>
+        /// <param name="texts">Texts and font.</param>
         [Inject]
-        public void Construct(IEventBus bus, IAmbientTemperatureSource temperature)
+        public void Construct(IEventBus bus, IAmbientTemperatureSource temperature, UiTextTable texts)
         {
             _temperature = temperature;
+            _texts = texts;
             _forecastSubscription = bus.Subscribe<WeatherForecastUpdated>(e =>
             {
                 _forecast = e;
-                _dirty = true;
+                _forecastDirty = true;
             });
+        }
+
+        private void Start()
+        {
+            _texts.ApplyFont(temperatureLabel);
+            _texts.ApplyFont(forecastLabel);
         }
 
         private void Update()
         {
-            var current = _temperature.CurrentTemperature;
-            if (!_dirty && Mathf.Approximately(current, _shownTemperature))
+            // Compare at the shown precision (one decimal) so the label is rebuilt only when its text changes.
+            var current = Mathf.Round(_temperature.CurrentTemperature * 10f) / 10f;
+            if (!Mathf.Approximately(current, _shownTemperature))
             {
-                return;
+                _shownTemperature = current;
+                temperatureLabel.text = _texts.Format(TemperatureKey, current);
             }
 
-            _shownTemperature = current;
-            _dirty = false;
-            label.text = string.Format(
-                format, _forecast.Today.DisplayName, _forecast.Tomorrow.DisplayName, _forecast.DayAfter.DisplayName, current);
+            if (_forecastDirty)
+            {
+                _forecastDirty = false;
+                forecastLabel.text = _texts.Format(
+                    ForecastKey, _forecast.Today.DisplayName, _forecast.Tomorrow.DisplayName, _forecast.DayAfter.DisplayName);
+            }
         }
 
         private void OnDestroy()

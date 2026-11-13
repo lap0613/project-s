@@ -21,6 +21,8 @@ MonoBehaviour:
   healthRegenPerSecond: 0.5
   freezingDamagePerSecond: 2
   starvationDamagePerSecond: 1
+  restRegenThreshold: 30
+  restRegenMultiplier: 3
   lowThreshold: 30
   moveSpeedPenalty: 0.25
   gatherSpeedPenalty: 0.3

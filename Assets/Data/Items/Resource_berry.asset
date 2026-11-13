@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdbe521161807cc40b1c1601a6e78174, type: 3}
+  m_Name: Resource_berry
+  m_EditorClassIdentifier: Whiteout.Resources.Unity::Whiteout.Resources.Unity.ResourceDefinition
+  item: {fileID: 11400000, guid: 1fcccec223149a0438ba00c724ce053b, type: 2}
+  displayName: "\uC5F4\uB9E4"
+  stackLimit: 3
+  useEffects:
+  - {fileID: 11400000, guid: 642ba7f4f2b7a6d4092194086b82d3cd, type: 2}
+  cooksInto: {fileID: 0}
+  pickupPrefab: {fileID: 651101084582861504, guid: 524236b65d1f8d340a50bd9d6927e481, type: 3}

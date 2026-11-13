@@ -76,6 +76,9 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 이벤트는 알림에만 쓰고, 명령은 인터페이스 호출로 한다 (흐름 추적을 위해).
 - **시스템 사이 연결(브리지):** 두 시스템을 잇는 코드는 Game에 둔다. 예: `SurvivalPlayerBridge`는 Survival의 체온 30 미만 상태를
   Player의 이동속도 스탯 수정자로 붙이고, `PlayerDied`에 `PlayerController`를 끈다. Survival과 Player는 서로를 모른다.
+  story-004의 브리지: `InteractionDirector`(E 행동을 우선순위대로 하나만 시작하고, 누르는 시간·취소·이동 잠금을 맡는다. 줍기·요리는 Resources,
+  나무 넣기·휴식은 Camp가 `IInteractionSource`로 내놓는다), `PlayerActionLock`(E 행동 중 이동 입력을 막는다),
+  `SurvivalGatherBridge`(허기 30 미만이면 채집 속도 스탯에 -30% 수정자를 붙인다), `PlayerPositionSource`.
 
 | 이벤트 | 발행 | 구독 |
 |---|---|---|
@@ -92,13 +95,24 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `RescueArrived` | RunFlow | UI |
 | `StructurePlaced` | Camp | UI, View |
 | `WeatherForecastUpdated` | Environment | UI |
+| `NoticePosted` (화면 알림: 문구 키 + 값) | Resources, Camp | UI |
 
 | 조회 인터페이스 | 구현 | 사용 |
 |---|---|---|
 | `IAmbientTemperatureSource` | Environment | Survival |
-| `IWarmthSource` (플레이어 위치의 켜진 모닥불 중 가장 따뜻한 1개의 온기, 없으면 0) | Camp (story-004 전까지는 Game의 `NoWarmthSource`가 0을 돌려줌) | Environment |
+| `IWarmthSource` (플레이어 위치의 켜진 모닥불 중 가장 따뜻한 1개의 온기, 없으면 0) | Camp (`CampSystem`) | Environment |
 | `IStatRegistry` | Core | 스탯을 쓰는 모든 시스템, Augments |
 | `IRandom` | Core (시드 지정 가능) | Resources(배치), Environment(날씨), Augments(뽑기) |
+| `IBag` (가방: 칸, 개수, 넣기·빼기, 고른 칸) | Resources (`Bag`) | Camp(설치·연료 비용), UI(가방 칸 줄) |
+| `IItemNames` (아이템 표시 이름) | Resources | Camp, UI |
+| `IBagAction` (칸 우클릭 메뉴 항목: 사용·버리기, 008에서 입기 추가) | Resources | UI |
+| `IVitalsReceiver` (허기·체력 회복 받기) / `IRestTarget` (휴식 상태 켜고 끄기) | Survival | Resources(소모품 효과) / Camp(은신처 휴식) |
+| `IFireStatus` (근처 모닥불의 켜짐·연료) | Camp | Resources(요리), UI(연료 표시) |
+| `IPlacementMenu` (설치 목록: 열림, 항목, 고른 항목) | Camp | UI, Game, Resources(목록이 열린 동안 숫자키는 가방 칸을 고르지 않음) |
+| `IPlayerPosition` (플레이어 위치(발 높이)와 바라보는 방향) | Game (`PlayerPositionSource`) | Resources, Camp |
+| `IInteractionInput` (E, B, 확인·취소, 숫자키, 휠) | Input | Game, Resources, Camp, UI |
+| `IInteractionSource` (E로 하는 행동 1개: 줍기·요리·나무 넣기·휴식) | Resources, Camp | Game(`InteractionDirector`) |
+| `IInteractionStatus` (지금 보여 줄 프롬프트와 진행률) | Game (`InteractionDirector`) | UI |
 | `IMapLayout` (맵 중심, 링 반지름 60/130/200m, 거리가 어느 링인지) | Core (값은 Core.Unity의 ScriptableObject) | Player(시작 위치), Environment(온도), Resources(배치), Threats(늑대 중심지) |
 
 ## 5. 스탯과 수정자
@@ -158,3 +172,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-13: §2 Whiteout.Editor 설명에 Play 시 Bootstrap에서 시작(tech-decisions 21) 추가.
 - 2026-11-13: §4에 `IWarmthSource` 추가 (Environment가 Camp를 참조하지 않고 모닥불 온기를 받는 통로, story-002). 낮/밤 길이는 RunFlow의 `RunFlowConfig`, 날씨·온도·시야 값은 Environment의 `EnvironmentConfig`에 둔다.
 - 2026-11-13: §4에 Game 브리지(`SurvivalPlayerBridge`)와 `PlayerDied` 구독자(Game) 추가 (story-003: 시스템끼리 참조 금지를 지키면서 이동속도 불이익·사망 정지를 연결).
+- 2026-11-13: §4에 story-004 계약 추가: 이벤트 `NoticePosted`, 조회 인터페이스 10종(가방·이름·칸 메뉴·회복·휴식·모닥불 상태·설치 목록·플레이어 위치·E 입력·E 행동), Game 브리지 4종. `IWarmthSource` 구현을 Camp로 바꾸고 `NoWarmthSource` 삭제 (story-004, UI 결정 D3~D5 반영으로 계약이 늘었다).

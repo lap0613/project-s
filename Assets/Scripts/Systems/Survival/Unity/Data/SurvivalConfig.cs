@@ -49,6 +49,13 @@ namespace Whiteout.Survival.Unity
         [Tooltip("Health lost per second while hunger is 0.")]
         [SerializeField] private float starvationDamagePerSecond = 1f;
 
+        [Header("Shelter rest (core-rules section 2)")]
+        [Tooltip("While resting, body temperature and hunger need only be at least this for health to regenerate.")]
+        [SerializeField] private float restRegenThreshold = 30f;
+
+        [Tooltip("While resting, health regeneration is multiplied by this (3 = +1.5 per second).")]
+        [SerializeField] private float restRegenMultiplier = 3f;
+
         [Header("Low penalties")]
         [Tooltip("A gauge below this counts as low.")]
         [SerializeField] private float lowThreshold = 30f;
@@ -80,7 +87,9 @@ namespace Whiteout.Survival.Unity
                 freezingDamagePerSecond,
                 starvationDamagePerSecond,
                 moveSpeedPenalty,
-                gatherSpeedPenalty);
+                gatherSpeedPenalty,
+                restRegenThreshold,
+                restRegenMultiplier);
         }
     }
 }

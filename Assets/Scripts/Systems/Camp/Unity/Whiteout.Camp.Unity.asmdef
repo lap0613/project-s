@@ -1,0 +1,21 @@
+{
+    "name": "Whiteout.Camp.Unity",
+    "rootNamespace": "Whiteout.Camp.Unity",
+    "references": [
+        "Whiteout.Core",
+        "Whiteout.Core.Unity",
+        "Whiteout.Camp",
+        "VContainer",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

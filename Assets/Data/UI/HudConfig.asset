@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd28d48b7764e74791dac40ea4e5636, type: 3}
+  m_Name: HudConfig
+  m_EditorClassIdentifier: Whiteout.UI::Whiteout.UI.HudConfig
+  noticeMaxLines: 3
+  noticeSeconds: 3
+  slotBorderColor: {r: 1, g: 1, b: 1, a: 0.35}
+  slotSelectedBorderColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+  unavailableTextColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  promptHeight: 1.5
+  fuelDisplayHeight: 3
+  fuelPipFilledColor: {r: 0.95, g: 0.45, b: 0.2, a: 1}
+  fuelPipEmptyColor: {r: 0, g: 0, b: 0, a: 0.6}

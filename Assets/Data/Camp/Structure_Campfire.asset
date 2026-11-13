@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360e8b223b3831e47a04c999f91a98c9, type: 3}
+  m_Name: Structure_Campfire
+  m_EditorClassIdentifier: Whiteout.Camp.Unity::Whiteout.Camp.Unity.CampfireDefinition
+  id: campfire
+  displayName: "\uBAA8\uB2E5\uBD88"
+  prefab: {fileID: 1701669949298410366, guid: ec6e41ab2b394214c881f36c4630e952, type: 3}
+  previewPrefab: {fileID: 8456830805392183887, guid: eaf70ceac6cb7424591124f2507a5fbf, type: 3}
+  cost:
+  - item: {fileID: 11400000, guid: 60483a3c9a9199e42b9a765129c486f2, type: 2}
+    amount: 3
+  - item: {fileID: 11400000, guid: e88f7d0a0018885458e2f0fb6ce4d0cc, type: 2}
+    amount: 1
+  requiredItems:
+  - {fileID: 11400000, guid: d14cd05d67832be4c8c67ce30308205e, type: 2}
+  footprintRadius: 0.75
+  fuelItem: {fileID: 11400000, guid: 60483a3c9a9199e42b9a765129c486f2, type: 2}
+  burnSecondsPerFuel: 60
+  maxFuel: 5
+  relightCost:
+  - item: {fileID: 11400000, guid: e88f7d0a0018885458e2f0fb6ce4d0cc, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 60483a3c9a9199e42b9a765129c486f2, type: 2}
+    amount: 2
+  warmth: 35
+  warmthRadius: 4
+  interactRange: 2
+  statusRange: 6
