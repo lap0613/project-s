@@ -40,3 +40,4 @@
 | 007 | 늑대 무리와 단순 공격 | Integration | Ready | N/A (minimal) |
 | 008 | 도구·장비·한 단계 제작 | Integration | Ready | N/A (minimal) |
 | 009 | 최소 타이틀·로딩 페이드·일시정지 (`design/ux/ui-plan.md` D1·D7) | UI | Draft | N/A (minimal) |
+| 010 | HUD 상단 배치와 예보 타임라인 막대 (`design/ux/ui-plan.md` §7, T1~T7) | UI | Ready | N/A (minimal) |
