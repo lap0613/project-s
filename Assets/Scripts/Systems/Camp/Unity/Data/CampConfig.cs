@@ -17,6 +17,9 @@ namespace Whiteout.Camp.Unity
     {
         [SerializeField] private StructureCatalog catalog;
 
+        [Tooltip("The signal beacon definition (also listed in the catalog). Its parts are needed before the beacon is placed, for the goal display.")]
+        [SerializeField] private SignalBeaconDefinition signalBeacon;
+
         [Header("Placement mode (ui-plan section 9)")]
         [Tooltip("Provisional (ui-plan P3). The preview follows the mouse cursor but stops this far from the player, in meters.")]
         [SerializeField] private float maxPlaceDistance = 6f;
@@ -48,6 +51,9 @@ namespace Whiteout.Camp.Unity
 
         /// <summary>Farthest the preview (and the placed structure) can be from the player, in meters.</summary>
         public float MaxPlaceDistance => maxPlaceDistance;
+
+        /// <summary>The signal beacon definition (parts, rescue wait, E-action values).</summary>
+        public SignalBeaconDefinition SignalBeacon => signalBeacon;
 
         /// <summary>Degrees one wheel notch turns the preview.</summary>
         public float RotationStepDegrees => rotationStepDegrees;

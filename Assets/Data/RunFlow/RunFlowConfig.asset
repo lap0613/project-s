@@ -14,3 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Whiteout.RunFlow.Unity::Whiteout.RunFlow.Unity.RunFlowConfig
   dayLengthSeconds: 120
   nightLengthSeconds: 60
+  partAppearances:
+  - part: {fileID: 11400000, guid: ca41021fc42aedbd2a3a25411b7dec7e, type: 2}
+    day: 2
+    ring: 1
+  - part: {fileID: 11400000, guid: c2d20375277b1d0e28e93d723fffe62e, type: 2}
+    day: 4
+    ring: 2
+  - part: {fileID: 11400000, guid: 170c52f77ffbfa92000396367fda63b7, type: 2}
+    day: 6
+    ring: 2

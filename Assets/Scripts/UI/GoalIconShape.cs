@@ -19,6 +19,9 @@ namespace Whiteout.UI
         Rescue,
 
         /// <summary>An arrow pointing right (between the icons of the start guide).</summary>
-        Arrow
+        Arrow,
+
+        /// <summary>A check mark (on a part that is installed on the beacon).</summary>
+        Check
     }
 }

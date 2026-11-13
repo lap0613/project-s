@@ -24,6 +24,7 @@ MonoBehaviour:
   requiredItems:
   - {fileID: 11400000, guid: d14cd05d67832be4c8c67ce30308205e, type: 2}
   footprintRadius: 1.125
+  maxCount: 0
   fuelItem: {fileID: 11400000, guid: 60483a3c9a9199e42b9a765129c486f2, type: 2}
   burnSecondsPerFuel: 60
   maxFuel: 5

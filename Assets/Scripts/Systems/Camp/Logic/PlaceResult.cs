@@ -11,5 +11,8 @@ namespace Whiteout.Camp
 
         /// <summary>Part of the cost is missing.</summary>
         MissingCost,
+
+        /// <summary>The structure's per-run count limit is already reached (tech-decisions 34, R4).</summary>
+        LimitReached,
     }
 }

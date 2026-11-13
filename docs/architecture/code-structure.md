@@ -101,11 +101,13 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `FireStateChanged` | Camp | UI, View |
 | `ResourceGathered` | Gathering | UI |
 | `PlayerDamaged` | Threats | Survival |
-| `PlayerDied` | Survival | RunFlow, Game(`SurvivalPlayerBridge`: 플레이어 이동 정지) |
+| `PlayerDied` | Survival | RunFlow(`RunOutcome`) |
 | `AugmentChosen` | Augments | UI |
-| `SignalBeaconCompleted` | Camp | UI |
+| `SignalBeaconCompleted` | Camp | UI (지금은 구독자 없음. 완성 알림은 Camp가 `NoticePosted`로 보낸다) |
 | `RescueRequested` (도착까지 남은 게임 초) | Camp | RunFlow(타이머 시작), UI(타임라인 깃발) |
-| `RescueArrived` | RunFlow | UI |
+| `RescueArrived` | RunFlow (구조 타이머 끝) | RunFlow(`RunOutcome`) |
+| `BeaconPartAppeared` (부품, 링) | RunFlow (`PartSchedule`: 2·4·6일차 아침) | Gathering(그 링의 후보 지점에 줍기를 놓고 알림) |
+| `RunEnded` (구조 여부, 사망 원인, 날짜. 사망·구조 중 먼저 일어난 쪽 한 번만) | RunFlow (`RunOutcome`) | UI(결과 화면), Game(`InteractionDirector`, `SurvivalPlayerBridge`: 플레이어 이동 정지), Camp(설치 모드 닫기), Survival·RunFlow 러너(틱 정지) |
 | `StructurePlaced` | Camp | UI, View |
 | `WeatherForecastUpdated` | Environment | UI |
 | `NoticePosted` (화면 알림: 문구 키 + 값) | Gathering, Camp | UI |
@@ -122,8 +124,10 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `IBagAction` (칸 우클릭 메뉴 항목: 사용·버리기, 008에서 입기 추가) | Gathering | UI |
 | `IVitalsReceiver` (허기·체력 회복 받기) / `IRestTarget` (휴식 상태 켜고 끄기) | Survival | Gathering(소모품 효과) / Camp(은신처 휴식) |
 | `IFireStatus` (근처 모닥불의 켜짐·연료) | Camp | Gathering(요리), UI(연료 표시) |
-| `IRescueParts` (모은 신호기 부품 수, 필요한 수) | story-006 (그 전까지 Game의 `PlaceholderRescueParts`가 0/3) | UI(목표 안내 [C]) |
-| `IPlacementMenu` (설치 목록: 열림, 항목, 고른 항목) | Camp | UI, Game, Gathering(목록이 열린 동안 숫자키는 가방 칸을 고르지 않음) |
+| `IRescueParts` (신호기 부품: 필요한 수, 모은 수, 부품별 상태 없음·가짐·장착) | Camp (`SignalBeaconSystem`: 가방과 장착 상태에서 계산) | UI(목표 안내 [C]) |
+| `IRescueCountdown` (구조 타이머: 켜졌는지, 남은 게임 초) | RunFlow (`RescueTimer`) | UI(구조 타이머 [C]) |
+| `IRunRestarter` (`Restart()`: Game 씬 다시 불러오기) | Game (Bootstrap 씬의 `GameRestarter`, Bootstrap 스코프에 등록) | UI(결과 화면 `다시 하기`) |
+| `IPlacementMenu` (설치 목록: 열림, 항목, 고른 항목, 항목이 개수 한도에 닿았는지) | Camp | UI, Game, Gathering(목록이 열린 동안 숫자키는 가방 칸을 고르지 않음) |
 | `IPlayerPosition` (플레이어 위치(발 높이)와 바라보는 방향) | Game (`PlayerPositionSource`) | Gathering, Camp |
 | `IInteractionInput` (E, B, 확인(좌클릭)·취소, 숫자키, 휠(`WheelScroll`: 설치 모드에서 회전), 커서 화면 위치) | Input | Game, Camp, UI |
 | `IInteractionSource` (행동 1개: 줍기·요리·나무 넣기·휴식. E로 가까운 대상, `TryOfferPointed`로 커서 밑 대상, `IsTargetInReach`로 닿았는지) | Gathering, Camp | Game(`InteractionDirector`) |
@@ -157,9 +161,10 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 
 ## 7. 주의할 점
 
-- **미정 (story-006 착수 전에 결정):** Game 씬(결과 화면 UI 등)에서 Bootstrap 씬의 재시작 기능(`GameRestarter`)을
-  호출하는 경로가 아직 없다. Game 씬은 Bootstrap 씬을 참조할 수 없으므로 연결 방식(예: Bootstrap 스코프에 등록해 주입,
-  또는 Core의 재시작 요청 이벤트)을 정해야 한다.
+- **Game 씬 → 재시작 (임시, 지영 확인 필요, story-006):** Game 씬(결과 화면)은 Core의 `IRunRestarter`를 주입받아 `Restart()`를 부른다.
+  구현은 Bootstrap 씬의 `GameRestarter`이고 Bootstrap 스코프가 등록한다(Game 스코프의 부모라 Game 씬에서 주입된다). 명령은 인터페이스 호출(§4)이라는
+  규칙에 따랐다. 다른 선택지는 Core의 재시작 요청 이벤트였다 (`tech-decisions.md` 34번).
+- **런 종료 뒤 정지:** 사망이든 구조든 멈춰야 하는 코드는 `PlayerDied`가 아니라 `RunEnded`를 듣는다. `PlayerDied`만 들으면 구조 뒤에 멈추지 않는다.
 
 - Logic은 `UnityEngine`을 쓸 수 없다. `Mathf`·`Vector3`·`Debug` 대신 `System.Math`와 자체 타입.
   불 반경·구역 같은 위치 판정은 View가 하고 결과만 Logic에 넘긴다.
@@ -195,3 +200,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-13: §2에 코드 밖 에셋 폴더(Art·Prefabs)와 프리팹 구성 규칙 추가, `asset-rules.md` 연결 (모닥불 에셋 통합, tech-decisions 30번).
 - 2026-11-13: story-011 반영: §2 Gathering 폴더·어셈블리 이름 코드 반영(임시), §4 마우스 클릭 상호작용 연결(`InteractionDirector`·`PointerWorld`·`TargetHighlighter`)과 인터페이스 `IPointerWorld`·`IAttackInput`·`PlayerDamaged`, `IInteractionInput`·`IInteractionSource` 변경(휠 = `WheelScroll`, 커서 위치, `TryOfferPointed`).
 - 2026-11-13: §4에 조회 인터페이스 `IRescueParts` 추가 (story-012: UI가 부품 수를 받는 통로, 구현은 story-006, 그 전까지 Game의 `PlaceholderRescueParts`). UI의 `IFireStatus` 사용처에 온기 비네트·불 소리 추가.
+- 2026-11-13: story-006 반영: §4에 이벤트 `BeaconPartAppeared`·`RunEnded` 추가, `RescueArrived`·`PlayerDied`·`SignalBeaconCompleted` 구독자 수정, 조회 인터페이스 `IRescueCountdown`·`IRunRestarter` 추가, `IRescueParts`(부품별 상태, 구현 Camp)·`IPlacementMenu`(개수 한도) 변경. §7의 재시작 경로 미정 항목을 `IRunRestarter`로 정함(임시, 지영 확인 필요)과 런 종료 뒤 정지 규칙 추가.

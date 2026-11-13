@@ -36,7 +36,7 @@
 | 003 | 허들 3종과 사망 | Logic | Complete | N/A (minimal) |
 | 004 | 아이템 채집·가방·모닥불/은신처 설치·요리 | Integration | Complete | N/A (minimal) |
 | 005 | 증강 3택 1 (16개) | Integration | Ready | N/A (minimal) |
-| 006 | 구조 신호기·부품·구조·결과 화면 | Integration | Ready | N/A (minimal) |
+| 006 | 구조 신호기·부품·구조·결과 화면 | Integration | Complete | N/A (minimal) |
 | 007 | 늑대 무리와 단순 공격 | Integration | Ready | N/A (minimal) |
 | 008 | 도구·장비·한 단계 제작 | Integration | Ready | N/A (minimal) |
 | 009 | 최소 타이틀·로딩 페이드·일시정지 (`design/ux/ui-plan.md` D1·D7) | UI | Draft | N/A (minimal) |

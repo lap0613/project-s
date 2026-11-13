@@ -9,8 +9,9 @@ namespace Whiteout.UI
 {
     /// <summary>
     /// The structure list of the placement mode (ui-plan section 9): one line per structure with its number, name
-    /// and cost, the selected one marked, entries the player cannot afford greyed with have/need amounts, and a key
-    /// hint line. Built from <see cref="IPlacementMenu"/>, so a new structure definition just adds a line.
+    /// and cost, the selected one marked, entries the player cannot afford greyed with have/need amounts, an entry
+    /// whose per-run limit is reached greyed with the limit text instead of the cost (tech-decisions 34, R4), and a
+    /// key hint line. Built from <see cref="IPlacementMenu"/>, so a new structure definition just adds a line.
     /// Redraws only when the selection or the bag changes.
     /// </summary>
     /// <example>
@@ -24,6 +25,7 @@ namespace Whiteout.UI
         private const string EntryKey = "placement.entry";
         private const string SelectedEntryKey = "placement.entry_selected";
         private const string HintKey = "placement.hint";
+        private const string LimitReachedKey = "placement.limit_reached";
 
         [SerializeField] private GameObject panel;
         [SerializeField] private TMP_Text label;
@@ -36,6 +38,7 @@ namespace Whiteout.UI
         private HudConfig _config;
         private int _shownSelection = -1;
         private int _shownBagVersion = -1;
+        private int _shownLimitMask = -1;
 
         /// <summary>Receives dependencies from the container.</summary>
         /// <param name="menu">The placement list.</param>
@@ -67,14 +70,35 @@ namespace Whiteout.UI
                 _shownSelection = -1;
             }
 
-            if (!_menu.IsOpen || (_shownSelection == _menu.SelectedIndex && _shownBagVersion == _bag.Version))
+            if (!_menu.IsOpen)
+            {
+                return;
+            }
+
+            var limitMask = LimitMask();
+            if (_shownSelection == _menu.SelectedIndex && _shownBagVersion == _bag.Version && _shownLimitMask == limitMask)
             {
                 return;
             }
 
             _shownSelection = _menu.SelectedIndex;
             _shownBagVersion = _bag.Version;
+            _shownLimitMask = limitMask;
             Redraw();
+        }
+
+        private int LimitMask()
+        {
+            var mask = 0;
+            for (var i = 0; i < _menu.EntryCount; i++)
+            {
+                if (_menu.IsEntryLimitReached(i))
+                {
+                    mask |= 1 << i;
+                }
+            }
+
+            return mask;
         }
 
         private void Redraw()
@@ -102,6 +126,12 @@ namespace Whiteout.UI
                     affordable = false;
                     costText += _texts.Get(UiTextTable.ItemSeparatorKey)
                         + _texts.Format(UiTextTable.ItemShortageKey, _names.GetDisplayName(required[r]), 0, 1);
+                }
+
+                if (_menu.IsEntryLimitReached(i))
+                {
+                    affordable = false;
+                    costText = _texts.Get(LimitReachedKey);
                 }
 
                 var line = _texts.Format(

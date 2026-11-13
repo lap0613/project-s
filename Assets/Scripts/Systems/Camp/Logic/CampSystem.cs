@@ -12,7 +12,8 @@ namespace Whiteout.Camp
     /// A burned-out fire is relit with tinder 1 + wood 2 (flint needed); that wood becomes its fuel.
     /// Warmth is the single warmest lit fire whose radius contains the player; fires are not summed.
     /// Positions are judged by the View and passed in as flags (tech-decisions item 13).
-    /// Time moves only through <see cref="Tick"/>. No limit on the number of structures.
+    /// Time moves only through <see cref="Tick"/>. A structure whose spec has a <see cref="StructureSpec.MaxCount"/>
+    /// can be placed only that many times per run (tech-decisions 34, R4); the others have no limit.
     /// </summary>
     /// <example>
     /// <code>
@@ -27,6 +28,7 @@ namespace Whiteout.Camp
         private readonly IBag _bag;
         private readonly IEventBus _bus;
         private readonly List<Campfire> _fires = new List<Campfire>();
+        private readonly Dictionary<string, int> _placedCounts = new Dictionary<string, int>(StringComparer.Ordinal);
 
         /// <summary>Creates the system with no structures.</summary>
         /// <param name="bag">Pays placement, fuel and relight costs.</param>
@@ -114,8 +116,22 @@ namespace Whiteout.Camp
                 return result == PlaceResult.Placed ? PlaceResult.MissingCost : result;
             }
 
+            _placedCounts.TryGetValue(spec.Id, out var placed);
+            _placedCounts[spec.Id] = placed + 1;
             _bus.Publish(new StructurePlaced(spec.Id, x, z));
             return PlaceResult.Placed;
+        }
+
+        /// <summary>True when the structure has a count limit and that many are already placed in this run.</summary>
+        /// <param name="spec">The structure.</param>
+        public bool IsLimitReached(StructureSpec spec)
+        {
+            if (spec == null)
+            {
+                throw new ArgumentNullException(nameof(spec));
+            }
+
+            return spec.MaxCount > 0 && _placedCounts.TryGetValue(spec.Id, out var placed) && placed >= spec.MaxCount;
         }
 
         /// <summary>What <see cref="TryPlace"/> would return right now, without changing anything.</summary>
@@ -125,6 +141,11 @@ namespace Whiteout.Camp
             if (spec == null)
             {
                 throw new ArgumentNullException(nameof(spec));
+            }
+
+            if (IsLimitReached(spec))
+            {
+                return PlaceResult.LimitReached;
             }
 
             if (!HasAll(spec.RequiredItems))

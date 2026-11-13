@@ -37,7 +37,7 @@ namespace Whiteout.Game
         private readonly IPlayerPosition _player;
         private readonly PointerConfig _config;
         private readonly List<IInteractionSource> _sources;
-        private readonly IDisposable _diedSubscription;
+        private readonly IDisposable _endedSubscription;
         private readonly IDisposable _damagedSubscription;
         private IInteractionSource _offered;
         private IInteractionSource _active;
@@ -53,7 +53,7 @@ namespace Whiteout.Game
         private bool _startedByClick;
         private float _holdSeconds;
         private float _elapsed;
-        private bool _playerDead;
+        private bool _runEnded;
 
         /// <summary>Creates the director.</summary>
         /// <param name="input">Interact button, left click and cursor.</param>
@@ -63,7 +63,7 @@ namespace Whiteout.Game
         /// <param name="pointer">Where the cursor points in the world.</param>
         /// <param name="player">Player position.</param>
         /// <param name="config">Click range, hover radius and walk cancel values.</param>
-        /// <param name="bus">Event channel (player death, damage).</param>
+        /// <param name="bus">Event channel (run end, damage).</param>
         public InteractionDirector(
             IInteractionInput input,
             IReadOnlyList<IInteractionSource> sources,
@@ -82,9 +82,9 @@ namespace Whiteout.Game
             _config = config != null ? config : throw new ArgumentNullException(nameof(config));
             _sources = new List<IInteractionSource>(sources ?? throw new ArgumentNullException(nameof(sources)));
             _sources.Sort((a, b) => b.Priority.CompareTo(a.Priority));
-            _diedSubscription = bus.Subscribe<PlayerDied>(_ =>
+            _endedSubscription = bus.Subscribe<RunEnded>(_ =>
             {
-                _playerDead = true;
+                _runEnded = true;
                 Stop(false);
                 CancelWalk();
                 _offered = null;
@@ -142,7 +142,7 @@ namespace Whiteout.Game
         public void Tick()
         {
             AttackClicked = false;
-            if (_playerDead)
+            if (_runEnded)
             {
                 return;
             }
@@ -213,7 +213,7 @@ namespace Whiteout.Game
         /// <summary>Unsubscribes and releases the movement lock.</summary>
         public void Dispose()
         {
-            _diedSubscription.Dispose();
+            _endedSubscription.Dispose();
             _damagedSubscription.Dispose();
             CancelWalk();
             Stop(false);

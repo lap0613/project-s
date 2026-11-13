@@ -35,6 +35,9 @@ namespace Whiteout.Camp.Unity
         [Tooltip("Provisional. Radius in meters that must be free of obstacles to place this.")]
         [SerializeField] private float footprintRadius = 0.75f;
 
+        [Tooltip("Most of this structure that can be placed in one run. 0 = unlimited.")]
+        [SerializeField] private int maxCount;
+
         /// <summary>Structure id.</summary>
         public string Id => id;
 
@@ -68,7 +71,7 @@ namespace Whiteout.Camp.Unity
         /// <summary>Converts to the spec object the Logic uses.</summary>
         public StructureSpec ToSpec()
         {
-            return new StructureSpec(id, displayName, ItemCost.ToAmounts(cost), ToRequiredItems());
+            return new StructureSpec(id, displayName, ItemCost.ToAmounts(cost), ToRequiredItems(), Mathf.Max(maxCount, 0));
         }
     }
 }

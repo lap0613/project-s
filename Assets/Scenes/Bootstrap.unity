@@ -184,6 +184,7 @@ MonoBehaviour:
   autoInjectGameObjects: []
   seed: 0
   mapLayout: {fileID: 11400000, guid: 5adb4b6c8ecbd9944ae91ea75ce877c5, type: 2}
+  restarter: {fileID: 557183360}
 --- !u!4 &557183363
 Transform:
   m_ObjectHideFlags: 0

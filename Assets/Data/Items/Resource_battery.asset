@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdbe521161807cc40b1c1601a6e78174, type: 3}
+  m_Name: Resource_battery
+  m_EditorClassIdentifier: Whiteout.Gathering.Unity::Whiteout.Gathering.Unity.ResourceDefinition
+  item: {fileID: 11400000, guid: c2d20375277b1d0e28e93d723fffe62e, type: 2}
+  displayName: "배터리"
+  stackLimit: 1
+  useEffects: []
+  cooksInto: {fileID: 0}
+  pickupPrefab: {fileID: 4481990332042815401, guid: 681d6a162264646cb9f9e80e97dfe21e, type: 3}

@@ -62,7 +62,8 @@ MonoBehaviour:
   - key: placement.entry_selected
     text: "\u25B6 {0} {1}   {2}"
   - key: placement.hint
-    text: "[\uC88C\uD074\uB9AD] \uC124\uCE58   [\uD720] \uD68C\uC804   [\uC6B0\uD074\uB9AD/B/Esc] \uCDE8\uC18C"
+    text: "[\uC88C\uD074\uB9AD] \uC124\uCE58   [\uD720] \uD68C\uC804   [\uC6B0\uD074\uB9AD/B/Esc]
+      \uCDE8\uC18C"
   - key: world.fuel_seconds
     text: "{0}\uCD08"
   - key: format.item_amount
@@ -93,3 +94,52 @@ MonoBehaviour:
     text: "\uB208\uBCF4\uB77C"
   - key: weather.cold_snap
     text: "\uD55C\uD30C"
+  - key: prompt.beacon_install
+    text: "[E] {0} \uC7A5\uCC29"
+  - key: prompt.beacon_missing
+    text: "\uBD80\uD488 \uD544\uC694 ({0})"
+  - key: prompt.beacon_request
+    text: "[E] \uAD6C\uC870 \uC694\uCCAD"
+  - key: notice.beacon_missing_part
+    text: "\uC7A5\uCC29\uD560 \uBD80\uD488\uC774 \uC5C6\uC2B5\uB2C8\uB2E4"
+  - key: notice.beacon_completed
+    text: "\uAD6C\uC870 \uC2E0\uD638\uAE30\uAC00 \uC644\uC131\uB418\uC5C8\uC2B5\uB2C8\uB2E4"
+  - key: notice.rescue_requested
+    text: "\uAD6C\uC870\uB97C \uC694\uCCAD\uD588\uC2B5\uB2C8\uB2E4"
+  - key: notice.placement_limit
+    text: "{0}\uC740(\uB294) \uD55C \uD310\uC5D0 1\uAC1C\uB9CC \uC124\uCE58\uD560
+      \uC218 \uC788\uC2B5\uB2C8\uB2E4"
+  - key: notice.part_appeared.middle
+    text: "{0}\uAC00 \uAC00\uC6B4\uB370 \uB9C1 \uC5B4\uB518\uAC00\uC5D0 \uB098\uD0C0\uB0AC\uC2B5\uB2C8\uB2E4"
+  - key: notice.part_appeared.outer
+    text: "{0}\uAC00 \uBC14\uAE65 \uB9C1 \uC5B4\uB518\uAC00\uC5D0 \uB098\uD0C0\uB0AC\uC2B5\uB2C8\uB2E4"
+  - key: hud.rescue.timer
+    text: "\uAD6C\uC870\uAE4C\uC9C0 {0}\uC77C {1:00}:{2:00}"
+  - key: hud.rescue.timer_short
+    text: "\uAD6C\uC870\uAE4C\uC9C0 {0:00}:{1:00}"
+  - key: placement.limit_reached
+    text: "\uD55C \uD310\uC5D0 1\uAC1C"
+  - key: result.title.Rescued
+    text: "\uAD6C\uC870\uB418\uC5C8\uC2B5\uB2C8\uB2E4"
+  - key: result.title.Freezing
+    text: "\uC5BC\uC5B4 \uC8FD\uC5C8\uC2B5\uB2C8\uB2E4"
+  - key: result.title.Starvation
+    text: "\uAD76\uC5B4 \uC8FD\uC5C8\uC2B5\uB2C8\uB2E4"
+  - key: result.title.Wolf
+    text: "\uB291\uB300\uC5D0\uAC8C \uB2F9\uD588\uC2B5\uB2C8\uB2E4"
+  - key: result.days
+    text: "\uC0DD\uC874 \uC77C\uC218  {0}\uC77C"
+  - key: result.cause
+    text: "\uC0AC\uB9DD \uC6D0\uC778  {0}"
+  - key: result.cause.Freezing
+    text: "\uB3D9\uC0AC"
+  - key: result.cause.Starvation
+    text: "\uC544\uC0AC"
+  - key: result.cause.Wolf
+    text: "\uB291\uB300"
+  - key: result.augments
+    text: "\uACE0\uB978 \uC99D\uAC15  {0}"
+  - key: result.augments.none
+    text: "\uC5C6\uC74C"
+  - key: result.restart
+    text: "\uB2E4\uC2DC \uD558\uAE30"

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Whiteout.UI
 {
     /// <summary>
-    /// Draws the goal icons (beacon, its three parts, rescue) as white anti-aliased shapes into small textures, like
+    /// Draws the goal icons (beacon, its three parts, rescue, arrow, check mark) as white anti-aliased shapes into small textures, like
     /// <see cref="WeatherIconSprites"/>, so the HUD needs no image assets. The caller tints the sprite and owns
     /// (destroys) the returned texture and sprite.
     /// </summary>
@@ -97,6 +97,9 @@ namespace Whiteout.UI
                     return Mathf.Min(
                         Segment(x, y, 8f, 32f, 54f, 32f, 3.2f),
                         Mathf.Min(Segment(x, y, 38f, 16f, 55f, 32f, 3.2f), Segment(x, y, 38f, 48f, 55f, 32f, 3.2f)));
+
+                case GoalIconShape.Check:
+                    return Mathf.Min(Segment(x, y, 12f, 32f, 26f, 16f, 5f), Segment(x, y, 26f, 16f, 52f, 48f, 5f));
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(shape), shape, null);

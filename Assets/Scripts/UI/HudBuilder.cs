@@ -41,6 +41,45 @@ namespace Whiteout.UI
             return label;
         }
 
+        /// <summary>Creates a clickable button: a plain colored image with a centered label.</summary>
+        /// <param name="name">Object name.</param>
+        /// <param name="parent">Parent transform.</param>
+        /// <param name="texts">Font source.</param>
+        /// <param name="text">Button text.</param>
+        /// <param name="fontSize">Font size of the text.</param>
+        /// <param name="textColor">Color of the text.</param>
+        /// <param name="normalColor">Button color.</param>
+        /// <param name="highlightColor">Button color under the cursor, while pressed and while selected.</param>
+        /// <param name="disabledColor">Button color when it is not interactable.</param>
+        internal static Button NewButton(
+            string name,
+            Transform parent,
+            UiTextTable texts,
+            string text,
+            float fontSize,
+            Color textColor,
+            Color normalColor,
+            Color highlightColor,
+            Color disabledColor)
+        {
+            var image = NewImage(name, parent, null, Color.white);
+            image.raycastTarget = true;
+            var button = image.gameObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            var colors = button.colors;
+            colors.normalColor = normalColor;
+            colors.highlightedColor = highlightColor;
+            colors.pressedColor = highlightColor;
+            colors.selectedColor = highlightColor;
+            colors.disabledColor = disabledColor;
+            button.colors = colors;
+
+            var label = NewLabel("Label", image.transform, texts, fontSize, textColor, TextAlignmentOptions.Center);
+            label.text = text;
+            Stretch(label.rectTransform);
+            return button;
+        }
+
         /// <summary>Anchors a rectangle to the top center of its parent with the given pivot, position and size.</summary>
         internal static void PlaceTopCenter(RectTransform rect, Vector2 pivot, Vector2 position, Vector2 size)
         {

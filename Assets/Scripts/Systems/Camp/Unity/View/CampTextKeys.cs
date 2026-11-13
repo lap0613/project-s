@@ -31,5 +31,26 @@ namespace Whiteout.Camp.Unity
 
         /// <summary>Notice when the preview overlaps an obstacle.</summary>
         public const string PlacementBlockedNotice = "notice.placement_blocked";
+
+        /// <summary>Notice when a structure's per-run limit is reached; {0} = structure name.</summary>
+        public const string PlacementLimitNotice = "notice.placement_limit";
+
+        /// <summary>Prompt on the beacon when the bag holds a part; {0} = part name.</summary>
+        public const string BeaconInstallPrompt = "prompt.beacon_install";
+
+        /// <summary>Greyed prompt on the beacon when the bag holds no part; {0} = installed/required, e.g. 1/3.</summary>
+        public const string BeaconMissingPrompt = "prompt.beacon_missing";
+
+        /// <summary>Prompt on the complete beacon.</summary>
+        public const string BeaconRequestPrompt = "prompt.beacon_request";
+
+        /// <summary>Notice when E is pressed on the beacon without a part.</summary>
+        public const string BeaconMissingPartNotice = "notice.beacon_missing_part";
+
+        /// <summary>Notice when the last part is installed.</summary>
+        public const string BeaconCompletedNotice = "notice.beacon_completed";
+
+        /// <summary>Notice when rescue is requested.</summary>
+        public const string RescueRequestedNotice = "notice.rescue_requested";
     }
 }

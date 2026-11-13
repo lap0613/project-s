@@ -11,10 +11,12 @@ namespace Whiteout.UI
     /// <summary>
     /// The rescue goal on screen (design/ux/ui-plan.md 7.3 [C] and 7.6 N1, N2). From the first frame of a run it
     /// shows the beacon part progress under the timeline bar: a beacon icon, one icon per part (faint until the
-    /// player has it) and the count, e.g. 0/3. Also shows the start guide once per run (the Game scene is built
+    /// player has it, with a check mark once it is installed on the beacon) and the count, e.g. 0/3. After rescue is
+    /// requested the same spot shows the time until rescue instead (tech-decisions 34). Also shows the start guide once per run (the Game scene is built
     /// again when a run restarts): a picture row (parts, beacon, rescue) with a short phrase, which stays at full
     /// size for a while and then shrinks into the progress row. The game never stops for it. It says nothing about
-    /// where or when parts appear (ui-plan D8). Part counts come from <see cref="IRescueParts"/>.
+    /// where or when parts appear (ui-plan D8). Part states come from <see cref="IRescueParts"/>, the rescue time
+    /// from <see cref="IRescueCountdown"/>.
     /// </summary>
     /// <example>
     /// <code>
@@ -26,6 +28,9 @@ namespace Whiteout.UI
     {
         private const string GuideKey = "hud.goal.guide";
         private const string CountKey = "hud.parts.count";
+        private const string TimerKey = "hud.rescue.timer";
+        private const string TimerShortKey = "hud.rescue.timer_short";
+        private const int SecondsPerMinute = 60;
         private const float RowPadding = 8f;
         private const float GuidePadding = 14f;
         private const float GuideFadeInSeconds = 0.25f;
@@ -33,11 +38,20 @@ namespace Whiteout.UI
 
         private readonly List<Sprite> _sprites = new List<Sprite>();
         private IRescueParts _parts;
+        private IRescueCountdown _countdown;
+        private IDayTimeSource _clock;
         private UiTextTable _texts;
         private HudConfig _config;
+        private RectTransform _row;
+        private Vector2 _rowSize;
+        private GameObject _partsContent;
         private Image[] _partIcons;
+        private GameObject[] _partChecks;
+        private RescuePartState[] _shownStates;
         private TMP_Text _countLabel;
-        private int _shownCollected = -1;
+        private TMP_Text _timerLabel;
+        private bool _statesShown;
+        private int _shownTimerSeconds = -1;
         private RectTransform _guide;
         private CanvasGroup _guideGroup;
         private Vector2 _guideStart;
@@ -46,13 +60,18 @@ namespace Whiteout.UI
         private float _guideAge;
 
         /// <summary>Receives dependencies from the container.</summary>
-        /// <param name="parts">Collected and required beacon parts.</param>
+        /// <param name="parts">Beacon parts and where each one is.</param>
+        /// <param name="countdown">The rescue timer.</param>
+        /// <param name="clock">Day and night lengths, to show the remaining time in days.</param>
         /// <param name="texts">Texts and font.</param>
         /// <param name="config">Sizes, colors and times.</param>
         [Inject]
-        public void Construct(IRescueParts parts, UiTextTable texts, HudConfig config)
+        public void Construct(
+            IRescueParts parts, IRescueCountdown countdown, IDayTimeSource clock, UiTextTable texts, HudConfig config)
         {
             _parts = parts;
+            _countdown = countdown;
+            _clock = clock;
             _texts = texts;
             _config = config;
         }
@@ -83,29 +102,57 @@ namespace Whiteout.UI
             var width = RowPadding * 2f + iconSize + _config.GoalIconSpacing * 2f + required * iconSize + countWidth;
             var height = iconSize + RowPadding * 2f;
 
-            var row = HudBuilder.NewRect("GoalProgress", transform);
-            HudBuilder.PlaceTopCenter(row, new Vector2(0f, 1f), topLeft, new Vector2(width, height));
-            HudBuilder.Stretch(HudBuilder.NewImage("Back", row, null, _config.GoalBackColor).rectTransform);
+            _row = HudBuilder.NewRect("GoalProgress", transform);
+            _rowSize = new Vector2(width, height);
+            HudBuilder.PlaceTopCenter(_row, new Vector2(0f, 1f), topLeft, _rowSize);
+            HudBuilder.Stretch(HudBuilder.NewImage("Back", _row, null, _config.GoalBackColor).rectTransform);
+
+            var content = HudBuilder.NewRect("Parts", _row);
+            HudBuilder.Stretch(content);
+            _partsContent = content.gameObject;
 
             var x = RowPadding;
-            AddRowIcon(row, "Beacon", GoalIconShape.Beacon, _config.GoalBeaconColor, x, iconSize);
+            AddRowIcon(content, "Beacon", GoalIconShape.Beacon, _config.GoalBeaconColor, x, iconSize);
             x += iconSize + _config.GoalIconSpacing;
             _partIcons = new Image[required];
+            _partChecks = new GameObject[required];
+            _shownStates = new RescuePartState[required];
             for (var i = 0; i < required; i++)
             {
-                _partIcons[i] = AddRowIcon(row, "Part" + i, PartShapes[i % PartShapes.Length], _config.GoalPartMissingColor, x, iconSize);
+                _partIcons[i] = AddRowIcon(content, "Part" + i, PartShapes[i % PartShapes.Length], _config.GoalPartMissingColor, x, iconSize);
+                _partChecks[i] = AddCheck(_partIcons[i].rectTransform);
                 x += iconSize;
             }
 
             x += _config.GoalIconSpacing;
-            _countLabel = HudBuilder.NewLabel("Count", row, _texts, _config.GoalCountFontSize, _config.GoalBeaconColor, TextAlignmentOptions.MidlineLeft);
+            _countLabel = HudBuilder.NewLabel("Count", content, _texts, _config.GoalCountFontSize, _config.GoalBeaconColor, TextAlignmentOptions.MidlineLeft);
             var labelRect = _countLabel.rectTransform;
             labelRect.anchorMin = new Vector2(0f, 0f);
             labelRect.anchorMax = new Vector2(0f, 1f);
             labelRect.pivot = new Vector2(0f, 0.5f);
             labelRect.anchoredPosition = new Vector2(x, 0f);
             labelRect.sizeDelta = new Vector2(countWidth, 0f);
-            return new Vector2(width, height);
+
+            _timerLabel = HudBuilder.NewLabel(
+                "RescueTimer", _row, _texts, _config.RescueTimerFontSize, _config.RescueTimerColor, TextAlignmentOptions.Center);
+            HudBuilder.Stretch(_timerLabel.rectTransform);
+            _timerLabel.gameObject.SetActive(false);
+            return _rowSize;
+        }
+
+        private GameObject AddCheck(RectTransform icon)
+        {
+            var sprite = GoalIconSprites.Create(GoalIconShape.Check);
+            _sprites.Add(sprite);
+            var image = HudBuilder.NewImage("Check", icon, sprite, _config.GoalPartInstalledCheckColor);
+            var rect = image.rectTransform;
+            rect.anchorMin = new Vector2(1f, 0f);
+            rect.anchorMax = new Vector2(1f, 0f);
+            rect.pivot = new Vector2(1f, 0f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = new Vector2(_config.GoalCheckSize, _config.GoalCheckSize);
+            image.gameObject.SetActive(false);
+            return image.gameObject;
         }
 
         private Image AddRowIcon(RectTransform parent, string name, GoalIconShape shape, Color color, float x, float size)
@@ -211,19 +258,69 @@ namespace Whiteout.UI
 
         private void Refresh()
         {
-            var collected = Mathf.Clamp(_parts.Collected, 0, _partIcons.Length);
-            if (collected == _shownCollected)
+            if (_countdown.IsActive)
+            {
+                RefreshTimer();
+                return;
+            }
+
+            var changed = !_statesShown;
+            var collected = 0;
+            for (var i = 0; i < _partIcons.Length; i++)
+            {
+                var state = _parts.GetPartState(i);
+                changed |= state != _shownStates[i];
+                _shownStates[i] = state;
+                if (state != RescuePartState.Missing)
+                {
+                    collected++;
+                }
+            }
+
+            if (!changed)
             {
                 return;
             }
 
-            _shownCollected = collected;
+            _statesShown = true;
             for (var i = 0; i < _partIcons.Length; i++)
             {
-                _partIcons[i].color = i < collected ? _config.GoalPartHaveColor : _config.GoalPartMissingColor;
+                _partIcons[i].color = _shownStates[i] == RescuePartState.Missing
+                    ? _config.GoalPartMissingColor
+                    : _config.GoalPartHaveColor;
+                _partChecks[i].SetActive(_shownStates[i] == RescuePartState.Installed);
             }
 
             _countLabel.text = _texts.Format(CountKey, collected, _partIcons.Length);
+        }
+
+        private void RefreshTimer()
+        {
+            var totalSeconds = Mathf.CeilToInt(Mathf.Max(_countdown.RemainingSeconds, 0f));
+            if (totalSeconds == _shownTimerSeconds)
+            {
+                return;
+            }
+
+            if (_shownTimerSeconds < 0)
+            {
+                _partsContent.SetActive(false);
+                _timerLabel.gameObject.SetActive(true);
+            }
+
+            _shownTimerSeconds = totalSeconds;
+            var fullDay = _clock.DayLength + _clock.NightLength;
+            var days = fullDay > 0f ? Mathf.FloorToInt(totalSeconds / fullDay) : 0;
+            var rest = Mathf.Max(Mathf.FloorToInt(totalSeconds - days * fullDay), 0);
+            var minutes = rest / SecondsPerMinute;
+            var seconds = rest % SecondsPerMinute;
+            _timerLabel.text = days >= 1
+                ? _texts.Format(TimerKey, days, minutes, seconds)
+                : _texts.Format(TimerShortKey, minutes, seconds);
+
+            // The timer text can be wider than the part row; the row only grows, so it does not jitter.
+            var width = Mathf.Max(_row.sizeDelta.x, _timerLabel.preferredWidth + RowPadding * 2f);
+            _row.sizeDelta = new Vector2(width, _rowSize.y);
         }
 
         private void OnDestroy()

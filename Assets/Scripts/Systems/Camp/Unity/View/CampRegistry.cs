@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Whiteout.Camp.Unity
 {
     /// <summary>
-    /// The campfires and shelters standing in the scene, so the Camp runner and E-actions can measure distances
+    /// The campfires, shelters and the signal beacon standing in the scene, so the Camp runner and E-actions can measure distances
     /// without searching the scene (code-structure section 7).
     /// </summary>
     /// <example>
@@ -23,6 +23,9 @@ namespace Whiteout.Camp.Unity
         /// <summary>Placed shelters.</summary>
         public IReadOnlyList<ShelterView> Shelters => _shelters;
 
+        /// <summary>The placed signal beacon, or null (one per run).</summary>
+        public SignalBeaconView Beacon { get; private set; }
+
         /// <summary>Starts tracking a campfire.</summary>
         /// <param name="campfire">The campfire view.</param>
         public void Add(CampfireView campfire) => _campfires.Add(campfire);
@@ -38,5 +41,19 @@ namespace Whiteout.Camp.Unity
         /// <summary>Stops tracking a shelter.</summary>
         /// <param name="shelter">The shelter view.</param>
         public void Remove(ShelterView shelter) => _shelters.Remove(shelter);
+
+        /// <summary>Starts tracking the signal beacon.</summary>
+        /// <param name="beacon">The beacon view.</param>
+        public void SetBeacon(SignalBeaconView beacon) => Beacon = beacon;
+
+        /// <summary>Stops tracking the signal beacon, if it is the tracked one.</summary>
+        /// <param name="beacon">The beacon view.</param>
+        public void ClearBeacon(SignalBeaconView beacon)
+        {
+            if (ReferenceEquals(Beacon, beacon))
+            {
+                Beacon = null;
+            }
+        }
     }
 }

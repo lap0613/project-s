@@ -13,7 +13,8 @@ namespace Whiteout.Camp.Unity
     /// The placement mode (ui-plan section 9, core-rules section 4). B opens the structure list built from the
     /// <see cref="StructureCatalog"/>; number keys select; the preview follows the mouse cursor (at most the max distance
     /// from the player), the wheel turns it, blue when it can be placed and red when it overlaps an obstacle; left click places;
-    /// right click, Esc or B closes.
+    /// right click, Esc or B closes. A structure with a per-run limit that is already reached cannot be placed again
+    /// (tech-decisions 34, R4). The mode closes and stays closed when the run ends.
     /// Time keeps running and the player can move. A new structure definition just makes the list longer.
     /// Registered as a VContainer entry point; also the <see cref="IPlacementMenu"/> the HUD reads.
     /// </summary>
@@ -34,7 +35,7 @@ namespace Whiteout.Camp.Unity
         private readonly IItemNames _names;
         private readonly UiTextTable _texts;
         private readonly IEventBus _bus;
-        private readonly IDisposable _diedSubscription;
+        private readonly IDisposable _endedSubscription;
         private readonly StructureDefinition[] _definitions;
         private readonly StructureSpec[] _specs;
         private Renderer[] _previewRenderers = new Renderer[0];
@@ -44,7 +45,7 @@ namespace Whiteout.Camp.Unity
         private float _yaw;
         private bool _hasCursorPosition;
         private Vector3 _cursorPosition;
-        private bool _playerDead;
+        private bool _runEnded;
 
         /// <summary>Creates the controller.</summary>
         /// <param name="resolver">Creates placed structures with their dependencies injected.</param>
@@ -92,9 +93,9 @@ namespace Whiteout.Camp.Unity
                 _specs[i] = _definitions[i].ToSpec();
             }
 
-            _diedSubscription = bus.Subscribe<PlayerDied>(_ =>
+            _endedSubscription = bus.Subscribe<RunEnded>(_ =>
             {
-                _playerDead = true;
+                _runEnded = true;
                 Close();
             });
         }
@@ -121,9 +122,12 @@ namespace Whiteout.Camp.Unity
         public IReadOnlyList<ItemId> GetEntryRequiredItems(int index) => _specs[index].RequiredItems;
 
         /// <inheritdoc />
+        public bool IsEntryLimitReached(int index) => _camp.IsLimitReached(_specs[index]);
+
+        /// <inheritdoc />
         public void Tick()
         {
-            if (_playerDead)
+            if (_runEnded)
             {
                 return;
             }
@@ -168,7 +172,7 @@ namespace Whiteout.Camp.Unity
         /// <summary>Unsubscribes and removes the preview.</summary>
         public void Dispose()
         {
-            _diedSubscription.Dispose();
+            _endedSubscription.Dispose();
             Close();
         }
 
@@ -199,6 +203,13 @@ namespace Whiteout.Camp.Unity
 
         private void Place(StructureDefinition definition, StructureSpec spec, Vector3 position, bool blocked)
         {
+            // The limit is checked before the obstacle so the reason shown is the one that cannot be fixed by moving.
+            if (_camp.IsLimitReached(spec))
+            {
+                _bus.Publish(new NoticePosted(CampTextKeys.PlacementLimitNotice, spec.DisplayName));
+                return;
+            }
+
             if (blocked)
             {
                 _bus.Publish(new NoticePosted(CampTextKeys.PlacementBlockedNotice, string.Empty));
@@ -207,6 +218,9 @@ namespace Whiteout.Camp.Unity
 
             switch (_camp.TryPlace(spec, position.x, position.z))
             {
+                case PlaceResult.LimitReached:
+                    _bus.Publish(new NoticePosted(CampTextKeys.PlacementLimitNotice, spec.DisplayName));
+                    return;
                 case PlaceResult.MissingRequiredItem:
                     for (var i = 0; i < spec.RequiredItems.Count; i++)
                     {

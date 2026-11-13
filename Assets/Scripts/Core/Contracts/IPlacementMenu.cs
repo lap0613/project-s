@@ -39,5 +39,12 @@ namespace Whiteout.Core.Contracts
         /// <summary>Items that must be in the bag but are not consumed (flint).</summary>
         /// <param name="index">Index in [0, <see cref="EntryCount"/>).</param>
         IReadOnlyList<ItemId> GetEntryRequiredItems(int index);
+
+        /// <summary>
+        /// True when a structure has a per-run count limit and that many are already placed
+        /// (docs/architecture/tech-decisions.md 34, R4). The HUD greys such an entry.
+        /// </summary>
+        /// <param name="index">Index in [0, <see cref="EntryCount"/>).</param>
+        bool IsEntryLimitReached(int index);
     }
 }

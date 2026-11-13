@@ -120,7 +120,12 @@ namespace Whiteout.Environment.Unity
             _subscriptions.Clear();
             if (_captured)
             {
-                sunLight.intensity = _daySunIntensity;
+                // On a Game scene reload the sun light may already be destroyed; the ambient and fog must still be restored.
+                if (sunLight != null)
+                {
+                    sunLight.intensity = _daySunIntensity;
+                }
+
                 RenderSettings.ambientIntensity = _dayAmbientIntensity;
                 RestoreFog();
             }

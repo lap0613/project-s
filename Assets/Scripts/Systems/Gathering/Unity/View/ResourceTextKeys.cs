@@ -22,5 +22,11 @@ namespace Whiteout.Gathering.Unity
 
         /// <summary>Bag slot menu entry: drop the stack.</summary>
         public const string DropAction = "bag.action.drop";
+
+        /// <summary>Notice when a beacon part appears in the middle ring; {0} = part name.</summary>
+        public const string PartAppearedMiddleNotice = "notice.part_appeared.middle";
+
+        /// <summary>Notice when a beacon part appears in the outer ring; {0} = part name.</summary>
+        public const string PartAppearedOuterNotice = "notice.part_appeared.outer";
     }
 }

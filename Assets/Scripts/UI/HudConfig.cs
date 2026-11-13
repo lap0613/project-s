@@ -151,9 +151,6 @@ namespace Whiteout.UI
         };
 
         [Header("Goal progress [C] (ui-plan 7.3 [C], N1)")]
-        [Tooltip("Parts the beacon needs while story-006 is not wired (core-rules section 1: 3).")]
-        [SerializeField] private int placeholderPartsRequired = 3;
-
         [Tooltip("Gap between the timeline bar and the goal progress row.")]
         [SerializeField] private float goalGapBelowTimeline = 10f;
 
@@ -177,6 +174,58 @@ namespace Whiteout.UI
 
         [Tooltip("Panel behind the progress row.")]
         [SerializeField] private Color goalBackColor = new Color(0f, 0f, 0f, 0.4f);
+
+        [Tooltip("Provisional. Color of the check mark on a part that is installed on the beacon.")]
+        [SerializeField] private Color goalPartInstalledCheckColor = new Color(0.4f, 0.95f, 0.45f, 1f);
+
+        [Tooltip("Provisional. Side of the check mark on an installed part.")]
+        [SerializeField] private float goalCheckSize = 24f;
+
+        [Tooltip("Provisional. Font size of the rescue timer that replaces the part row after rescue is requested.")]
+        [SerializeField] private float rescueTimerFontSize = 34f;
+
+        [Tooltip("Provisional. Color of the rescue timer text.")]
+        [SerializeField] private Color rescueTimerColor = new Color(0.4f, 0.95f, 0.45f, 1f);
+
+        [Header("Results screen (ui-plan S10)")]
+        [Tooltip("Provisional. Seconds the results screen takes to fade in (unscaled time).")]
+        [SerializeField] private float resultFadeSeconds = 1f;
+
+        [Tooltip("Provisional. Full-screen color behind the results panel.")]
+        [SerializeField] private Color resultBackdropColor = new Color(0f, 0f, 0f, 0.75f);
+
+        [Tooltip("Provisional. Color of the results panel.")]
+        [SerializeField] private Color resultPanelColor = new Color(0.08f, 0.1f, 0.16f, 0.95f);
+
+        [Tooltip("Provisional. Size of the results panel.")]
+        [SerializeField] private Vector2 resultPanelSize = new Vector2(760f, 560f);
+
+        [Tooltip("Provisional. Space between the panel edge and its content.")]
+        [SerializeField] private float resultPadding = 48f;
+
+        [Tooltip("Provisional. Font size of the results title.")]
+        [SerializeField] private float resultTitleFontSize = 64f;
+
+        [Tooltip("Provisional. Font size of the results rows (days, cause, augments).")]
+        [SerializeField] private float resultBodyFontSize = 36f;
+
+        [Tooltip("Provisional. Space between the results rows.")]
+        [SerializeField] private float resultRowSpacing = 16f;
+
+        [Tooltip("Provisional. Size of the restart button.")]
+        [SerializeField] private Vector2 resultButtonSize = new Vector2(320f, 84f);
+
+        [Tooltip("Provisional. Color of the restart button.")]
+        [SerializeField] private Color resultButtonColor = new Color(0.85f, 0.93f, 1f, 1f);
+
+        [Tooltip("Provisional. Color of the restart button under the cursor.")]
+        [SerializeField] private Color resultButtonHighlightColor = new Color(1f, 0.85f, 0.3f, 1f);
+
+        [Tooltip("Provisional. Color of the restart button after it was clicked.")]
+        [SerializeField] private Color resultButtonDisabledColor = new Color(0.6f, 0.6f, 0.6f, 1f);
+
+        [Tooltip("Provisional. Color of the restart button text.")]
+        [SerializeField] private Color resultButtonTextColor = new Color(0.08f, 0.1f, 0.2f, 1f);
 
         [Header("Start guide (ui-plan 7.6, N2)")]
         [Tooltip("Seconds the start guide stays at full size.")]
@@ -428,8 +477,6 @@ namespace Whiteout.UI
         /// <summary>Icon style per weather id.</summary>
         public WeatherStyle[] WeatherStyles => weatherStyles;
 
-        /// <summary>Parts the beacon needs while story-006 is not wired (core-rules section 1: 3).</summary>
-        public int PlaceholderPartsRequired => placeholderPartsRequired;
 
         /// <summary>Gap between the timeline bar and the goal progress row.</summary>
         public float GoalGapBelowTimeline => goalGapBelowTimeline;
@@ -454,6 +501,57 @@ namespace Whiteout.UI
 
         /// <summary>Panel behind the progress row.</summary>
         public Color GoalBackColor => goalBackColor;
+
+        /// <summary>Color of the check mark on a part that is installed on the beacon.</summary>
+        public Color GoalPartInstalledCheckColor => goalPartInstalledCheckColor;
+
+        /// <summary>Side of the check mark on an installed part.</summary>
+        public float GoalCheckSize => goalCheckSize;
+
+        /// <summary>Font size of the rescue timer.</summary>
+        public float RescueTimerFontSize => rescueTimerFontSize;
+
+        /// <summary>Color of the rescue timer text.</summary>
+        public Color RescueTimerColor => rescueTimerColor;
+
+        /// <summary>Seconds the results screen takes to fade in.</summary>
+        public float ResultFadeSeconds => resultFadeSeconds;
+
+        /// <summary>Full-screen color behind the results panel.</summary>
+        public Color ResultBackdropColor => resultBackdropColor;
+
+        /// <summary>Color of the results panel.</summary>
+        public Color ResultPanelColor => resultPanelColor;
+
+        /// <summary>Size of the results panel.</summary>
+        public Vector2 ResultPanelSize => resultPanelSize;
+
+        /// <summary>Space between the panel edge and its content.</summary>
+        public float ResultPadding => resultPadding;
+
+        /// <summary>Font size of the results title.</summary>
+        public float ResultTitleFontSize => resultTitleFontSize;
+
+        /// <summary>Font size of the results rows.</summary>
+        public float ResultBodyFontSize => resultBodyFontSize;
+
+        /// <summary>Space between the results rows.</summary>
+        public float ResultRowSpacing => resultRowSpacing;
+
+        /// <summary>Size of the restart button.</summary>
+        public Vector2 ResultButtonSize => resultButtonSize;
+
+        /// <summary>Color of the restart button.</summary>
+        public Color ResultButtonColor => resultButtonColor;
+
+        /// <summary>Color of the restart button under the cursor.</summary>
+        public Color ResultButtonHighlightColor => resultButtonHighlightColor;
+
+        /// <summary>Color of the restart button after it was clicked.</summary>
+        public Color ResultButtonDisabledColor => resultButtonDisabledColor;
+
+        /// <summary>Color of the restart button text.</summary>
+        public Color ResultButtonTextColor => resultButtonTextColor;
 
         /// <summary>Seconds the start guide stays at full size.</summary>
         public float GuideSeconds => guideSeconds;
@@ -561,7 +659,7 @@ namespace Whiteout.UI
             noticeMaxLines = Mathf.Max(noticeMaxLines, 1);
             noticeSeconds = Mathf.Max(noticeSeconds, 0f);
             timelineRangeSeconds = Mathf.Max(timelineRangeSeconds, 1f);
-            placeholderPartsRequired = Mathf.Max(placeholderPartsRequired, 1);
+            resultFadeSeconds = Mathf.Max(resultFadeSeconds, 0f);
             guideSeconds = Mathf.Max(guideSeconds, 0f);
             guideShrinkSeconds = Mathf.Max(guideShrinkSeconds, 0.01f);
             warmthFadeInSeconds = Mathf.Max(warmthFadeInSeconds, 0.01f);

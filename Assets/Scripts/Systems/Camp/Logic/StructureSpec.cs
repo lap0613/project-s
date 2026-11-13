@@ -11,7 +11,7 @@ namespace Whiteout.Camp
     /// <example>
     /// <code>
     /// var campfire = new StructureSpec("campfire", "모닥불",
-    ///     new[] { new ItemAmount(wood, 3), new ItemAmount(tinder, 1) }, new[] { flint });
+    ///     new[] { new ItemAmount(wood, 3), new ItemAmount(tinder, 1) }, new[] { flint }, 0);
     /// </code>
     /// </example>
     public sealed class StructureSpec
@@ -21,8 +21,16 @@ namespace Whiteout.Camp
         /// <param name="displayName">Player-facing name.</param>
         /// <param name="cost">Items consumed on placement.</param>
         /// <param name="requiredItems">Items that must be in the bag but are not consumed (flint).</param>
-        public StructureSpec(string id, string displayName, IReadOnlyList<ItemAmount> cost, IReadOnlyList<ItemId> requiredItems)
+        /// <param name="maxCount">Most of this structure that can be placed in one run; 0 = unlimited.</param>
+        public StructureSpec(
+            string id, string displayName, IReadOnlyList<ItemAmount> cost, IReadOnlyList<ItemId> requiredItems, int maxCount)
         {
+            if (maxCount < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(maxCount), "maxCount must be 0 (unlimited) or more.");
+            }
+
+            MaxCount = maxCount;
             Id = id ?? throw new ArgumentNullException(nameof(id));
             DisplayName = displayName ?? string.Empty;
             Cost = cost ?? throw new ArgumentNullException(nameof(cost));
@@ -40,5 +48,8 @@ namespace Whiteout.Camp
 
         /// <summary>Items that must be in the bag but are not consumed.</summary>
         public IReadOnlyList<ItemId> RequiredItems { get; }
+
+        /// <summary>Most of this structure that can be placed in one run; 0 = unlimited.</summary>
+        public int MaxCount { get; }
     }
 }

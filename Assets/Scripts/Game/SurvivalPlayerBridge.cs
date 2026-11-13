@@ -11,7 +11,8 @@ namespace Whiteout.Game
     /// <summary>
     /// Connects Survival to the player without Survival knowing Player (code-structure section 3):
     /// applies the low-body-temperature move speed penalty as a Multiply modifier on
-    /// <see cref="PlayerController.MoveSpeedStat"/>, and disables the controller when <see cref="PlayerDied"/> arrives.
+    /// <see cref="PlayerController.MoveSpeedStat"/>, and disables the controller when <see cref="RunEnded"/> arrives
+    /// (death or rescue; tech-decisions 34, R5).
     /// </summary>
     /// <example>
     /// <code>
@@ -25,13 +26,13 @@ namespace Whiteout.Game
         private readonly SurvivalSystem _survival;
         private readonly SurvivalSettings _settings;
         private readonly PlayerController _player;
-        private readonly IDisposable _diedSubscription;
+        private readonly IDisposable _endedSubscription;
         private IDisposable _coldPenalty;
 
-        /// <summary>Creates the bridge and subscribes to <see cref="PlayerDied"/>.</summary>
+        /// <summary>Creates the bridge and subscribes to <see cref="RunEnded"/>.</summary>
         /// <param name="survival">Source of the low-temperature state.</param>
         /// <param name="settings">Supplies the penalty size.</param>
-        /// <param name="player">The player whose speed is changed and whose input stops on death.</param>
+        /// <param name="player">The player whose speed is changed and whose input stops when the run ends.</param>
         /// <param name="bus">Event channel.</param>
         public SurvivalPlayerBridge(SurvivalSystem survival, SurvivalSettings settings, PlayerController player, IEventBus bus)
         {
@@ -44,7 +45,7 @@ namespace Whiteout.Game
             }
 
             _player = player;
-            _diedSubscription = bus.Subscribe<PlayerDied>(_ =>
+            _endedSubscription = bus.Subscribe<RunEnded>(_ =>
             {
                 if (_player != null)
                 {
@@ -77,7 +78,7 @@ namespace Whiteout.Game
         /// <summary>Unsubscribes and removes the penalty.</summary>
         public void Dispose()
         {
-            _diedSubscription.Dispose();
+            _endedSubscription.Dispose();
             _coldPenalty?.Dispose();
         }
     }

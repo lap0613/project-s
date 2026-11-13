@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CampConfig
   m_EditorClassIdentifier: Whiteout.Camp.Unity::Whiteout.Camp.Unity.CampConfig
   catalog: {fileID: 11400000, guid: 879797adc974f554cb458b510d1e6e75, type: 2}
+  signalBeacon: {fileID: 11400000, guid: 1399d65a192d0804f8e58582ec3fba23, type: 2}
   maxPlaceDistance: 6
   rotationStepDegrees: 15
   obstacleMask:

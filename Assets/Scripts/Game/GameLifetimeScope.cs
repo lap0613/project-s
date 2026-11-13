@@ -23,8 +23,9 @@ namespace Whiteout.Game
 {
     /// <summary>
     /// Scope in the Game scene (child of <see cref="BootstrapLifetimeScope"/> when loaded by the bootstrap).
-    /// Registers per-run objects: player, input, day clock, environment, survival, resources (bag, pickups),
-    /// camp (campfires, shelters, placement mode), the E-key director and the HUD.
+    /// Registers per-run objects: player, input, run flow (day clock, part schedule, rescue timer, run outcome),
+    /// environment, survival, resources (bag, pickups), camp (campfires, shelters, signal beacon, placement mode),
+    /// the E-key director and the HUD with the results screen.
     /// Optional scene views (e.g. <see cref="MapRingDebugView"/>) are injected through the scope's
     /// Auto Inject Game Objects list in the Inspector, not by searching the scene (code-structure §7).
     /// </summary>
@@ -74,7 +75,11 @@ namespace Whiteout.Game
 
             builder.RegisterInstance(runFlowConfig.ToSettings());
             builder.Register<DayClock>(Lifetime.Singleton).AsSelf().As<IDayTimeSource>();
-            builder.RegisterEntryPoint<DayClockRunner>();
+            builder.RegisterInstance(runFlowConfig.ToPartScheduleSettings());
+            builder.Register<PartSchedule>(Lifetime.Singleton);
+            builder.Register<RescueTimer>(Lifetime.Singleton).AsSelf().As<IRescueCountdown>();
+            builder.Register<RunOutcome>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<RunFlowRunner>();
 
             builder.RegisterInstance(environmentConfig);
             builder.RegisterInstance(environmentConfig.ToSettings());
@@ -109,16 +114,24 @@ namespace Whiteout.Game
             builder.Register<CampRegistry>(Lifetime.Singleton);
             builder.Register<FuelInteractionSource>(Lifetime.Singleton).As<IInteractionSource>();
             builder.Register<RestInteractionSource>(Lifetime.Singleton).As<IInteractionSource>();
+            if (campConfig.SignalBeacon == null)
+            {
+                throw new InvalidOperationException("GameLifetimeScope: Camp Config needs a Signal Beacon definition.");
+            }
+
+            builder.RegisterInstance(campConfig.SignalBeacon.ToBeaconSpec());
+            builder.Register<SignalBeaconSystem>(Lifetime.Singleton).AsSelf().As<IRescueParts>();
+            builder.Register<BeaconInteractionSource>(Lifetime.Singleton).As<IInteractionSource>();
             builder.RegisterEntryPoint<CampRunner>();
             builder.RegisterEntryPoint<PlacementController>();
 
             builder.RegisterComponentInHierarchy<BagHud>();
             builder.RegisterComponentInHierarchy<PlacementHud>();
             builder.RegisterComponentInHierarchy<NotificationHud>();
-            builder.Register<PlaceholderRescueParts>(Lifetime.Singleton).As<IRescueParts>();
             builder.RegisterComponentInHierarchy<GoalGuidanceHud>();
             builder.RegisterComponentInHierarchy<ReliefFeedbackHud>();
             builder.RegisterComponentInHierarchy<WorldUiHud>();
+            builder.RegisterComponentInHierarchy<ResultsScreen>();
         }
     }
 }

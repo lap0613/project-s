@@ -52,4 +52,8 @@ MonoBehaviour:
     totalPickups: 6
     guaranteedNearStart: 0
     amountPerPickup: 1
+  - resource: {fileID: 11400000, guid: 5afd2ae45c96159719d285908884c92b, type: 2}
+    totalPickups: 6
+    guaranteedNearStart: 0
+    amountPerPickup: 1
   guaranteedPoolSize: 20
