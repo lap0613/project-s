@@ -1,0 +1,9 @@
+Reviewed-Content-Hash: Assets/Scripts/UI/GoalGuidanceHud.cs 13fbb545b1eafee6041efa8c8197a67d96e0bf2b
+Reviewed-Content-Hash: Assets/Scripts/UI/ReliefFeedbackHud.cs 77f931a60d92b155d3453b6007aa869bde4d8b09
+Reviewed-Content-Hash: Assets/Scripts/UI/HudConfig.cs d6019f997df96c208607ec5025455aaa7c1707aa
+Reviewed-Content-Hash: Assets/Scripts/UI/GoalIconSprites.cs d7246204311c43ac0d695e6664eb3f13f1a28a66
+Reviewed-Content-Hash: Assets/Scripts/UI/HudBuilder.cs 1dec20f1cfa45106532b358577f239b2f8e52ceb
+Reviewed-Content-Hash: Assets/Scripts/UI/WeatherHud.cs f4cf83e41a39b64ae0b557a9dbe85d568501b4f3
+Reviewed-Content-Hash: Assets/Scripts/Game/PlaceholderRescueParts.cs 9bd909e09e0d950e9e8e39db2530e2c29a228afa
+Reviewed-Content-Hash: Assets/Scripts/Game/GameLifetimeScope.cs b5c8fb7cb20aced9511ade290cd2090bf2681b00
+Reviewed-Content-Hash: Assets/Scripts/Core/Contracts/IRescueParts.cs 522530cae6b89184c579f9a81d318129abad15f9

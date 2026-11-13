@@ -79,3 +79,43 @@ MonoBehaviour:
     shape: 3
     color: {r: 0.5, g: 0.85, b: 1, a: 1}
     isDanger: 1
+  placeholderPartsRequired: 3
+  goalGapBelowTimeline: 10
+  goalIconSize: 48
+  goalIconSpacing: 8
+  goalCountFontSize: 34
+  goalPartHaveColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  goalPartMissingColor: {r: 1, g: 1, b: 1, a: 0.22}
+  goalBeaconColor: {r: 0.85, g: 0.93, b: 1, a: 1}
+  goalBackColor: {r: 0, g: 0, b: 0, a: 0.4}
+  guideSeconds: 6
+  guideShrinkSeconds: 0.7
+  guideTopOffset: 16
+  guideFontSize: 34
+  guideIconSize: 54
+  guideArrowColor: {r: 1, g: 1, b: 1, a: 0.75}
+  guideBackColor: {r: 0, g: 0, b: 0, a: 0.5}
+  warmthVignetteColor: {r: 1, g: 0.55, b: 0.15, a: 1}
+  warmthVignetteMaxOpacity: 0.25
+  warmthFadeInSeconds: 0.5
+  warmthFadeOutSeconds: 1
+  vignetteInnerRadius: 0.6
+  vignetteOuterRadius: 1.3
+  morningBannerSeconds: 1.5
+  morningBannerFadeSeconds: 0.25
+  morningBannerTopFraction: 0.78
+  morningBannerFontSize: 96
+  morningBannerIconSize: 96
+  morningBannerColor: {r: 1, g: 0.93, b: 0.7, a: 1}
+  morningSunColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  morningGlowSeconds: 0.8
+  morningGlowColor: {r: 1, g: 0.82, b: 0.3, a: 1}
+  morningGlowMaxOpacity: 0.55
+  warmthEnterClip: {fileID: 8300000, guid: 00e741175b725274995495ea61853917, type: 3}
+  fireLoopClip: {fileID: 8300000, guid: 215211d664c5929449a6d101a6688233, type: 3}
+  morningClip: {fileID: 8300000, guid: fc07c5c5ef3374b4682095dc6d20a5ca, type: 3}
+  warmthEnterVolume: 0.8
+  fireLoopMaxVolume: 0.5
+  morningVolume: 0.8
+  warmthEnterCooldownSeconds: 10
+  fireLoopHearDistance: 8

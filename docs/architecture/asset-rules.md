@@ -62,7 +62,7 @@
 
 ## 6. 이름 규칙 (제안)
 - FBX와 프리팹 모델: `SM_<이름>` (정적 메시, 예: `SM_Campfire`), `SK_<이름>` (리깅된 캐릭터)
-- 머티리얼 `M_`, 텍스처 `T_` (예: `T_Palette`)
+- 머티리얼 `M_`, 텍스처 `T_` (예: `T_Palette`), 효과음 `SFX_` (예: `SFX_MorningChime`)
 - 기능용 Empty: 역할이 드러나는 PascalCase (`FirePoint`, `HandGrip`, `PartSocket_Antenna`)
 - 영어, 공백 없음
 
@@ -73,6 +73,7 @@ Assets/Art/Materials/M_*.mat
 Assets/Art/Textures/T_*.png
 ```
 - 프리팹: `Assets/Prefabs/<분류>/<이름>.prefab` (예: `Assets/Prefabs/Props/Campfire.prefab`). 개발봇 영역.
+- 오디오(임시, story-012): `Assets/Audio/Sfx/SFX_*.wav`. 음악·믹서가 생기면 `Assets/Audio/Music/` 등으로 나눈다. 출처·라이선스는 tech-decisions 33번.
 - 공용 머티리얼: `Assets/Art/Materials/M_Palette.mat` (URP Lit, `T_Palette` 연결). FBX 임포트 때 생기는 머티리얼은 이것으로 리맵한다.
 - 분류 폴더 이름은 `ProjectS_Art\export\<분류>`와 같게 맞춘다.
 - 모델봇은 위 Art 폴더 안의 파일만 추가하거나 교체하고, 씬과 프리팹은 건드리지 않는다.
@@ -91,3 +92,4 @@ Assets/Art/Textures/T_*.png
 - 2026-11-13 15:08 KST 지영 확정: 1~6항(삼각형 예산, 팔레트 텍스처 1장 + 공용 URP Lit, 크기 기준, 원본은 저장소 밖 ProjectS_Art\source, 외곽선·메시 콜라이더·LOD 없음). Unity 경로는 개발봇 의견 후 최종 확정.
 - 2026-11-13 15:30 KST 개발봇 합의: Unity 경로 확정(7절).
 - 2026-11-13 개발봇: 저장소 `docs/architecture/asset-rules.md`로 복사(원본은 `C:\Users\studio2\ProjectS_Art\docs\asset-rules.md`에 그대로 있다). 모닥불 통합 결과로 4절 텍스처 임포트 값과 5절 임포트 확인의 '미확인'을 확인 값으로 바꿨다. 이 두 줄과 이 기록은 원본에 없다.
+- 2026-11-13 개발봇(story-012): 6절에 `SFX_` 접두어, 7절에 오디오 경로 `Assets/Audio/Sfx/` 추가(임시, 지영 확인 필요).

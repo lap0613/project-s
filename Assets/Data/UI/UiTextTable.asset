@@ -79,6 +79,12 @@ MonoBehaviour:
     text: '?'
   - key: hud.timeline.tooltip
     text: "{0} {1:+0;-0;0}\xB0C"
+  - key: hud.goal.guide
+    text: "\uBD80\uD488 3\uAC1C\uB85C \uAD6C\uC870 \uC694\uCCAD"
+  - key: hud.parts.count
+    text: '{0}/{1}'
+  - key: hud.morning.day
+    text: "{0}\uC77C\uCC28"
   - key: weather.clear
     text: "\uB9D1\uC74C"
   - key: weather.snow

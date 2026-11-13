@@ -150,6 +150,131 @@ namespace Whiteout.UI
             new WeatherStyle("cold_snap", WeatherIconShape.Thermometer, new Color(0.5f, 0.85f, 1f, 1f), true)
         };
 
+        [Header("Goal progress [C] (ui-plan 7.3 [C], N1)")]
+        [Tooltip("Parts the beacon needs while story-006 is not wired (core-rules section 1: 3).")]
+        [SerializeField] private int placeholderPartsRequired = 3;
+
+        [Tooltip("Gap between the timeline bar and the goal progress row.")]
+        [SerializeField] private float goalGapBelowTimeline = 10f;
+
+        [Tooltip("Side of the beacon and part icons.")]
+        [SerializeField] private float goalIconSize = 48f;
+
+        [Tooltip("Space between the icons and the count.")]
+        [SerializeField] private float goalIconSpacing = 8f;
+
+        [Tooltip("Font size of the 0/3 count.")]
+        [SerializeField] private float goalCountFontSize = 34f;
+
+        [Tooltip("Color of a part icon the player has.")]
+        [SerializeField] private Color goalPartHaveColor = new Color(1f, 0.85f, 0.3f, 1f);
+
+        [Tooltip("Color of a part icon the player lacks (faint silhouette).")]
+        [SerializeField] private Color goalPartMissingColor = new Color(1f, 1f, 1f, 0.22f);
+
+        [Tooltip("Color of the beacon icon.")]
+        [SerializeField] private Color goalBeaconColor = new Color(0.85f, 0.93f, 1f, 1f);
+
+        [Tooltip("Panel behind the progress row.")]
+        [SerializeField] private Color goalBackColor = new Color(0f, 0f, 0f, 0.4f);
+
+        [Header("Start guide (ui-plan 7.6, N2)")]
+        [Tooltip("Seconds the start guide stays at full size.")]
+        [SerializeField] private float guideSeconds = 6f;
+
+        [Tooltip("Seconds it takes to shrink into the goal progress row.")]
+        [SerializeField] private float guideShrinkSeconds = 0.7f;
+
+        [Tooltip("Gap between the goal progress row and the start guide.")]
+        [SerializeField] private float guideTopOffset = 16f;
+
+        [Tooltip("Font size of the guide phrase.")]
+        [SerializeField] private float guideFontSize = 34f;
+
+        [Tooltip("Side of an icon in the guide's picture row.")]
+        [SerializeField] private float guideIconSize = 54f;
+
+        [Tooltip("Color of the arrows between the icons.")]
+        [SerializeField] private Color guideArrowColor = new Color(1f, 1f, 1f, 0.75f);
+
+        [Tooltip("Panel behind the guide.")]
+        [SerializeField] private Color guideBackColor = new Color(0f, 0f, 0f, 0.5f);
+
+        [Header("Warmth vignette (ui-plan 7.6, N3)")]
+        [Tooltip("Orange of the edge glow (alpha is set by the max opacity).")]
+        [SerializeField] private Color warmthVignetteColor = new Color(1f, 0.55f, 0.15f, 1f);
+
+        [Tooltip("Opacity at the edge while inside a lit fire's warmth radius.")]
+        [SerializeField] private float warmthVignetteMaxOpacity = 0.25f;
+
+        [Tooltip("Seconds to turn on.")]
+        [SerializeField] private float warmthFadeInSeconds = 0.5f;
+
+        [Tooltip("Seconds to turn off.")]
+        [SerializeField] private float warmthFadeOutSeconds = 1f;
+
+        [Tooltip("Distance from the screen centre (0 centre, 1 edge middle) where the vignette starts; inside stays clear.")]
+        [SerializeField] private float vignetteInnerRadius = 0.6f;
+
+        [Tooltip("Distance where the vignette reaches full strength (corners are 1.41).")]
+        [SerializeField] private float vignetteOuterRadius = 1.3f;
+
+        [Header("Morning (ui-plan 7.6, N4)")]
+        [Tooltip("Seconds the sun icon and day text show.")]
+        [SerializeField] private float morningBannerSeconds = 1.5f;
+
+        [Tooltip("Seconds of fade in and fade out inside that time.")]
+        [SerializeField] private float morningBannerFadeSeconds = 0.25f;
+
+        [Tooltip("Vertical anchor of the banner (1 = top of the screen).")]
+        [SerializeField] private float morningBannerTopFraction = 0.78f;
+
+        [Tooltip("Font size of the day text.")]
+        [SerializeField] private float morningBannerFontSize = 96f;
+
+        [Tooltip("Side of the sun icon.")]
+        [SerializeField] private float morningBannerIconSize = 96f;
+
+        [Tooltip("Color of the day text.")]
+        [SerializeField] private Color morningBannerColor = new Color(1f, 0.93f, 0.7f, 1f);
+
+        [Tooltip("Color of the sun icon.")]
+        [SerializeField] private Color morningSunColor = new Color(1f, 0.85f, 0.3f, 1f);
+
+        [Tooltip("Seconds of the golden edge glow (up and down).")]
+        [SerializeField] private float morningGlowSeconds = 0.8f;
+
+        [Tooltip("Gold of the edge glow.")]
+        [SerializeField] private Color morningGlowColor = new Color(1f, 0.82f, 0.3f, 1f);
+
+        [Tooltip("Peak opacity of the glow (provisional, the plan gives none).")]
+        [SerializeField] private float morningGlowMaxOpacity = 0.55f;
+
+        [Header("Sound (tech-decisions 33, N5)")]
+        [Tooltip("One-shot played when the player enters a lit fire's warmth radius.")]
+        [SerializeField] private AudioClip warmthEnterClip = null;
+
+        [Tooltip("Looping fire sound, louder when closer.")]
+        [SerializeField] private AudioClip fireLoopClip = null;
+
+        [Tooltip("One-shot played at the morning effect.")]
+        [SerializeField] private AudioClip morningClip = null;
+
+        [Tooltip("Volume of the enter sound (0..1).")]
+        [SerializeField] private float warmthEnterVolume = 0.8f;
+
+        [Tooltip("Volume of the fire loop at the fire (0..1).")]
+        [SerializeField] private float fireLoopMaxVolume = 0.5f;
+
+        [Tooltip("Volume of the morning sound (0..1).")]
+        [SerializeField] private float morningVolume = 0.8f;
+
+        [Tooltip("The enter sound of the same fire does not play again within this time.")]
+        [SerializeField] private float warmthEnterCooldownSeconds = 10f;
+
+        [Tooltip("Distance from a lit fire where its loop falls to silence (the fire status only reports fires within its nearby range).")]
+        [SerializeField] private float fireLoopHearDistance = 8f;
+
         /// <summary>Most notices shown at once.</summary>
         public int NoticeMaxLines => noticeMaxLines;
 
@@ -303,11 +428,150 @@ namespace Whiteout.UI
         /// <summary>Icon style per weather id.</summary>
         public WeatherStyle[] WeatherStyles => weatherStyles;
 
+        /// <summary>Parts the beacon needs while story-006 is not wired (core-rules section 1: 3).</summary>
+        public int PlaceholderPartsRequired => placeholderPartsRequired;
+
+        /// <summary>Gap between the timeline bar and the goal progress row.</summary>
+        public float GoalGapBelowTimeline => goalGapBelowTimeline;
+
+        /// <summary>Side of the beacon and part icons.</summary>
+        public float GoalIconSize => goalIconSize;
+
+        /// <summary>Space between the icons and the count.</summary>
+        public float GoalIconSpacing => goalIconSpacing;
+
+        /// <summary>Font size of the 0/3 count.</summary>
+        public float GoalCountFontSize => goalCountFontSize;
+
+        /// <summary>Color of a part icon the player has.</summary>
+        public Color GoalPartHaveColor => goalPartHaveColor;
+
+        /// <summary>Color of a part icon the player lacks (faint silhouette).</summary>
+        public Color GoalPartMissingColor => goalPartMissingColor;
+
+        /// <summary>Color of the beacon icon.</summary>
+        public Color GoalBeaconColor => goalBeaconColor;
+
+        /// <summary>Panel behind the progress row.</summary>
+        public Color GoalBackColor => goalBackColor;
+
+        /// <summary>Seconds the start guide stays at full size.</summary>
+        public float GuideSeconds => guideSeconds;
+
+        /// <summary>Seconds it takes to shrink into the goal progress row.</summary>
+        public float GuideShrinkSeconds => guideShrinkSeconds;
+
+        /// <summary>Gap between the goal progress row and the start guide.</summary>
+        public float GuideTopOffset => guideTopOffset;
+
+        /// <summary>Font size of the guide phrase.</summary>
+        public float GuideFontSize => guideFontSize;
+
+        /// <summary>Side of an icon in the guide's picture row.</summary>
+        public float GuideIconSize => guideIconSize;
+
+        /// <summary>Color of the arrows between the icons.</summary>
+        public Color GuideArrowColor => guideArrowColor;
+
+        /// <summary>Panel behind the guide.</summary>
+        public Color GuideBackColor => guideBackColor;
+
+        /// <summary>Orange of the edge glow (alpha is set by the max opacity).</summary>
+        public Color WarmthVignetteColor => warmthVignetteColor;
+
+        /// <summary>Opacity at the edge while inside a lit fire's warmth radius.</summary>
+        public float WarmthVignetteMaxOpacity => warmthVignetteMaxOpacity;
+
+        /// <summary>Seconds to turn on.</summary>
+        public float WarmthFadeInSeconds => warmthFadeInSeconds;
+
+        /// <summary>Seconds to turn off.</summary>
+        public float WarmthFadeOutSeconds => warmthFadeOutSeconds;
+
+        /// <summary>Distance from the screen centre (0 centre, 1 edge middle) where the vignette starts; inside stays clear.</summary>
+        public float VignetteInnerRadius => vignetteInnerRadius;
+
+        /// <summary>Distance where the vignette reaches full strength (corners are 1.41).</summary>
+        public float VignetteOuterRadius => vignetteOuterRadius;
+
+        /// <summary>Seconds the sun icon and day text show.</summary>
+        public float MorningBannerSeconds => morningBannerSeconds;
+
+        /// <summary>Seconds of fade in and fade out inside that time.</summary>
+        public float MorningBannerFadeSeconds => morningBannerFadeSeconds;
+
+        /// <summary>Vertical anchor of the banner (1 = top of the screen).</summary>
+        public float MorningBannerTopFraction => morningBannerTopFraction;
+
+        /// <summary>Font size of the day text.</summary>
+        public float MorningBannerFontSize => morningBannerFontSize;
+
+        /// <summary>Side of the sun icon.</summary>
+        public float MorningBannerIconSize => morningBannerIconSize;
+
+        /// <summary>Color of the day text.</summary>
+        public Color MorningBannerColor => morningBannerColor;
+
+        /// <summary>Color of the sun icon.</summary>
+        public Color MorningSunColor => morningSunColor;
+
+        /// <summary>Seconds of the golden edge glow (up and down).</summary>
+        public float MorningGlowSeconds => morningGlowSeconds;
+
+        /// <summary>Gold of the edge glow.</summary>
+        public Color MorningGlowColor => morningGlowColor;
+
+        /// <summary>Peak opacity of the glow (provisional, the plan gives none).</summary>
+        public float MorningGlowMaxOpacity => morningGlowMaxOpacity;
+
+        /// <summary>One-shot played when the player enters a lit fire's warmth radius.</summary>
+        public AudioClip WarmthEnterClip => warmthEnterClip;
+
+        /// <summary>Looping fire sound, louder when closer.</summary>
+        public AudioClip FireLoopClip => fireLoopClip;
+
+        /// <summary>One-shot played at the morning effect.</summary>
+        public AudioClip MorningClip => morningClip;
+
+        /// <summary>Volume of the enter sound (0..1).</summary>
+        public float WarmthEnterVolume => warmthEnterVolume;
+
+        /// <summary>Volume of the fire loop at the fire (0..1).</summary>
+        public float FireLoopMaxVolume => fireLoopMaxVolume;
+
+        /// <summary>Volume of the morning sound (0..1).</summary>
+        public float MorningVolume => morningVolume;
+
+        /// <summary>The enter sound of the same fire does not play again within this time.</summary>
+        public float WarmthEnterCooldownSeconds => warmthEnterCooldownSeconds;
+
+        /// <summary>Distance from a lit fire where its loop falls to silence (the fire status only reports fires within its nearby range).</summary>
+        public float FireLoopHearDistance => fireLoopHearDistance;
+
+        /// <summary>
+        /// Top-left corner of the timeline bar, relative to the top center of the canvas. The goal progress row
+        /// and the start guide line up under it.
+        /// </summary>
+        public Vector2 TimelineAnchoredPosition => new Vector2(
+            temperaturePanelSize.x * 0.5f + timelineGap,
+            -hudTopMargin - (temperaturePanelSize.y - timelineSize.y) * 0.5f);
+
         private void OnValidate()
         {
             noticeMaxLines = Mathf.Max(noticeMaxLines, 1);
             noticeSeconds = Mathf.Max(noticeSeconds, 0f);
             timelineRangeSeconds = Mathf.Max(timelineRangeSeconds, 1f);
+            placeholderPartsRequired = Mathf.Max(placeholderPartsRequired, 1);
+            guideSeconds = Mathf.Max(guideSeconds, 0f);
+            guideShrinkSeconds = Mathf.Max(guideShrinkSeconds, 0.01f);
+            warmthFadeInSeconds = Mathf.Max(warmthFadeInSeconds, 0.01f);
+            warmthFadeOutSeconds = Mathf.Max(warmthFadeOutSeconds, 0.01f);
+            morningGlowSeconds = Mathf.Max(morningGlowSeconds, 0.01f);
+            morningBannerSeconds = Mathf.Max(morningBannerSeconds, 0.01f);
+            morningBannerFadeSeconds = Mathf.Clamp(morningBannerFadeSeconds, 0f, morningBannerSeconds * 0.5f);
+            vignetteOuterRadius = Mathf.Max(vignetteOuterRadius, vignetteInnerRadius + 0.01f);
+            warmthEnterCooldownSeconds = Mathf.Max(warmthEnterCooldownSeconds, 0f);
+            fireLoopHearDistance = Mathf.Max(fireLoopHearDistance, 0.1f);
         }
     }
 }

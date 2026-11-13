@@ -115,6 +115,9 @@ namespace Whiteout.Game
             builder.RegisterComponentInHierarchy<BagHud>();
             builder.RegisterComponentInHierarchy<PlacementHud>();
             builder.RegisterComponentInHierarchy<NotificationHud>();
+            builder.Register<PlaceholderRescueParts>(Lifetime.Singleton).As<IRescueParts>();
+            builder.RegisterComponentInHierarchy<GoalGuidanceHud>();
+            builder.RegisterComponentInHierarchy<ReliefFeedbackHud>();
             builder.RegisterComponentInHierarchy<WorldUiHud>();
         }
     }

@@ -71,7 +71,6 @@ namespace Whiteout.UI
         private void Start()
         {
             var panelSize = _config.TemperaturePanelSize;
-            var barSize = _config.TimelineSize;
             var left = -panelSize.x * 0.5f;
 
             var panel = new GameObject("TemperaturePanel", typeof(RectTransform)).GetComponent<RectTransform>();
@@ -97,9 +96,8 @@ namespace Whiteout.UI
             temperatureLabel.textWrappingMode = TextWrappingModes.NoWrap;
             temperatureLabel.raycastTarget = false;
 
-            var barTop = -_config.HudTopMargin - (panelSize.y - barSize.y) * 0.5f;
             _timeline = new ForecastTimelineView(
-                (RectTransform)transform, new Vector2(left + panelSize.x + _config.TimelineGap, barTop), _config, _texts, _time);
+                (RectTransform)transform, _config.TimelineAnchoredPosition, _config, _texts, _time);
             if (_hasForecast)
             {
                 _timeline.SetForecast(_forecast);

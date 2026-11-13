@@ -122,6 +122,7 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 | `IBagAction` (칸 우클릭 메뉴 항목: 사용·버리기, 008에서 입기 추가) | Gathering | UI |
 | `IVitalsReceiver` (허기·체력 회복 받기) / `IRestTarget` (휴식 상태 켜고 끄기) | Survival | Gathering(소모품 효과) / Camp(은신처 휴식) |
 | `IFireStatus` (근처 모닥불의 켜짐·연료) | Camp | Gathering(요리), UI(연료 표시) |
+| `IRescueParts` (모은 신호기 부품 수, 필요한 수) | story-006 (그 전까지 Game의 `PlaceholderRescueParts`가 0/3) | UI(목표 안내 [C]) |
 | `IPlacementMenu` (설치 목록: 열림, 항목, 고른 항목) | Camp | UI, Game, Gathering(목록이 열린 동안 숫자키는 가방 칸을 고르지 않음) |
 | `IPlayerPosition` (플레이어 위치(발 높이)와 바라보는 방향) | Game (`PlayerPositionSource`) | Gathering, Camp |
 | `IInteractionInput` (E, B, 확인(좌클릭)·취소, 숫자키, 휠(`WheelScroll`: 설치 모드에서 회전), 커서 화면 위치) | Input | Game, Camp, UI |
@@ -193,3 +194,4 @@ Assets/Tests/EditMode/   Whiteout.Tests.EditMode  (Core + 모든 Logic 테스트
 - 2026-11-13: §4에 조회 인터페이스 `IDayTimeSource` 추가, `RescueRequested`에 값(도착까지 남은 초) 표기, `IAmbientTemperatureSource` 사용처에 UI 추가 (story-010 HUD 타임라인: UI가 RunFlow를 참조하지 않고 게임 시간을 읽는 통로).
 - 2026-11-13: §2에 코드 밖 에셋 폴더(Art·Prefabs)와 프리팹 구성 규칙 추가, `asset-rules.md` 연결 (모닥불 에셋 통합, tech-decisions 30번).
 - 2026-11-13: story-011 반영: §2 Gathering 폴더·어셈블리 이름 코드 반영(임시), §4 마우스 클릭 상호작용 연결(`InteractionDirector`·`PointerWorld`·`TargetHighlighter`)과 인터페이스 `IPointerWorld`·`IAttackInput`·`PlayerDamaged`, `IInteractionInput`·`IInteractionSource` 변경(휠 = `WheelScroll`, 커서 위치, `TryOfferPointed`).
+- 2026-11-13: §4에 조회 인터페이스 `IRescueParts` 추가 (story-012: UI가 부품 수를 받는 통로, 구현은 story-006, 그 전까지 Game의 `PlaceholderRescueParts`). UI의 `IFireStatus` 사용처에 온기 비네트·불 소리 추가.
